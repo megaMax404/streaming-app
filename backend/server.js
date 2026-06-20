@@ -46,9 +46,8 @@ app.use(cors({
     if (
       allowedOrigins.includes(origin) ||
       origin.endsWith(".vercel.app")
-    ) {
-    }
-    return callback(
+    ){
+    } return callback(
       new Error("Not allowed by CORS")
     );
   },
