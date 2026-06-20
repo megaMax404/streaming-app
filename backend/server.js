@@ -40,13 +40,14 @@ app.use(cors({
   origin(origin, callback) {
     if (!origin) {
       return callback(null, true);
-      // เอาออกได้ถ้าไม่ใช้ Postman
+
     }
 
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
+    if (
+      allowedOrigins.includes(origin) ||
+      origin.endsWith(".vercel.app")
+    ) {
     }
-
     return callback(
       new Error("Not allowed by CORS")
     );
@@ -128,7 +129,7 @@ const adminRoutes = require("./routes/admin");
 const articleRoutes = require("./routes/articleRoutes");
 
 
-app.use("/api/admin/login",loginLimiter);
+app.use("/api/admin/login", loginLimiter);
 
 app.use(
   "/api/admin",
