@@ -744,14 +744,9 @@ const styles = {
   },
 
 };
-if (window.innerWidth <= 768) {
-  styles.topSection.flexDirection =
-    "column";
-
-  styles.poster.width =
-    "100%";
-
-  styles.trailer.minHeight =
-    "240px";
+if (typeof window !== "undefined" && window.innerWidth <= 768) {
+  styles.topSection.flexDirection = "column";
+  styles.poster.width = "100%";
+  styles.trailer.minHeight = "240px";
 }
 export default MovieDetail;
