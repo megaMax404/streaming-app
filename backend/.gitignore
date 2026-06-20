@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+frontend/.env
+backend/.env
+# Environment
+.env
+.env.local
+.env.production
+
+# Backup files
+backups/*.json
+backups/*.zip
+
+# Logs
+*.log
+logs/
+
+# Database temp / cache
+*.sqlite
+*.db
+
+# OS
+.DS_Store
+Thumbs.db
+
