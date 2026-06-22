@@ -7,9 +7,9 @@ import Carousel from "../components/Carousel";
 import { categories } from "../data/categories";
 
 function Home({ search }) {
-  if (process.env.NODE_ENV !== "production") {
-    console.log("API_URL =", API_URL);
-  }
+  
+  console.log("API_URL =", API_URL);
+
   const [movies, setMovies] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [category, setCategory] = useState("หนังทั้งหมด");

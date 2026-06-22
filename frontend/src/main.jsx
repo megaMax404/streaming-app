@@ -1,4 +1,5 @@
 import React from "react";
+console.log("MAIN JSX LOADED");
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";

@@ -1,12 +1,10 @@
 import { useState } from "react";
 import {
-  HashRouter,
   BrowserRouter,
   Routes,
   Route,
   Navigate,
 } from "react-router-dom";
-
 
 import Home from "./pages/Home";
 import MovieDetail from "./pages/MovieDetail";
@@ -26,7 +24,7 @@ function App() {
     useState("");
 
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Routes>
 
         {/* HOME */}
@@ -107,7 +105,7 @@ function App() {
       </Routes>
 
 
-    </HashRouter>
+    </BrowserRouter>
   );
 
 }
