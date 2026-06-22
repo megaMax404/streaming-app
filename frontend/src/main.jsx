@@ -1,11 +1,13 @@
 import React from "react";
-console.log("MAIN JSX LOADED");
 import ReactDOM from "react-dom/client";
-import App from "./App";
 import "./index.css";
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+console.log("MAIN JSX LOADED");
+
+ReactDOM.createRoot(
+  document.getElementById("root")
+).render(
+  <h1 style={{ color: "white" }}>
+    ROOT WORKS
+  </h1>
 );
