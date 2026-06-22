@@ -37,9 +37,9 @@ function App() {
                 setSearch={setSearch}
               />
 
-              <Home
-                search={search}
-              />
+              <div style={{ color: "white", fontSize: "40px" }}>
+  HOME TEST
+</div>
 
               <Footer />
             </>
