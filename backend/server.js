@@ -1,15 +1,5 @@
 require("dotenv").config();
 
-if (!process.env.MONGO_URI) {
-  throw new Error("Missing MONGO_URI");
-}
-if (!process.env.JWT_SECRET) {
-  throw new Error("Missing JWT_SECRET");
-}
-if (!process.env.ADMIN_PASSWORD_HASH) {
-  throw new Error("Missing ADMIN_PASSWORD_HASH");
-}
-
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
@@ -26,21 +16,30 @@ const bannerRoutes = require("./routes/banners");
 const adminRoutes = require("./routes/admin");
 const articleRoutes = require("./routes/articleRoutes");
 
+//
+// ENV CHECK
+//
+const requiredEnv = [
+  "MONGO_URI",
+  "JWT_SECRET",
+  "ADMIN_PASSWORD_HASH"
+];
+
+requiredEnv.forEach((key) => {
+  if (!process.env[key]) {
+    throw new Error(`Missing ${key}`);
+  }
+});
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 //
-// MongoDB
-//
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("Mongo connected"))
-  .catch(err => console.error("Mongo error:", err));
-
-//
-// Security
+// SECURITY
 //
 app.use(helmet());
 app.use(mongoSanitize());
+app.use(express.json({ limit: "1mb" }));
 
 //
 // CORS
@@ -51,35 +50,30 @@ const allowedOrigins = [
   "https://streaming-app.vercel.app"
 ];
 
-app.use(cors({
-  origin(origin, callback) {
-    if (!origin) return callback(null, true);
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin) return callback(null, true);
 
-    if (
-      allowedOrigins.includes(origin) ||
-      origin.endsWith(".vercel.app")
-    ) {
-      return callback(null, true);
-    }
+      const allowed =
+        allowedOrigins.includes(origin) ||
+        (typeof origin === "string" &&
+          origin.endsWith(".vercel.app"));
 
-    return callback(new Error("Not allowed by CORS"));
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
+      if (allowed) {
+        return callback(null, true);
+      }
 
-app.use(express.json({
-  limit: "1mb"
-}));
-
-  mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("Mongo connected");
-    console.log("DB:", mongoose.connection.name);
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"]
   })
+);
+
 //
-// Rate Limit
+// RATE LIMIT
 //
 const loginLimiter = rateLimit({
   windowMs: 5 * 60 * 1000,
@@ -114,15 +108,12 @@ const adminActionLimiter = rateLimit({
 app.use("/api", apiLimiter);
 
 //
-// Static
+// STATIC
 //
-app.use(
-  "/images",
-  express.static("public/images")
-);
+app.use("/images", express.static("public/images"));
 
 //
-// Routes
+// ROUTES
 //
 app.use("/api/stats", statsRoutes);
 
@@ -140,21 +131,39 @@ app.use(
 );
 
 //
-// Auto Backup ทุก 1 ชั่วโมง
+// GLOBAL ERROR HANDLER
 //
-setInterval(async () => {
-  await createBackup();
-  console.log("Auto backup completed");
-}, 1000 * 60 * 60);
+app.use((err, req, res, next) => {
+  console.error("SERVER ERROR:", err);
 
-//
-// Start Server
-//
-app.listen(PORT, async () => {
-  console.log(`Server running on port ${PORT}`);
-
-  // backup ครั้งแรกทันที
-  await createBackup();
-  console.log("Initial backup completed");
+  res.status(500).json({
+    message: err.message || "Internal server error"
+  });
 });
+
+//
+// START SERVER
+//
+async function startServer() {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+
+    await createBackup();
+    console.log("Initial backup completed");
+
+    setInterval(async () => {
+      await createBackup();
+      console.log("Auto backup completed");
+    }, 1000 * 60 * 60);
+
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error("Startup error:", err);
+    process.exit(1);
+  }
+}
+
+startServer();
 
