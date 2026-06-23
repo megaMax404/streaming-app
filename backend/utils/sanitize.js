@@ -5,10 +5,22 @@ function sanitizeString(value) {
   return validator.escape(value.trim());
 }
 
+const RAW_FIELDS = [
+  "image",
+  "trailer",
+  "video",
+  "link"
+];
+
 function sanitizeObject(obj) {
   const sanitized = {};
 
   for (const key in obj) {
+    if (RAW_FIELDS.includes(key)) {
+      sanitized[key] = obj[key];
+      continue;
+    }
+
     if (Array.isArray(obj[key])) {
       sanitized[key] = obj[key].map(item =>
         typeof item === "string"
