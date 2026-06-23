@@ -73,6 +73,11 @@ app.use(express.json({
   limit: "1mb"
 }));
 
+  mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("Mongo connected");
+    console.log("DB:", mongoose.connection.name);
+  })
 //
 // Rate Limit
 //
@@ -152,3 +157,4 @@ app.listen(PORT, async () => {
   await createBackup();
   console.log("Initial backup completed");
 });
+
