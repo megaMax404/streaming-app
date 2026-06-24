@@ -38,9 +38,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* HOME */}
-        <Route path="/" element={<Home search={search} />} />
-        <Route path="/category/:slug" element={<Home search={search} />} />
-        <Route path="/movie/:id" element={<MovieDetail />} />
+        <Route path="/" element={MainLayout} />
+        <Route path="/category/:slug" element={MainLayout} />
 
         {/* MOVIE DETAIL */}
         <Route

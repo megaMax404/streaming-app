@@ -68,6 +68,11 @@ function Home({ search }) {
     navigate(`/category/${categoryToSlug(cat)}`);
   };
 
+  console.log("slug =", slug);
+  console.log("category =", category);
+  console.log(
+    movies.filter(m => m.category?.includes(category)).length
+  );
   /* ======================
      FILTER MOVIES
   ====================== */
@@ -249,9 +254,7 @@ const styles = {
   layout: {
     display: "flex",
     gap: "20px",
-    maxWidth: "1200px",
     width: "100%",
-    margin: "0 auto",
     alignItems: "flex-start",
   },
   sidebar: {
