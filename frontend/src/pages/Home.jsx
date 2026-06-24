@@ -159,40 +159,54 @@ function Home({ search }) {
               {category}
             </div>
 
-            <div
-              style={styles.container}
-              className="movie-grid"
-            >
-              {currentMovies.map((movie) => (
-                <MovieCard
-                  key={movie._id}
-                  movie={movie}
-                />
-              ))}
-            </div>
+            <div style={styles.container} className="movie-grid">
+              {currentMovies.length > 0 ? (
+                <div style={styles.container} className="movie-grid">
+                  {currentMovies.map((movie) => (
+                    <MovieCard
+                      key={movie._id}
+                      movie={movie}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div style={styles.emptyState}>
+                  <div style={styles.emptyBox}>
+                    <div style={styles.emptyIcon}>🎬</div>
 
-            {/* PAGINATION */}
-            {totalPages > 1 && (
-              <div style={styles.pagination}>
-                {Array.from(
-                  { length: totalPages },
-                  (_, i) => (
-                    <button
-                      key={i}
-                      onClick={() =>
-                        setCurrentPage(i + 1)
-                      }
-                      className={`page-btn ${currentPage === i + 1
-                        ? "active"
-                        : ""
-                        }`}
-                    >
-                      {i + 1}
-                    </button>
-                  )
-                )}
-              </div>
-            )}
+                    <div style={styles.emptyText}>
+                      กำลังทำการอัพเดท
+                    </div>
+
+                    <div style={styles.emptySubText}>
+                      หมวดหมู่นี้กำลังเพิ่มหนังใหม่ โปรดกลับมาอีกครั้ง
+                    </div>
+                  </div>
+                </div>
+              )}
+          </div>
+              {/* PAGINATION */}
+              {totalPages > 1 && (
+                <div style={styles.pagination}>
+                  {Array.from(
+                    { length: totalPages },
+                    (_, i) => (
+                      <button
+                        key={i}
+                        onClick={() =>
+                          setCurrentPage(i + 1)
+                        }
+                        className={`page-btn ${currentPage === i + 1
+                          ? "active"
+                          : ""
+                          }`}
+                      >
+                        {i + 1}
+                      </button>
+                    )
+                  )}
+                </div>
+              )}
           </main>
         </div>
       </div>
@@ -230,15 +244,17 @@ function ArticleSection({ articles }) {
 
 const styles = {
   wrapper: {
-    display: "flex",
-    justifyContent: "center",
-    padding: "10px",
+    width: "100%",
+    padding: "10px 20px",
+    boxSizing: "border-box",
   },
   layout: {
     display: "flex",
     gap: "20px",
     maxWidth: "1200px",
     width: "100%",
+    margin: "0 auto",
+    alignItems: "flex-start",
   },
   sidebar: {
     width: "200px",
@@ -284,6 +300,7 @@ const styles = {
     borderLeft: "5px solid #ffd000",
     paddingLeft: "12px",
     margin: "0 0 15px 20px",
+    textAlign: "left",
   },
   movieTitle: {
     color: "#fff",
@@ -292,6 +309,7 @@ const styles = {
     borderLeft: "5px solid #ffd000",
     paddingLeft: "12px",
     marginBottom: "20px",
+    textAlign: "left",
   },
   articleBox: {
     maxWidth: "1200px",
@@ -308,6 +326,39 @@ const styles = {
     paddingLeft: "12px",
     marginBottom: "25px",
   },
+  emptyState: {
+    width: "100%",
+    padding: "80px 20px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyBox: {
+    background: "linear-gradient(180deg,#111,#0b0b0b)",
+    border: "1px solid #2a2a2a",
+    borderRadius: "18px",
+    padding: "40px 60px",
+    textAlign: "center",
+    boxShadow: "0 0 30px rgba(0,0,0,0.35)",
+  },
+
+  emptyIcon: {
+    fontSize: "50px",
+    marginBottom: "15px",
+  },
+
+  emptyText: {
+    color: "#fff",
+    fontSize: "24px",
+    fontWeight: "bold",
+    marginBottom: "10px",
+  },
+
+  emptySubText: {
+    color: "#aaa",
+    fontSize: "15px",
+  },
+
 };
 
 export default Home;
