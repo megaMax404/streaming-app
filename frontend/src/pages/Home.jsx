@@ -161,14 +161,12 @@ function Home({ search }) {
 
             <div style={styles.container} className="movie-grid">
               {currentMovies.length > 0 ? (
-                <div style={styles.container} className="movie-grid">
-                  {currentMovies.map((movie) => (
-                    <MovieCard
-                      key={movie._id}
-                      movie={movie}
-                    />
-                  ))}
-                </div>
+                currentMovies.map((movie) => (
+                  <MovieCard
+                    key={movie._id}
+                    movie={movie}
+                  />
+                ))
               ) : (
                 <div style={styles.emptyState}>
                   <div style={styles.emptyBox}>
@@ -184,29 +182,29 @@ function Home({ search }) {
                   </div>
                 </div>
               )}
-          </div>
-              {/* PAGINATION */}
-              {totalPages > 1 && (
-                <div style={styles.pagination}>
-                  {Array.from(
-                    { length: totalPages },
-                    (_, i) => (
-                      <button
-                        key={i}
-                        onClick={() =>
-                          setCurrentPage(i + 1)
-                        }
-                        className={`page-btn ${currentPage === i + 1
-                          ? "active"
-                          : ""
-                          }`}
-                      >
-                        {i + 1}
-                      </button>
-                    )
-                  )}
-                </div>
-              )}
+            </div>
+            {/* PAGINATION */}
+            {totalPages > 1 && (
+              <div style={styles.pagination}>
+                {Array.from(
+                  { length: totalPages },
+                  (_, i) => (
+                    <button
+                      key={i}
+                      onClick={() =>
+                        setCurrentPage(i + 1)
+                      }
+                      className={`page-btn ${currentPage === i + 1
+                        ? "active"
+                        : ""
+                        }`}
+                    >
+                      {i + 1}
+                    </button>
+                  )
+                )}
+              </div>
+            )}
           </main>
         </div>
       </div>
@@ -274,8 +272,10 @@ const styles = {
     borderBottom: "1px solid #444",
   },
   main: {
-    width: "100%",
-    maxWidth: "900px",
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "stretch",
   },
   container: {
     display: "grid",
@@ -310,6 +310,9 @@ const styles = {
     paddingLeft: "12px",
     marginBottom: "20px",
     textAlign: "left",
+    width: "100%",
+    display: "block",
+    marginLeft: 0,
   },
   articleBox: {
     maxWidth: "1200px",

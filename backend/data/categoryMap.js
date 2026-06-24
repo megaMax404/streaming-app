@@ -1,21 +1,48 @@
-export const categoryMap = [
-  { slug: "all", name: "หนังทั้งหมด" },
-  { slug: "latest", name: "หนังใหม่ล่าสุด" },
-  { slug: "2026", name: "หนังปี 2026" },
-  { slug: "action", name: "Action บู๊" },
-  { slug: "comedy", name: "Comedy ตลก" },
-  { slug: "horror", name: "Horror สยองขวัญ" },
-  { slug: "romance", name: "Romance รักโรแมนติก" },
-  { slug: "thriller", name: "Thriller ระทึกขวัญ" },
-  { slug: "marvel", name: "หนังมาเวล" },
-  { slug: "netflix", name: "Netflix" },
-  { slug: "animation", name: "Animation การ์ตูน" },
-];
+import { categories } from "./categories";
 
-export const slugToCategory = (slug) => {
-  return categoryMap.find(c => c.slug === slug)?.name || "หนังทั้งหมด";
+/* =========================
+   SLUG GENERATOR
+========================= */
+const normalize = (text) => {
+  return text
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-") // space -> -
+    .replace(/[^\w\u0E00-\u0E7F-]/g, ""); // keep thai/eng/num/-
 };
 
+/* =========================
+   AUTO CATEGORY MAP
+========================= */
+export const categoryMap = categories.map((category) => ({
+  name: category,
+  slug:
+    category === "หนังทั้งหมด"
+      ? "all"
+      : normalize(category),
+}));
+
+/* =========================
+   LOOKUP HELPERS
+========================= */
 export const categoryToSlug = (name) => {
-  return categoryMap.find(c => c.name === name)?.slug || "all";
+  if (!name) return "all";
+
+  const found = categoryMap.find(
+    (item) => item.name === name
+  );
+
+  return found?.slug || normalize(name);
+};
+
+export const slugToCategory = (slug) => {
+  if (!slug || slug === "all") {
+    return "หนังทั้งหมด";
+  }
+
+  const found = categoryMap.find(
+    (item) => item.slug === slug
+  );
+
+  return found?.name || decodeURIComponent(slug);
 };
