@@ -7,8 +7,7 @@ function CategoryPage() {
 
 
     const selectCategory = (cat) => {
-        localStorage.setItem("selectedCategory", cat);
-        navigate("/");
+        navigate(`/?category=${encodeURIComponent(cat)}`);
     };
 
     return (
@@ -16,16 +15,14 @@ function CategoryPage() {
             <div style={styles.box}>
                 {/* ปุ่มกลับหน้าแรก */}
                 <div style={styles.backWrap}>
-                <button
-                    style={styles.backBtn}
-                    onClick={() =>
-                        navigate("/", {
-                            state: { category: "หนังทั้งหมด" }
-                        })
-                    }
-                >
-                    ← กลับหน้าแรก
-                </button>
+                    <button
+                        style={styles.backBtn}
+                        onClick={() =>
+                            navigate("/?category=หนังทั้งหมด")
+                        }
+                    >
+                        ← กลับหน้าแรก
+                    </button>
                 </div>
                 <h1 style={styles.title}>แยกหมวดหมู่หนัง</h1>
 

@@ -1,8 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { categories } from "../data/categories";
 
 function Navbar({ search, setSearch }) {
+  const navigate = useNavigate();
+
+  const [mobileMenu, setMobileMenu] = useState(false);
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+
   const quickCategories = [
     "หนังใหม่ล่าสุด",
     "หนังปี 2026",
@@ -13,67 +17,59 @@ function Navbar({ search, setSearch }) {
     "Thriller ระทึกขวัญ",
     "หนังมาเวล",
     "Netflix",
-    "Animation การ์ตูน"
+    "Animation การ์ตูน",
   ];
 
-  const navigate = useNavigate();
-  const [mobileMenu, setMobileMenu] = useState(false);
-  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+  const goCategory = (category) => {
+    navigate(`/?category=${encodeURIComponent(category)}`);
+  };
+
+  const goHome = () => {
+    goCategory("หนังทั้งหมด");
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenu(false);
+    setShowCategoryDropdown(false);
+  };
+
   return (
     <div style={styles.wrapper}>
       <div style={styles.container}>
-
-        <div
-          style={styles.logoLink}
-          onClick={() =>
-            navigate("/", {
-              state: { category: "หนังทั้งหมด" }
-            })
-          }
-        >
+        {/* Logo */}
+        <div style={styles.logoLink} onClick={goHome}>
           <h2 style={styles.logo}>
-            <img src="https://img2.pic.in.th/10392e98b172ab32c.png"
+            <img
+              src="https://img2.pic.in.th/10392e98b172ab32c.png"
               alt="logo"
-              style={styles.logoImage} />
+              style={styles.logoImage}
+            />
           </h2>
         </div>
 
-        <div className="navLinks">
-          <div
-            className="nav-item"
-            onClick={() =>
-              navigate("/", {
-                state: { category: "หนังทั้งหมด" }
-              })
-            }
-          >
+        {/* Desktop Nav */}
+        <div className="navLinks" style={styles.navLinks}>
+          <div className="nav-item" onClick={goHome}>
             หน้าแรก
           </div>
 
-          <div
-            className="nav-item"
-            onClick={() =>
-              navigate("/", {
-                state: { category: "หนังทั้งหมด" }
-              })
-            }
-          >
+          <div className="nav-item" onClick={goHome}>
             ดูหนังฟรี HD
           </div>
 
           <div
             className="nav-item"
-            onClick={() => {
-              navigate("/", {
-                state: { category: "หนังปี 2026" }
-              });
-            }}
+            onClick={() => goCategory("หนังปี 2026")}
           >
             ดูหนังชนโรง 2026
           </div>
 
-          <Link to="/categories" className="nav-item">แยกหมวดหมู่หนัง</Link>
+          <Link to="/categories" className="nav-item">
+            แยกหมวดหมู่หนัง
+          </Link>
         </div>
+
+        {/* Mobile Menu Button */}
         <button
           className="mobile-menu-btn"
           onClick={() => setMobileMenu(true)}
@@ -81,58 +77,42 @@ function Navbar({ search, setSearch }) {
           ☰
         </button>
 
+        {/* Mobile Sidebar */}
         {mobileMenu && (
           <>
             <div
               className="mobile-overlay"
-              onClick={() => setMobileMenu(false)}
+              onClick={closeMobileMenu}
             />
 
             <div className="mobile-sidebar">
               <h3>เมนู</h3>
 
-              <div
-                className="category-item"
-                onClick={() => {
-                  navigate("/", {
-                    state: { category: "หนังทั้งหมด" }
-                  });
-                  setMobileMenu(false);
-                }}
-              >
+              <div className="category-item" onClick={() => {
+                goHome();
+                closeMobileMenu();
+              }}>
                 🏠 หน้าแรก
               </div>
 
-              <div
-                className="category-item"
-                onClick={() => {
-                  navigate("/", {
-                    state: { category: "หนังทั้งหมด" }
-                  });
-                  setMobileMenu(false);
-                }}
-              >
+              <div className="category-item" onClick={() => {
+                goHome();
+                closeMobileMenu();
+              }}>
                 🎬 ดูหนังฟรี HD
               </div>
 
-              <div
-                className="category-item"
-                onClick={() => {
-                  navigate("/", {
-                    state: { category: "หนังปี 2026" }
-                  });
-                  setMobileMenu(false);
-                }}
-              >
+              <div className="category-item" onClick={() => {
+                goCategory("หนังปี 2026");
+                closeMobileMenu();
+              }}>
                 🔥 ดูหนังชนโรง 2026
               </div>
 
               <div
                 className="category-item"
                 onClick={() =>
-                  setShowCategoryDropdown(
-                    !showCategoryDropdown
-                  )
+                  setShowCategoryDropdown(!showCategoryDropdown)
                 }
               >
                 📂 หมวดหมู่หนัง
@@ -146,11 +126,8 @@ function Navbar({ search, setSearch }) {
                       className="category-item"
                       style={styles.dropdownItem}
                       onClick={() => {
-                        navigate("/", {
-                          state: { category: cat }
-                        });
-                        setMobileMenu(false);
-                        setShowCategoryDropdown(false);
+                        goCategory(cat);
+                        closeMobileMenu();
                       }}
                     >
                       • {cat}
@@ -163,7 +140,7 @@ function Navbar({ search, setSearch }) {
                 className="category-item"
                 onClick={() => {
                   navigate("/categories");
-                  setMobileMenu(false);
+                  closeMobileMenu();
                 }}
               >
                 ⭐ แยกหมวดหมู่หนัง
@@ -172,9 +149,10 @@ function Navbar({ search, setSearch }) {
           </>
         )}
 
-        {/* SEARCH BOX */}
+        {/* Search */}
         <div className="search-box" style={styles.searchBox}>
           <span style={styles.icon}>🔍</span>
+
           <input
             type="text"
             placeholder="ค้นหาหนัง..."
@@ -183,18 +161,14 @@ function Navbar({ search, setSearch }) {
             style={styles.input}
           />
         </div>
-
       </div>
     </div>
-
-
   );
-
 }
 
 const styles = {
   wrapper: {
-    background: "black"
+    background: "black",
   },
 
   container: {
@@ -203,51 +177,24 @@ const styles = {
     padding: "10px",
     display: "flex",
     alignItems: "center",
-    gap: "10px"
+    gap: "10px",
   },
 
   logo: {
-    flexShrink: 0, // 👈 กัน logo บีบ
+    flexShrink: 0,
     display: "flex",
     alignItems: "center",
-    gap: "10px",
-    margin: 0
+    margin: 0,
   },
 
   logoImage: {
     width: "200px",
     height: "100px",
-    objectFit: "contain"
+    objectFit: "contain",
   },
 
   logoLink: {
-    textDecoration: "none",
-    color: "white"
-  },
-
-  searchBox: {
-    position: "relative",
-    marginLeft: "auto",   // 👈 ดันไปขวา
-    width: "300px"
-  },
-
-  input: {
-    width: "100%",
-    boxSizing: "border-box", // 👈 แก้ล้นตัวจริง 💥
-    padding: "8px 8px 8px 35px",
-    borderRadius: "20px",
-    border: "none",
-    background: "#222",
-    color: "white"
-  },
-
-  icon: {
-    position: "absolute",
-    left: "10px",
-    top: "50%",
-    transform: "translateY(-50%)",
-    color: "#aaa",
-    pointerEvents: "none"
+    cursor: "pointer",
   },
 
   navLinks: {
@@ -257,22 +204,47 @@ const styles = {
     marginLeft: "20px",
     flex: 1,
     color: "#ddd",
-    textDecoration: "none",
     fontSize: "15px",
     fontWeight: "600",
     whiteSpace: "nowrap",
   },
+
+  searchBox: {
+    position: "relative",
+    marginLeft: "auto",
+    width: "300px",
+  },
+
+  input: {
+    width: "100%",
+    boxSizing: "border-box",
+    padding: "8px 8px 8px 35px",
+    borderRadius: "20px",
+    border: "none",
+    background: "#222",
+    color: "white",
+  },
+
+  icon: {
+    position: "absolute",
+    left: "10px",
+    top: "50%",
+    transform: "translateY(-50%)",
+    color: "#aaa",
+    pointerEvents: "none",
+  },
+
   dropdown: {
     background: "#181818",
     borderRadius: "10px",
     marginTop: "5px",
-    marginBottom: "10px"
+    marginBottom: "10px",
   },
 
   dropdownItem: {
     paddingLeft: "25px",
-    fontSize: "14px"
-  }
+    fontSize: "14px",
+  },
 };
 
 export default Navbar;
