@@ -1,9 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import { API_URL } from "../config";
 import { categories } from "../data/categories";
+import {
+  slugToCategory,
+  categoryToSlug,
+} from "../data/categoryMap";
 
 import MovieCard from "../components/MovieCard";
 import Carousel from "../components/Carousel";
@@ -11,81 +15,80 @@ import Carousel from "../components/Carousel";
 const MOVIES_PER_PAGE = 12;
 
 function Home({ search }) {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { slug } = useParams();
+  const navigate = useNavigate();
 
   const [movies, setMovies] = useState([]);
   const [articles, setArticles] = useState([]);
+  const category = slug
+    ? slugToCategory(slug)
+    : "หนังทั้งหมด";
   const [currentPage, setCurrentPage] = useState(1);
-  const [category, setCategory] = useState("หนังทั้งหมด");
 
-  /* =====================
+  /* ======================
      FETCH DATA
-  ===================== */
+  ====================== */
   useEffect(() => {
-    fetchMovies();
-    fetchArticles();
+    const loadData = async () => {
+      try {
+        const [movieRes, articleRes] = await Promise.all([
+          axios.get(`${API_URL}/api/movies`),
+          axios.get(`${API_URL}/api/articles`),
+        ]);
+
+        const sortedMovies = [...movieRes.data].sort(
+          (a, b) =>
+            new Date(b.createdAt || 0) -
+            new Date(a.createdAt || 0)
+        );
+
+        setMovies(sortedMovies);
+        setArticles(articleRes.data);
+      } catch (err) {
+        console.error("Failed loading home data:", err);
+      }
+    };
+
+    loadData();
   }, []);
 
-  const fetchMovies = async () => {
-    try {
-      const res = await axios.get(`${API_URL}/api/movies`);
-
-      const sortedMovies = res.data.sort(
-        (a, b) =>
-          new Date(b.createdAt || 0) -
-          new Date(a.createdAt || 0)
-      );
-
-      setMovies(sortedMovies);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const fetchArticles = async () => {
-    try {
-      const res = await axios.get(`${API_URL}/api/articles`);
-      setArticles(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  /* =====================
+  /* ======================
      CATEGORY FROM URL
-  ===================== */
+  ====================== */
   useEffect(() => {
-    const currentCategory =
-      searchParams.get("category") || "หนังทั้งหมด";
-
-    setCategory(currentCategory);
     setCurrentPage(1);
-  }, [searchParams]);
+  }, [slug]);
 
   const changeCategory = (cat) => {
-    setSearchParams({ category: cat });
+    if (cat === "หนังทั้งหมด") {
+      navigate("/");
+      return;
+    }
+
+    navigate(`/category/${categoryToSlug(cat)}`);
   };
 
-  /* =====================
+  /* ======================
      FILTER MOVIES
-  ===================== */
+  ====================== */
   const filteredMovies = useMemo(() => {
     return movies.filter((movie) => {
-      const matchSearch = movie.title
-        .toLowerCase()
-        .includes(search.toLowerCase());
+      const title = movie.title?.toLowerCase() || "";
+      const keyword = search.toLowerCase();
+
+      const matchSearch = title.includes(keyword);
 
       const matchCategory =
         category === "หนังทั้งหมด" ||
-        (movie.category || []).includes(category);
+        movie.category?.includes(category);
 
       return matchSearch && matchCategory;
     });
   }, [movies, category, search]);
 
-  /* =====================
+  /* ======================
      PAGINATION
-  ===================== */
+  ====================== */
   const totalPages = Math.ceil(
     filteredMovies.length / MOVIES_PER_PAGE
   );
@@ -111,15 +114,14 @@ function Home({ search }) {
         <div style={styles.sectionTitle}>
           หนังใหม่ล่าสุด (2026)
         </div>
-
         <Carousel movies={latestMovies} />
       </div>
 
-      {/* MAIN CONTENT */}
+      {/* MAIN */}
       <div style={styles.wrapper}>
         <div style={styles.layout}>
           {/* SIDEBAR */}
-          <div
+          <aside
             style={styles.sidebar}
             className="hide-mobile"
           >
@@ -149,10 +151,10 @@ function Home({ search }) {
                 {cat}
               </div>
             ))}
-          </div>
+          </aside>
 
           {/* MOVIES */}
-          <div style={styles.main}>
+          <main style={styles.main}>
             <div style={styles.movieTitle}>
               {category}
             </div>
@@ -169,39 +171,40 @@ function Home({ search }) {
               ))}
             </div>
 
-            <div style={styles.pagination}>
-              {Array.from(
-                { length: totalPages },
-                (_, i) => (
-                  <button
-                    key={i}
-                    onClick={() =>
-                      setCurrentPage(i + 1)
-                    }
-                    className={`page-btn ${
-                      currentPage === i + 1
+            {/* PAGINATION */}
+            {totalPages > 1 && (
+              <div style={styles.pagination}>
+                {Array.from(
+                  { length: totalPages },
+                  (_, i) => (
+                    <button
+                      key={i}
+                      onClick={() =>
+                        setCurrentPage(i + 1)
+                      }
+                      className={`page-btn ${currentPage === i + 1
                         ? "active"
                         : ""
-                    }`}
-                  >
-                    {i + 1}
-                  </button>
-                )
-              )}
-            </div>
-          </div>
+                        }`}
+                    >
+                      {i + 1}
+                    </button>
+                  )
+                )}
+              </div>
+            )}
+          </main>
         </div>
       </div>
 
-      {/* ARTICLES */}
       <ArticleSection articles={articles} />
     </div>
   );
 }
 
-/* =====================
-   ARTICLE COMPONENT
-===================== */
+/* ======================
+   ARTICLE SECTION
+====================== */
 function ArticleSection({ articles }) {
   return (
     <>

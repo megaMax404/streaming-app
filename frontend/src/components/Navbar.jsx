@@ -1,5 +1,19 @@
 import { Link, useNavigate } from "react-router-dom";
+import { categoryToSlug } from "../data/categoryMap";
 import { useState } from "react";
+
+const QUICK_CATEGORIES = [
+  "หนังใหม่ล่าสุด",
+  "หนังปี 2026",
+  "Action บู๊",
+  "Comedy ตลก",
+  "Horror สยองขวัญ",
+  "Romance รักโรแมนติก",
+  "Thriller ระทึกขวัญ",
+  "หนังมาเวล",
+  "Netflix",
+  "Animation การ์ตูน",
+];
 
 function Navbar({ search, setSearch }) {
   const navigate = useNavigate();
@@ -7,37 +21,43 @@ function Navbar({ search, setSearch }) {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
 
-  const quickCategories = [
-    "หนังใหม่ล่าสุด",
-    "หนังปี 2026",
-    "Action บู๊",
-    "Comedy ตลก",
-    "Horror สยองขวัญ",
-    "Romance รักโรแมนติก",
-    "Thriller ระทึกขวัญ",
-    "หนังมาเวล",
-    "Netflix",
-    "Animation การ์ตูน",
-  ];
-
-  const goCategory = (category) => {
-    navigate(`/?category=${encodeURIComponent(category)}`);
-  };
-
-  const goHome = () => {
-    goCategory("หนังทั้งหมด");
-  };
-
   const closeMobileMenu = () => {
     setMobileMenu(false);
     setShowCategoryDropdown(false);
   };
 
+  const handleCategory = (category) => {
+    const slug = categoryToSlug(category);
+
+    if (slug === "all") {
+      navigate("/");
+    } else {
+      navigate(`/category/${slug}`);
+    }
+
+    closeMobileMenu();
+  };
+
+  const handleHome = () => {
+    handleCategory("หนังทั้งหมด");
+  };
+
+  const handleNavigateCategories = () => {
+    navigate("/categories");
+    closeMobileMenu();
+  };
+
+  const renderMobileItem = (label, onClick) => (
+    <div className="category-item" onClick={onClick}>
+      {label}
+    </div>
+  );
+
   return (
     <div style={styles.wrapper}>
       <div style={styles.container}>
         {/* Logo */}
-        <div style={styles.logoLink} onClick={goHome}>
+        <div style={styles.logoLink} onClick={handleHome}>
           <h2 style={styles.logo}>
             <img
               src="https://img2.pic.in.th/10392e98b172ab32c.png"
@@ -49,17 +69,17 @@ function Navbar({ search, setSearch }) {
 
         {/* Desktop Nav */}
         <div className="navLinks" style={styles.navLinks}>
-          <div className="nav-item" onClick={goHome}>
+          <div className="nav-item" onClick={handleHome}>
             หน้าแรก
           </div>
 
-          <div className="nav-item" onClick={goHome}>
+          <div className="nav-item" onClick={handleHome}>
             ดูหนังฟรี HD
           </div>
 
           <div
             className="nav-item"
-            onClick={() => goCategory("หนังปี 2026")}
+            onClick={() => handleCategory("หนังปี 2026")}
           >
             ดูหนังชนโรง 2026
           </div>
@@ -69,7 +89,7 @@ function Navbar({ search, setSearch }) {
           </Link>
         </div>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Button */}
         <button
           className="mobile-menu-btn"
           onClick={() => setMobileMenu(true)}
@@ -77,7 +97,7 @@ function Navbar({ search, setSearch }) {
           ☰
         </button>
 
-        {/* Mobile Sidebar */}
+        {/* Mobile Menu */}
         {mobileMenu && (
           <>
             <div
@@ -88,31 +108,17 @@ function Navbar({ search, setSearch }) {
             <div className="mobile-sidebar">
               <h3>เมนู</h3>
 
-              <div className="category-item" onClick={() => {
-                goHome();
-                closeMobileMenu();
-              }}>
-                🏠 หน้าแรก
-              </div>
-
-              <div className="category-item" onClick={() => {
-                goHome();
-                closeMobileMenu();
-              }}>
-                🎬 ดูหนังฟรี HD
-              </div>
-
-              <div className="category-item" onClick={() => {
-                goCategory("หนังปี 2026");
-                closeMobileMenu();
-              }}>
-                🔥 ดูหนังชนโรง 2026
-              </div>
+              {renderMobileItem("🏠 หน้าแรก", handleHome)}
+              {renderMobileItem("🎬 ดูหนังฟรี HD", handleHome)}
+              {renderMobileItem(
+                "🔥 ดูหนังชนโรง 2026",
+                () => handleCategory("หนังปี 2026")
+              )}
 
               <div
                 className="category-item"
                 onClick={() =>
-                  setShowCategoryDropdown(!showCategoryDropdown)
+                  setShowCategoryDropdown(prev => !prev)
                 }
               >
                 📂 หมวดหมู่หนัง
@@ -120,15 +126,12 @@ function Navbar({ search, setSearch }) {
 
               {showCategoryDropdown && (
                 <div style={styles.dropdown}>
-                  {quickCategories.map((cat) => (
+                  {QUICK_CATEGORIES.map((cat) => (
                     <div
                       key={cat}
                       className="category-item"
                       style={styles.dropdownItem}
-                      onClick={() => {
-                        goCategory(cat);
-                        closeMobileMenu();
-                      }}
+                      onClick={() => handleCategory(cat)}
                     >
                       • {cat}
                     </div>
@@ -136,15 +139,10 @@ function Navbar({ search, setSearch }) {
                 </div>
               )}
 
-              <div
-                className="category-item"
-                onClick={() => {
-                  navigate("/categories");
-                  closeMobileMenu();
-                }}
-              >
-                ⭐ แยกหมวดหมู่หนัง
-              </div>
+              {renderMobileItem(
+                "⭐ แยกหมวดหมู่หนัง",
+                handleNavigateCategories
+              )}
             </div>
           </>
         )}
