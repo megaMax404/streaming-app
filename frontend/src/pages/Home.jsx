@@ -112,6 +112,9 @@ function Home({ search }) {
     );
   }, [movies]);
   console.log("articles length =", articles.length);
+  console.log("slug:", slug);
+  console.log("category:", category);
+  console.log("filtered:", filteredMovies.length);
   return (
     <div>
       {/* CAROUSEL */}
@@ -173,16 +176,18 @@ function Home({ search }) {
                   />
                 ))
               ) : (
-                <div style={styles.emptyState}>
-                  <div style={styles.emptyBox}>
-                    <div style={styles.emptyIcon}>🎬</div>
+                <div style={{ gridColumn: "1 / -1" }}>
+                  <div style={styles.emptyState}>
+                    <div style={styles.emptyBox}>
+                      <div style={styles.emptyIcon}>🎬</div>
 
-                    <div style={styles.emptyText}>
-                      กำลังทำการอัพเดท
-                    </div>
+                      <div style={styles.emptyText}>
+                        กำลังทำการอัพเดท
+                      </div>
 
-                    <div style={styles.emptySubText}>
-                      หมวดหมู่นี้กำลังเพิ่มหนังใหม่ โปรดกลับมาอีกครั้ง
+                      <div style={styles.emptySubText}>
+                        หมวดหมู่นี้กำลังเพิ่มหนังใหม่ โปรดกลับมาอีกครั้ง
+                      </div>
                     </div>
                   </div>
                 </div>
