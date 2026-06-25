@@ -1,30 +1,18 @@
 import { categories } from "./categories";
 
-/* =========================
-   SLUG GENERATOR
-========================= */
 const normalize = (text) => {
   return text
     .trim()
     .toLowerCase()
-    .replace(/\s+/g, "-") // space -> -
-    .replace(/[^\w\u0E00-\u0E7F-]/g, ""); // keep thai/eng/num/-
+    .replace(/\s+/g, "-")
+    .replace(/[^\w\u0E00-\u0E7F-]/g, "");
 };
 
-/* =========================
-   AUTO CATEGORY MAP
-========================= */
 export const categoryMap = categories.map((category) => ({
   name: category,
-  slug:
-    category === "หนังทั้งหมด"
-      ? "all"
-      : normalize(category),
+  slug: category === "หนังทั้งหมด" ? "all" : normalize(category),
 }));
 
-/* =========================
-   LOOKUP HELPERS
-========================= */
 export const categoryToSlug = (name) => {
   if (!name) return "all";
 
@@ -36,9 +24,7 @@ export const categoryToSlug = (name) => {
 };
 
 export const slugToCategory = (slug) => {
-  if (!slug || slug === "all") {
-    return "หนังทั้งหมด";
-  }
+  if (!slug || slug === "all") return "หนังทั้งหมด";
 
   const found = categoryMap.find(
     (item) => item.slug === slug
