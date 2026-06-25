@@ -233,6 +233,18 @@ function ArticleSection({ articles }) {
   console.log("ArticleSection rendered", articles);
   return (
     <>
+      <div
+        style={{
+          background: "red",
+          color: "white",
+          padding: "100px",
+          fontSize: "50px",
+          zIndex: 99999,
+          position: "relative"
+        }}
+      >
+        ARTICLE TEST {articles.length}
+      </div>
       <h2 style={styles.articleTitle}>
         เว็บดูหนังออนไลน์ หนังใหม่ชนโรง 2026
       </h2>
