@@ -23,8 +23,9 @@ function App() {
   const [search, setSearch] =
     useState("");
 
-  const MainLayout = (
-    <>
+  function MainLayout() {
+    return ( 
+      <>
       <Navbar
         search={search}
         setSearch={setSearch}
@@ -32,7 +33,8 @@ function App() {
       <Home search={search} />
       <Footer />
     </>
-  );
+    );
+  }
 
   return (
     <BrowserRouter>
