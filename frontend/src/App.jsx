@@ -24,15 +24,15 @@ function App() {
     useState("");
 
   function MainLayout() {
-    return ( 
+    return (
       <>
-      <Navbar
-        search={search}
-        setSearch={setSearch}
-      />
-      <Home search={search} />
-      <Footer />
-    </>
+        <Navbar
+          search={search}
+          setSearch={setSearch}
+        />
+        <Home search={search} />
+        <Footer />
+      </>
     );
   }
 
@@ -40,8 +40,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* HOME */}
-        <Route path="/" element={MainLayout} />
-        <Route path="/category/:slug" element={MainLayout} />
+        <Route path="/" element={<MainLayout />} />
+        <Route path="/category/:slug" element={<MainLayout />} />
 
         {/* MOVIE DETAIL */}
         <Route
