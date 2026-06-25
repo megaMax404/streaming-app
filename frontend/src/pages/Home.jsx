@@ -112,11 +112,7 @@ function Home({ search }) {
       movie.category?.includes("หนังใหม่ล่าสุด")
     );
   }, [movies]);
-  console.log("RENDER ARTICLE SECTION", articles);
-  console.log("articles length =", articles.length);
-  console.log("slug:", slug);
-  console.log("category:", category);
-  console.log("filtered:", filteredMovies.length);
+
   return (
     <div>
       {/* CAROUSEL */}
@@ -230,37 +226,27 @@ function Home({ search }) {
    ARTICLE SECTION
 ====================== */
 function ArticleSection({ articles }) {
-  console.log("ArticleSection rendered", articles);
+
   return (
     <>
-      <div
-        style={{
-          background: "red",
-          color: "white",
-          padding: "100px",
-          fontSize: "50px",
-          zIndex: 99999,
-          position: "relative"
-        }}
-      >
-        ARTICLE TEST {articles.length}
+      <div style={styles.articleWrapper}>
+        <h2 style={styles.articleTitle}>
+          เว็บดูหนังออนไลน์ หนังใหม่ชนโรง 2026
+        </h2>
+
+        {articles.map((article) => (
+          <section
+            key={article._id}
+            style={styles.articleBox}
+          >
+            <h2 style={styles.articleTitle}>
+              {article.title}
+            </h2>
+
+            <p>{article.intro}</p>
+          </section>
+        ))}
       </div>
-      <h2 style={styles.articleTitle}>
-        เว็บดูหนังออนไลน์ หนังใหม่ชนโรง 2026
-      </h2>
-
-      {articles.map((article) => (
-        <section
-          key={article._id}
-          style={styles.articleBox}
-        >
-          <h2 style={styles.articleTitle}>
-            {article.title}
-          </h2>
-
-          <p>{article.intro}</p>
-        </section>
-      ))}
     </>
   );
 }
@@ -383,6 +369,13 @@ const styles = {
   emptySubText: {
     color: "#aaa",
     fontSize: "15px",
+  },
+
+  articleWrapper: {
+    width: "100%",
+    maxWidth: "1200px",
+    margin: "40px auto",
+    display: "block",
   },
 
 };

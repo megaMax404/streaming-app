@@ -24,18 +24,16 @@ function App() {
   const [search, setSearch] =
     useState("");
 
-  function MainLayout() {
-    return (
+  <Route
+    path="/category/:slug"
+    element={
       <>
-        <Navbar
-          search={search}
-          setSearch={setSearch}
-        />
+        <Navbar search={search} setSearch={setSearch} />
         <Home search={search} />
         <Footer />
       </>
-    );
-  }
+    }
+  />
 
   return (
     <BrowserRouter>
