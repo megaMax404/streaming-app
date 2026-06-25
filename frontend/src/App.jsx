@@ -1,3 +1,4 @@
+console.log("APP RENDER");
 import { useState } from "react";
 import {
   BrowserRouter,
