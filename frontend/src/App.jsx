@@ -1,4 +1,3 @@
-console.log("APP RENDER");
 import { useState } from "react";
 import {
   BrowserRouter,
@@ -17,48 +16,41 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
 function App() {
+  console.log("APP RENDER");
+
   const [isAdmin, setIsAdmin] = useState(
     !!sessionStorage.getItem("adminToken")
   );
 
-  const [search, setSearch] =
-    useState("");
+  const [search, setSearch] = useState("");
 
-  <Route
-    path="/category/:slug"
-    element={
+  function MainLayout() {
+    return (
       <>
         <Navbar search={search} setSearch={setSearch} />
         <Home search={search} />
         <Footer />
       </>
-    }
-  />
+    );
+  }
 
   return (
     <BrowserRouter>
       <Routes>
-        {/* HOME */}
         <Route path="/" element={<MainLayout />} />
         <Route path="/category/:slug" element={<MainLayout />} />
 
-        {/* MOVIE DETAIL */}
         <Route
           path="/movie/:id"
           element={
             <>
-              <Navbar
-                search={search}
-                setSearch={setSearch}
-              />
+              <Navbar search={search} setSearch={setSearch} />
               <MovieDetail />
-
               <Footer />
             </>
           }
         />
 
-        {/* LOGIN */}
         <Route
           path="/9x9adm-panel"
           element={
@@ -73,38 +65,21 @@ function App() {
           element={<AdminLogin setIsAdmin={setIsAdmin} />}
         />
 
-        {/* PROTECTED ADMIN */}
         <Route
           path="/categories"
           element={
             <>
-              <Navbar
-                search={search}
-                setSearch={setSearch}
-              />
+              <Navbar search={search} setSearch={setSearch} />
               <CategoryPage />
               <Footer />
             </>
           }
         />
 
-
-        <Route
-          path="*"
-          element={
-            <Navigate
-              to="/"
-              replace
-            />
-          }
-        />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-
-
     </BrowserRouter>
   );
-
 }
-
 
 export default App;
