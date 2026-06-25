@@ -112,6 +112,7 @@ function Home({ search }) {
       movie.category?.includes("หนังใหม่ล่าสุด")
     );
   }, [movies]);
+  console.log("RENDER ARTICLE SECTION", articles);
   console.log("articles length =", articles.length);
   console.log("slug:", slug);
   console.log("category:", category);
@@ -229,6 +230,7 @@ function Home({ search }) {
    ARTICLE SECTION
 ====================== */
 function ArticleSection({ articles }) {
+  console.log("ArticleSection rendered", articles);
   return (
     <>
       <h2 style={styles.articleTitle}>
