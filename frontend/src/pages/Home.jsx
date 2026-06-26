@@ -106,8 +106,8 @@ function Home({ search }) {
       movie.category?.includes("หนังใหม่ล่าสุด")
     );
   }, [movies]);
-  console.log("articles =", articles);
-  console.log("articles length =", articles.length);
+
+
   return (
     <div style={{
       width: "100%",
@@ -225,7 +225,6 @@ function Home({ search }) {
    ARTICLE SECTION
 ====================== */
 function ArticleSection({ articles }) {
-  console.log("articles in section =", articles);
 
   if (!articles || articles.length === 0) {
     return <div style={{ color: "white" }}>No articles</div>;
@@ -234,21 +233,40 @@ function ArticleSection({ articles }) {
   return (
     <div style={styles.articleWrapper}>
       {articles.map((article) => {
-        console.log("render article", article);
 
         return (
-          <section
-            key={article._id}
-            style={{
-              background: "red",
-              color: "white",
-              minHeight: "300px",
-              padding: "20px",
-              marginBottom: "20px"
-            }}
-          >
-            <h2>{article.title || "NO TITLE"}</h2>
-            <p>{article.intro || "NO INTRO"}</p>
+          <section key={article._id} style={styles.articleBox}>
+            <h2 style={styles.articleTitle}>{article.title}</h2>
+
+            <p>{article.intro}</p>
+
+            {article.section1Title && (
+              <>
+                <h3>{article.section1Title}</h3>
+                <p>{article.section1Content}</p>
+              </>
+            )}
+
+            {article.section2Title && (
+              <>
+                <h3>{article.section2Title}</h3>
+                <p>{article.section2Content}</p>
+              </>
+            )}
+
+            {article.section3Title && (
+              <>
+                <h3>{article.section3Title}</h3>
+                <p>{article.section3Content}</p>
+              </>
+            )}
+
+            {article.section4Title && (
+              <>
+                <h3>{article.section4Title}</h3>
+                <p>{article.section4Content}</p>
+              </>
+            )}
           </section>
         );
       })}
