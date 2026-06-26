@@ -232,6 +232,9 @@ function ArticleSection({ articles }) {
 
   return (
     <div style={styles.articleWrapper}>
+      <h2 style={styles.articleTitle}>
+        เว็บดูหนังออนไลน์ หนังใหม่ชนโรง 2026
+      </h2>
       {articles.map((article) => {
 
         return (
