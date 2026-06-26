@@ -215,7 +215,9 @@ function Home({ search }) {
         </div>
       </div>
 
-      <ArticleSection articles={articles} />
+      <div style={{ background: "green", padding: 50 }}>
+        <ArticleSection articles={articles} />
+      </div>
     </div>
   );
 }
@@ -224,7 +226,7 @@ function Home({ search }) {
    ARTICLE SECTION
 ====================== */
 function ArticleSection({ articles }) {
-console.log("ARTICLE SECTION MOUNTED");
+  console.log("ARTICLE SECTION MOUNTED");
   return (
     <>
       <div style={styles.articleWrapper}>
