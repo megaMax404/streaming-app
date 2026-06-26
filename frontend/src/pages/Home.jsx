@@ -1,4 +1,3 @@
-console.log("HOME RENDER");
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -69,11 +68,6 @@ function Home({ search }) {
     navigate(`/category/${categoryToSlug(cat)}`);
   };
 
-  console.log("slug =", slug);
-  console.log("category =", category);
-  console.log(
-    movies.filter(m => m.category?.includes(category)).length
-  );
   /* ======================
      FILTER MOVIES
   ====================== */
@@ -114,7 +108,11 @@ function Home({ search }) {
   }, [movies]);
 
   return (
-    <div>
+    <div style={{
+      width: "100%",
+      display: "block",
+      overflow: "visible"
+    }}>
       {/* CAROUSEL */}
       <div style={styles.carouselSection}>
         <div style={styles.sectionTitle}>
@@ -226,7 +224,7 @@ function Home({ search }) {
    ARTICLE SECTION
 ====================== */
 function ArticleSection({ articles }) {
-
+console.log("ARTICLE SECTION MOUNTED");
   return (
     <>
       <div style={styles.articleWrapper}>
@@ -376,6 +374,10 @@ const styles = {
     maxWidth: "1200px",
     margin: "40px auto",
     display: "block",
+    minHeight: "600px",
+    background: "blue",
+    position: "relative",
+    zIndex: 9999
   },
 
 };

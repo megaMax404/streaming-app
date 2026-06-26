@@ -8,6 +8,7 @@ body,
   background: #000;
   color: white;
   font-family: "Prompt", sans-serif;
+  overflow-y: auto !important;
 }
 
 body {
@@ -21,12 +22,7 @@ body {
 
 #root {
   width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
+  min-height: 100vh;
   box-sizing: border-box;
   background: #000;
 }
@@ -35,9 +31,6 @@ p {
   margin: 0;
 }
 
-::-webkit-scrollbar {
-  display: none;
-}
 
 /* ===== MOVIE GRID ===== */
 .movie-grid {
