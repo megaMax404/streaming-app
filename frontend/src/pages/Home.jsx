@@ -215,11 +215,9 @@ function Home({ search }) {
           </main>
         </div>
       </div>
-
-      <div style={{ background: "green", padding: 50 }}>
-        <ArticleSection articles={articles} />
-      </div>
+      <ArticleSection articles={articles} />
     </div>
+
   );
 }
 
@@ -227,32 +225,34 @@ function Home({ search }) {
    ARTICLE SECTION
 ====================== */
 function ArticleSection({ articles }) {
-  console.log("RENDER ARTICLE:", article);
-  return (
-    <>
-      <div style={styles.articleWrapper}>
-        <h2 style={styles.articleTitle}>
-          เว็บดูหนังออนไลน์ หนังใหม่ชนโรง 2026
-        </h2>
+  console.log("articles in section =", articles);
 
-        {articles.map((article) => (
+  if (!articles || articles.length === 0) {
+    return <div style={{ color: "white" }}>No articles</div>;
+  }
+
+  return (
+    <div style={styles.articleWrapper}>
+      {articles.map((article) => {
+        console.log("render article", article);
+
+        return (
           <section
             key={article._id}
             style={{
-              ...styles.articleBox,
               background: "red",
-              minHeight: "300px"
+              color: "white",
+              minHeight: "300px",
+              padding: "20px",
+              marginBottom: "20px"
             }}
           >
-            <h2 style={styles.articleTitle}>
-              {article.title}
-            </h2>
-
-            <p>{article.intro}</p>
+            <h2>{article.title || "NO TITLE"}</h2>
+            <p>{article.intro || "NO INTRO"}</p>
           </section>
-        ))}
-      </div>
-    </>
+        );
+      })}
+    </div>
   );
 }
 
