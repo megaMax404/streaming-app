@@ -227,7 +227,7 @@ function Home({ search }) {
    ARTICLE SECTION
 ====================== */
 function ArticleSection({ articles }) {
-  console.log("ARTICLE SECTION MOUNTED");
+  console.log("RENDER ARTICLE:", article);
   return (
     <>
       <div style={styles.articleWrapper}>
@@ -238,7 +238,11 @@ function ArticleSection({ articles }) {
         {articles.map((article) => (
           <section
             key={article._id}
-            style={styles.articleBox}
+            style={{
+              ...styles.articleBox,
+              background: "red",
+              minHeight: "300px"
+            }}
           >
             <h2 style={styles.articleTitle}>
               {article.title}
