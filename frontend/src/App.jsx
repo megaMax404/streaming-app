@@ -27,7 +27,11 @@ function App() {
     return (
       <>
         <Navbar search={search} setSearch={setSearch} />
-        <Home search={search} />
+
+        <div className="page-container">
+          <Home search={search} />
+        </div>
+
         <Footer />
       </>
     );

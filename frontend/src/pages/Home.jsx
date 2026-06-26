@@ -254,7 +254,7 @@ function ArticleSection({ articles }) {
 const styles = {
   wrapper: {
     width: "100%",
-    padding: "10px 20px",
+    padding: "10px 0",
     boxSizing: "border-box",
   },
   layout: {
@@ -287,10 +287,12 @@ const styles = {
     alignItems: "stretch",
   },
   container: {
-    display: "grid",
-    gridTemplateColumns:
-      "repeat(auto-fill,minmax(180px,1fr))",
-    gap: "15px",
+    width: "100%",
+    maxWidth: "1200px",
+    margin: "0 auto",
+    padding: "20px",
+    textAlign: "center",
+    boxSizing: "border-box"
   },
   pagination: {
     marginTop: "20px",
@@ -324,11 +326,13 @@ const styles = {
     marginLeft: 0,
   },
   articleBox: {
-    maxWidth: "1200px",
-    margin: "40px auto",
+    width: "100%",
+    maxWidth: "1000px",
+    margin: "0 auto 40px auto",
     padding: "30px",
     background: "#111",
     borderRadius: "18px",
+    boxSizing: "border-box"
   },
   articleTitle: {
     color: "#fff",
@@ -373,13 +377,8 @@ const styles = {
 
   articleWrapper: {
     width: "100%",
-    maxWidth: "1200px",
-    margin: "40px auto",
-    display: "block",
-    minHeight: "600px",
-    background: "blue",
-    position: "relative",
-    zIndex: 9999
+    padding: "40px 20px",
+    boxSizing: "border-box",
   },
 
 };
