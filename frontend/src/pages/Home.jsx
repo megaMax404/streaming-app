@@ -106,7 +106,8 @@ function Home({ search }) {
       movie.category?.includes("หนังใหม่ล่าสุด")
     );
   }, [movies]);
-
+  console.log("articles =", articles);
+  console.log("articles length =", articles.length);
   return (
     <div style={{
       width: "100%",
