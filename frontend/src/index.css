@@ -35,7 +35,8 @@ p {
 /* ===== MOVIE GRID ===== */
 .movie-grid {
   display: grid;
-  gap: 10px;
+  gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
 }
 
 @media (max-width: 600px) {
@@ -47,6 +48,12 @@ p {
 @media (min-width: 601px) and (max-width: 1024px) {
   .movie-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1399px) {
+  .movie-grid {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 

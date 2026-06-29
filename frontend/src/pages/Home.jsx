@@ -36,6 +36,9 @@ function Home({ search }) {
           axios.get(`${API_URL}/api/articles`),
         ]);
 
+        console.log("ARTICLE RAW =", articleRes);
+        console.log("ARTICLE DATA =", articleRes.data);
+        console.log("IS ARRAY =", Array.isArray(articleRes.data));
         const sortedMovies = [...movieRes.data].sort(
           (a, b) =>
             new Date(b.createdAt || 0) -
