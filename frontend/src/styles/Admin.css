@@ -1,12 +1,15 @@
 * {
   box-sizing: border-box;
 }
+
 /* ========================== PAGE ========================== */
 .admin-page {
   min-height: 100vh;
   background: #0b0b0b;
   color: #fff;
   padding: 30px;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 
 /* ===========================
@@ -96,15 +99,13 @@
   max-width: 430px;
 
   background:
-    rgba(255,255,255,0.06);
+    rgba(255, 255, 255, 0.06);
 
   border:
-    1px solid rgba(
+    1px solid rgba(255,
       255,
       255,
-      255,
-      0.08
-    );
+      0.08);
 
   backdrop-filter:
     blur(18px);
@@ -116,12 +117,10 @@
   text-align: center;
 
   box-shadow:
-    0 20px 60px rgba(
+    0 20px 60px rgba(0,
       0,
       0,
-      0,
-      0.5
-    );
+      0.5);
 
   position: relative;
   z-index: 10;
@@ -137,11 +136,9 @@
   border-radius: 50%;
 
   background:
-    linear-gradient(
-      135deg,
+    linear-gradient(135deg,
       #4f8cff,
-      #6f42c1
-    );
+      #6f42c1);
 
   display: flex;
   justify-content: center;
@@ -150,12 +147,10 @@
   font-size: 40px;
 
   box-shadow:
-    0 0 40px rgba(
-      79,
+    0 0 40px rgba(79,
       140,
       255,
-      0.35
-    );
+      0.35);
 }
 
 .login-title {
@@ -187,15 +182,13 @@
   height: 58px;
 
   background:
-    rgba(255,255,255,0.06);
+    rgba(255, 255, 255, 0.06);
 
   border:
-    1px solid rgba(
+    1px solid rgba(255,
       255,
       255,
-      255,
-      0.08
-    );
+      0.08);
 
   border-radius: 18px;
 
@@ -214,12 +207,10 @@
   border-color: #4f8cff;
 
   box-shadow:
-    0 0 20px rgba(
-      79,
+    0 0 20px rgba(79,
       140,
       255,
-      0.2
-    );
+      0.2);
 }
 
 .toggle-password {
@@ -242,11 +233,9 @@
   border-radius: 18px;
 
   background:
-    linear-gradient(
-      135deg,
+    linear-gradient(135deg,
       #4f8cff,
-      #6f42c1
-    );
+      #6f42c1);
 
   color: white;
   font-size: 18px;
@@ -262,12 +251,10 @@
     translateY(-3px);
 
   box-shadow:
-    0 12px 30px rgba(
-      79,
+    0 12px 30px rgba(79,
       140,
       255,
-      0.35
-    );
+      0.35);
 }
 
 
@@ -576,6 +563,7 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
+
 /* ========================== RESPONSIVE ========================== */
 @media (max-width: 1300px) {
   .movie-dashboard-grid {
@@ -685,8 +673,8 @@
   border-color: #ffd000;
 
   box-shadow:
-    0 0 0 4px rgba(255,208,0,.08),
-    0 10px 25px rgba(255,208,0,.12);
+    0 0 0 4px rgba(255, 208, 0, .08),
+    0 10px 25px rgba(255, 208, 0, .12);
 }
 
 /* option */
@@ -736,16 +724,14 @@
 }
 
 .backup-row {
-   display: flex;
+  display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 12px;
-  border: 1px solid rgba(
-    255,
-    255,
-    255,
-    0.08
-  );
+  border: 1px solid rgba(255,
+      255,
+      255,
+      0.08);
   border-radius: 10px;
 }
 
@@ -772,7 +758,7 @@
 .stat-card {
   background: #171717;
 
-  border: 1px solid rgba(255,255,255,.08);
+  border: 1px solid rgba(255, 255, 255, .08);
 
   border-radius: 16px;
 
@@ -855,12 +841,10 @@
   position: fixed;
   inset: 0;
 
-  background: rgba(
-    0,
-    0,
-    0,
-    0.7
-  );
+  background: rgba(0,
+      0,
+      0,
+      0.7);
 
   display: flex;
   justify-content: center;
@@ -973,7 +957,7 @@
   color: white;
 
   box-shadow:
-    0 0 15px rgba(229,9,20,.4);
+    0 0 15px rgba(229, 9, 20, .4);
 }
 
 /* =========================

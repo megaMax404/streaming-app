@@ -32,6 +32,7 @@ requiredEnv.forEach((key) => {
 });
 
 const app = express();
+app.set("trust proxy", 1);
 const PORT = process.env.PORT || 5000;
 
 //
@@ -47,7 +48,11 @@ app.use(express.json({ limit: "1mb" }));
 const allowedOrigins = [
   "http://localhost:5173",
   "http://192.168.1.16:5173",
-  "https://streaming-app.vercel.app"
+  "https://streaming-app.vercel.app",
+  "http://doohd.vip",
+  "https://doohd.vip",
+  "http://www.doohd.vip",
+  "https://www.doohd.vip"
 ];
 
 app.use(
