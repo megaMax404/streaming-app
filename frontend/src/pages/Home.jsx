@@ -106,7 +106,17 @@ function Home({ search }) {
       movie.category?.includes("หนังใหม่ล่าสุด")
     );
   }, [movies]);
+  const visiblePages = [];
 
+  for (let i = 1; i <= totalPages; i++) {
+    if (
+      i === 1 ||
+      i === totalPages ||
+      Math.abs(i - currentPage) <= 2
+    ) {
+      visiblePages.push(i);
+    }
+  }
 
   return (
     <div style={{
@@ -164,7 +174,7 @@ function Home({ search }) {
               {category}
             </div>
 
-            <div style={styles.container} className="movie-grid">
+            <div className="movie-grid">
               {currentMovies.length > 0 ? (
                 currentMovies.map((movie) => (
                   <MovieCard
@@ -193,23 +203,60 @@ function Home({ search }) {
             {/* PAGINATION */}
             {totalPages > 1 && (
               <div style={styles.pagination}>
-                {Array.from(
-                  { length: totalPages },
-                  (_, i) => (
-                    <button
-                      key={i}
-                      onClick={() =>
-                        setCurrentPage(i + 1)
-                      }
-                      className={`page-btn ${currentPage === i + 1
-                        ? "active"
-                        : ""
-                        }`}
-                    >
-                      {i + 1}
-                    </button>
-                  )
-                )}
+                <button
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(1)}
+                >
+                  {"<<"}
+                </button>
+
+                <button
+                  disabled={currentPage === 1}
+                  onClick={() =>
+                    setCurrentPage((p) => Math.max(1, p - 1))
+                  }
+                >
+                  {"<"}
+                </button>
+
+                {visiblePages.map((page, index) => {
+                  const prevPage = visiblePages[index - 1];
+
+                  return (
+                    <div key={page} style={{ display: "flex", gap: "8px" }}>
+                      {prevPage && page - prevPage > 1 && (
+                        <span style={{ color: "#aaa", padding: "10px" }}>
+                          ...
+                        </span>
+                      )}
+
+                      <button
+                        onClick={() => setCurrentPage(page)}
+                        className={currentPage === page ? "active" : ""}
+                      >
+                        {page}
+                      </button>
+                    </div>
+                  );
+                })}
+
+                <button
+                  disabled={currentPage === totalPages}
+                  onClick={() =>
+                    setCurrentPage((p) =>
+                      Math.min(totalPages, p + 1)
+                    )
+                  }
+                >
+                  {">"}
+                </button>
+
+                <button
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(totalPages)}
+                >
+                  {">>"}
+                </button>
               </div>
             )}
           </main>
@@ -321,7 +368,11 @@ const styles = {
     boxSizing: "border-box"
   },
   pagination: {
-    marginTop: "20px",
+    display: "flex",
+    justifyContent: "center",
+    gap: "8px",
+    flexWrap: "wrap",
+    marginTop: "30px",
   },
   carouselSection: {
     width: "100%",
