@@ -1031,3 +1031,9 @@
   object-fit: cover;
   border-radius: 12px;
 }
+
+.admin-content {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+}
