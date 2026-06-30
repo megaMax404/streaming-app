@@ -119,11 +119,7 @@ function Home({ search }) {
   }
 
   return (
-    <div style={{
-      width: "100%",
-      display: "block",
-      overflow: "visible"
-    }}>
+    <div className="page-container">
       {/* CAROUSEL */}
       <div style={styles.carouselSection}>
         <div style={styles.sectionTitle}>
@@ -359,14 +355,7 @@ const styles = {
     flexDirection: "column",
     alignItems: "stretch",
   },
-  container: {
-    width: "100%",
-    maxWidth: "1200px",
-    margin: "0 auto",
-    padding: "20px",
-    textAlign: "center",
-    boxSizing: "border-box"
-  },
+  
   pagination: {
     display: "flex",
     justifyContent: "center",
@@ -387,7 +376,7 @@ const styles = {
     fontWeight: "bold",
     borderLeft: "5px solid #ffd000",
     paddingLeft: "12px",
-    margin: "0 0 15px 20px",
+    margin: "0 0 15px 0",
     textAlign: "left",
   },
   movieTitle: {

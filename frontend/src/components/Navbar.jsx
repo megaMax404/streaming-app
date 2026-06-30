@@ -170,12 +170,14 @@ const styles = {
   },
 
   container: {
-    maxWidth: "1200px",
+    width: "100%",
+    maxWidth: "1400px",
     margin: "0 auto",
-    padding: "10px",
+    padding: "10px 20px",
     display: "flex",
     alignItems: "center",
     gap: "10px",
+    boxSizing: "border-box",
   },
 
   logo: {
