@@ -12,7 +12,7 @@ import {
 import MovieCard from "../components/MovieCard";
 import Carousel from "../components/Carousel";
 
-const MOVIES_PER_PAGE = 12;
+const MOVIES_PER_PAGE = 36;
 
 function Home({ search }) {
   const { slug } = useParams();
