@@ -16,7 +16,7 @@ function MovieCard({ movie }) {
       />
 
       <h3 style={styles.title}>{movie.title}</h3>
-      <p style={styles.desc}>{movie.description}</p>
+      {/* <p style={styles.desc}>{movie.description}</p> */}
     </div>
   );
 }
