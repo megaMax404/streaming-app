@@ -1,3 +1,4 @@
+console.log("NEW MOVIECARD LOADED");
 import { useNavigate } from "react-router-dom";
 
 function MovieCard({ movie }) {
