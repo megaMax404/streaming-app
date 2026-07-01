@@ -28,10 +28,6 @@ body,
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 20px;
 }
 
 /* Mobile = 2 columns */
