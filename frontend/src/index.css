@@ -52,34 +52,41 @@ body,
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   flex-wrap: wrap;
-  margin-top: 30px;
+  margin-top: 35px;
 }
 
 .pagination button {
-  min-width: 42px;
-  height: 42px;
-  border: none;
-  border-radius: 8px;
-  background: #222;
-  color: white;
+  min-width: 46px;
+  height: 46px;
+  border: 1px solid #333;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #1b1b1b, #111);
+  color: #ddd;
   cursor: pointer;
-  font-weight: 600;
-  transition: 0.25s;
+  font-size: 15px;
+  font-weight: 700;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .3);
 }
 
 .pagination button:hover:not(:disabled) {
-  background: #444;
+  transform: translateY(-2px);
+  border-color: #ffd000;
+  color: #ffd000;
+  box-shadow: 0 0 15px rgba(255, 208, 0, .25);
 }
 
 .pagination button.active {
-  background: #ffd000;
+  background: linear-gradient(180deg, #ffd000, #f5b700);
   color: black;
+  border: none;
+  box-shadow: 0 0 20px rgba(255, 208, 0, .45);
 }
 
 .pagination button:disabled {
-  opacity: 0.35;
+  opacity: 0.25;
   cursor: not-allowed;
 }
 
@@ -124,7 +131,7 @@ body,
 /* ===== CARD ===== */
 .movie-card:hover {
   transform: scale(1.01) translateY(-1px);
-  box-shadow: 0 10px 25px rgba(0,0,0,.7);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, .7);
 }
 
 
@@ -136,7 +143,7 @@ body,
 .mobile-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.65);
+  background: rgba(0, 0, 0, 0.65);
   z-index: 9998;
 }
 
@@ -159,9 +166,18 @@ body,
 }
 
 .category-item {
-  padding: 12px 0;
+  padding: 12px 10px;
   border-bottom: 1px solid #333;
   cursor: pointer;
+  color: #aaa;
+  transition: all 0.25s ease;
+  border-radius: 8px;
+}
+
+.category-item:hover {
+  background: rgba(255, 208, 0, 0.08);
+  color: #ffd000 !important;
+  padding-left: 18px;
 }
 
 @media (max-width: 768px) {

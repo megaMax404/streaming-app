@@ -1,3 +1,7 @@
+console.log("movies =", movies.length);
+console.log("filtered =", filteredMovies.length);
+console.log("current =", currentMovies.length);
+console.log("totalPages =", totalPages);
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -146,14 +150,13 @@ function Home({ search }) {
                 className="category-item"
                 style={{
                   ...styles.categoryItem,
-                  color:
+                  color: category === cat ? "#ffd000" : "#aaa",
+                  fontWeight: category === cat ? "bold" : "normal",
+                  background:
                     category === cat
-                      ? "#fff"
-                      : "#aaa",
-                  fontWeight:
-                    category === cat
-                      ? "bold"
-                      : "normal",
+                      ? "rgba(255,208,0,0.12)"
+                      : "transparent",
+                  paddingLeft: category === cat ? "18px" : "10px",
                 }}
                 onClick={() =>
                   changeCategory(cat)
