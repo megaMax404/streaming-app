@@ -119,14 +119,7 @@ function Home({ search }) {
   }
 
   return (
-    <div
-      className="page-container"
-      style={{
-        maxWidth: "1400px",
-        margin: "0 auto",
-        border: "5px solid lime"
-      }}
-    >
+    <div style={{ border: "5px solid lime" }}>
       {/* CAROUSEL */}
       <div style={styles.carouselSection}>
         <div style={styles.sectionTitle}>

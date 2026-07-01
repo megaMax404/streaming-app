@@ -16,18 +16,21 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
 function App() {
-
   const [isAdmin, setIsAdmin] = useState(
     !!sessionStorage.getItem("adminToken")
   );
 
   const [search, setSearch] = useState("");
 
-  function MainLayout() {
+  function Layout({ children }) {
     return (
       <>
         <Navbar search={search} setSearch={setSearch} />
-          <Home search={search} />
+
+        <main className="page-container">
+          {children}
+        </main>
+
         <Footer />
       </>
     );
@@ -36,17 +39,39 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<MainLayout />} />
-        <Route path="/category/:slug" element={<MainLayout />} />
+        <Route
+          path="/"
+          element={
+            <Layout>
+              <Home search={search} />
+            </Layout>
+          }
+        />
+
+        <Route
+          path="/category/:slug"
+          element={
+            <Layout>
+              <Home search={search} />
+            </Layout>
+          }
+        />
 
         <Route
           path="/movie/:id"
           element={
-            <>
-              <Navbar search={search} setSearch={setSearch} />
+            <Layout>
               <MovieDetail />
-              <Footer />
-            </>
+            </Layout>
+          }
+        />
+
+        <Route
+          path="/categories"
+          element={
+            <Layout>
+              <CategoryPage />
+            </Layout>
           }
         />
 
@@ -62,17 +87,6 @@ function App() {
         <Route
           path="/9x9adm-login"
           element={<AdminLogin setIsAdmin={setIsAdmin} />}
-        />
-
-        <Route
-          path="/categories"
-          element={
-            <>
-              <Navbar search={search} setSearch={setSearch} />
-              <CategoryPage />
-              <Footer />
-            </>
-          }
         />
 
         <Route path="*" element={<Navigate to="/" replace />} />

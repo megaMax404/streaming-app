@@ -4,18 +4,19 @@ body,
 #root {
   margin: 0;
   padding: 0;
-  min-height: 100%;
-  background: #000;
+  background: black;
   color: white;
-  font-family: "Prompt", sans-serif;
-}
-
-body {
-  overflow-x: hidden;
+  min-height: 100%;
+  font-family: Prompt, sans-serif;
 }
 
 * {
   box-sizing: border-box;
+}
+
+.page-container {
+  width: min(1400px, calc(100vw - 40px));
+  margin-inline: auto;
 }
 
 :root {
@@ -118,12 +119,5 @@ body {
 /* ===== CARD ===== */
 .card-hover:hover {
   transform: scale(1.01) translateY(-1px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.7);
-}
-
-/* ===== container ===== */
-.page-container {
-  width: min(1400px, calc(100vw - 40px));
-  margin-inline: auto;
-  border: 3px solid red;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
 }

@@ -167,17 +167,15 @@ function Navbar({ search, setSearch }) {
 const styles = {
   wrapper: {
     background: "black",
+    borderBottom: "1px solid #222",
   },
 
   container: {
-    width: "100%",
-    maxWidth: "1400px",
+    width: "min(1400px, calc(100vw - 40px))",
     margin: "0 auto",
-    padding: "10px 20px",
     display: "flex",
     alignItems: "center",
     gap: "10px",
-    boxSizing: "border-box",
   },
 
   logo: {
