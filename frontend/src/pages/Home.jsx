@@ -74,7 +74,7 @@ function Home({ search }) {
   const filteredMovies = useMemo(() => {
     return movies.filter((movie) => {
       const title = movie.title?.toLowerCase() || "";
-      const keyword = search.toLowerCase();
+      const keyword = (search || "").toLowerCase();
 
       const matchSearch = title.includes(keyword);
 
