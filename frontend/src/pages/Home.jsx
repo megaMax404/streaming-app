@@ -1,7 +1,3 @@
-console.log("movies =", movies.length);
-console.log("filtered =", filteredMovies.length);
-console.log("current =", currentMovies.length);
-console.log("totalPages =", totalPages);
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -121,7 +117,10 @@ function Home({ search }) {
       visiblePages.push(i);
     }
   }
-
+  console.log("movies =", movies.length);
+  console.log("filtered =", filteredMovies.length);
+  console.log("current =", currentMovies.length);
+  console.log("totalPages =", totalPages);
   return (
     <div>
       {/* CAROUSEL */}
