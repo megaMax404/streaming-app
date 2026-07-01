@@ -42,125 +42,104 @@ function Navbar({ search, setSearch }) {
     handleCategory("หนังทั้งหมด");
   };
 
-  const handleNavigateCategories = () => {
-    navigate("/categories");
-    closeMobileMenu();
-  };
-
-  const renderMobileItem = (label, onClick) => (
-    <div className="category-item" onClick={onClick}>
-      {label}
-    </div>
-  );
-
   return (
-    <div style={styles.wrapper}>
-      <div style={styles.container}>
-        {/* Logo */}
-        <div style={styles.logoLink} onClick={handleHome}>
-          <h2 style={styles.logo}>
+    <>
+      {/* Mobile Toggle */}
+      <button
+        className="mobile-menu-btn"
+        onClick={() => setMobileMenu(!mobileMenu)}
+      >
+        ☰
+      </button>
+
+      {/* Overlay */}
+      {mobileMenu && (
+        <div className="mobile-overlay" onClick={closeMobileMenu} />
+      )}
+
+      {/* Sidebar */}
+      <div className={`mobile-sidebar ${mobileMenu ? "open" : ""}`}>
+        <h3>เมนู</h3>
+
+        <div className="category-item" onClick={handleHome}>
+          🏠 หน้าแรก
+        </div>
+
+        <div className="category-item" onClick={() => handleCategory("หนังปี 2026")}>
+          🔥 ดูหนังชนโรง 2026
+        </div>
+
+        <div
+          className="category-item"
+          onClick={() =>
+            setShowCategoryDropdown(!showCategoryDropdown)
+          }
+        >
+          📂 หมวดหมู่หนัง
+        </div>
+
+        {showCategoryDropdown && (
+          <div style={styles.dropdown}>
+            {QUICK_CATEGORIES.map((cat) => (
+              <div
+                key={cat}
+                className="category-item"
+                style={styles.dropdownItem}
+                onClick={() => handleCategory(cat)}
+              >
+                • {cat}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Navbar */}
+      <div style={styles.wrapper}>
+        <div style={styles.container}>
+          <div style={styles.logoLink} onClick={handleHome}>
             <img
               src="https://img2.pic.in.th/10392e98b172ab32c.png"
               alt="logo"
               style={styles.logoImage}
             />
-          </h2>
-        </div>
-
-        {/* Desktop Nav */}
-        <div className="navLinks" style={styles.navLinks}>
-          <div className="nav-item" onClick={handleHome}>
-            หน้าแรก
           </div>
 
-          <div className="nav-item" onClick={handleHome}>
-            ดูหนังฟรี HD
-          </div>
-
-          <div
-            className="nav-item"
-            onClick={() => handleCategory("หนังปี 2026")}
-          >
-            ดูหนังชนโรง 2026
-          </div>
-
-          <Link to="/categories" className="nav-item">
-            แยกหมวดหมู่หนัง
-          </Link>
-        </div>
-
-        {/* Mobile Button */}
-        <button
-          className="mobile-menu-btn"
-          onClick={() => setMobileMenu(true)}
-        >
-          ☰
-        </button>
-
-        {/* Mobile Menu */}
-        {mobileMenu && (
-          <>
-            <div
-              className="mobile-overlay"
-              onClick={closeMobileMenu}
-            />
-
-            <div className="mobile-sidebar">
-              <h3>เมนู</h3>
-
-              {renderMobileItem("🏠 หน้าแรก", handleHome)}
-              {renderMobileItem("🎬 ดูหนังฟรี HD", handleHome)}
-              {renderMobileItem(
-                "🔥 ดูหนังชนโรง 2026",
-                () => handleCategory("หนังปี 2026")
-              )}
-
-              <div
-                className="category-item"
-                onClick={() =>
-                  setShowCategoryDropdown(prev => !prev)
-                }
-              >
-                📂 หมวดหมู่หนัง
-              </div>
-
-              {showCategoryDropdown && (
-                <div style={styles.dropdown}>
-                  {QUICK_CATEGORIES.map((cat) => (
-                    <div
-                      key={cat}
-                      className="category-item"
-                      style={styles.dropdownItem}
-                      onClick={() => handleCategory(cat)}
-                    >
-                      • {cat}
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {renderMobileItem(
-                "⭐ แยกหมวดหมู่หนัง",
-                handleNavigateCategories
-              )}
+          <div className="navLinks" style={styles.navLinks}>
+            <div className="nav-item" onClick={handleHome}>
+              หน้าแรก
             </div>
-          </>
-        )}
 
-        {/* Search */}
-        <div className="search-box" style={styles.searchBox}>
-          <span style={styles.icon}>🔍</span>
+            <div className="nav-item">
+              ดูหนังฟรี HD
+            </div>
 
-          <input
-            type="text"
-            placeholder="ค้นหาหนัง..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            style={styles.input}
-          />
+            <div
+              className="nav-item"
+              onClick={() => handleCategory("หนังปี 2026")}
+            >
+              ดูหนังชนโรง 2026
+            </div>
+
+            <Link to="/categories" className="nav-item">
+              แยกหมวดหมู่หนัง
+            </Link>
+          </div>
+
+          <div className="search-box" style={styles.searchBox}>
+            <span style={styles.icon}>🔍</span>
+
+            <input
+              type="text"
+              placeholder="ค้นหาหนัง..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              style={styles.input}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -178,11 +157,8 @@ const styles = {
     gap: "10px",
   },
 
-  logo: {
-    flexShrink: 0,
-    display: "flex",
-    alignItems: "center",
-    margin: 0,
+  logoLink: {
+    cursor: "pointer",
   },
 
   logoImage: {
@@ -191,13 +167,8 @@ const styles = {
     objectFit: "contain",
   },
 
-  logoLink: {
-    cursor: "pointer",
-  },
-
   navLinks: {
     display: "flex",
-    alignItems: "center",
     gap: "20px",
     marginLeft: "20px",
     flex: 1,
@@ -215,7 +186,6 @@ const styles = {
 
   input: {
     width: "100%",
-    boxSizing: "border-box",
     padding: "8px 8px 8px 35px",
     borderRadius: "20px",
     border: "none",
@@ -229,19 +199,16 @@ const styles = {
     top: "50%",
     transform: "translateY(-50%)",
     color: "#aaa",
-    pointerEvents: "none",
   },
 
   dropdown: {
     background: "#181818",
     borderRadius: "10px",
     marginTop: "5px",
-    marginBottom: "10px",
   },
 
   dropdownItem: {
-    paddingLeft: "25px",
-    fontSize: "14px",
+    paddingLeft: "20px",
   },
 };
 

@@ -116,23 +116,6 @@ body,
   }
 }
 
-.mobile-menu-btn {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .mobile-menu-btn {
-    display: block;
-  }
-
-  .navLinks {
-    display: none !important;
-  }
-
-  .search-box {
-    width: 180px !important;
-  }
-}
 
 /* ===== CARD ===== */
 .card-hover:hover {
@@ -141,3 +124,66 @@ body,
 }
 
 
+/* ===== Toggle ===== */
+.mobile-menu-btn {
+  display: none;
+}
+
+.mobile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 9998;
+}
+
+.mobile-sidebar {
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 260px;
+  height: 100vh;
+  background: #111;
+  color: white;
+  z-index: 9999;
+  padding: 20px;
+  transition: left 0.3s ease;
+  overflow-y: auto;
+}
+
+.mobile-sidebar.open {
+  left: 0;
+}
+
+.category-item {
+  padding: 12px 0;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: block;
+    position: fixed;
+    left: 16px;
+    top: 16px;
+    z-index: 10000;
+
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 10px;
+    background: #222;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  .navLinks {
+    display: none !important;
+  }
+
+  .search-box {
+    width: 180px !important;
+    margin-left: auto;
+  }
+}
