@@ -44,8 +44,30 @@ function Carousel({ movies }) {
     trackRef.current.scrollLeft = scrollLeft - walk;
   };
 
+  const scroll = (direction) => {
+    const el = trackRef.current;
+    if (!el) return;
+
+    const cardWidth =
+      el.querySelector("img")?.clientWidth || 250;
+
+    const amount = cardWidth + 15;
+
+    el.scrollBy({
+      left: direction === "left" ? -amount : amount,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <div style={styles.wrapper}>
+      <button
+        style={{ ...styles.arrow, ...styles.leftArrow }}
+        onClick={() => scroll("left")}
+      >
+        ❮
+      </button>
+
       <div
         ref={trackRef}
         style={styles.track}
@@ -55,10 +77,7 @@ function Carousel({ movies }) {
         onMouseMove={handleMouseMove}
       >
         {movies.map((movie) => (
-          <Link
-            key={movie._id}
-            to={`/movie/${movie._id}`}
-          >
+          <Link key={movie._id} to={`/movie/${movie._id}`}>
             <img
               src={movie.image || "/no-image.jpg"}
               alt={movie.title}
@@ -67,12 +86,20 @@ function Carousel({ movies }) {
           </Link>
         ))}
       </div>
+
+      <button
+        style={{ ...styles.arrow, ...styles.rightArrow }}
+        onClick={() => scroll("right")}
+      >
+        ❯
+      </button>
     </div>
   );
 }
 
 const styles = {
   wrapper: {
+    position: "relative",
     overflow: "hidden",
     width: "100%",
     background: "transparent",
@@ -93,7 +120,31 @@ const styles = {
     objectFit: "cover",
     borderRadius: "12px",
     flexShrink: 0,
-  }
+  },
+  arrow: {
+    position: "absolute",
+    top: "50%",
+    transform: "translateY(-50%)",
+    width: "52px",
+    height: "52px",
+    borderRadius: "50%",
+    border: "none",
+    background: "linear-gradient(180deg,#1b1b1b,#111)",
+    boxShadow: "0 0 15px rgba(255,208,0,.15)",
+    color: "#ffd000",
+    fontSize: "26px",
+    cursor: "pointer",
+    zIndex: 5,
+    transition: "all 0.25s ease",
+  },
+
+  leftArrow: {
+    left: "10px",
+  },
+
+  rightArrow: {
+    right: "10px",
+  },
 };
 
 export default Carousel;
