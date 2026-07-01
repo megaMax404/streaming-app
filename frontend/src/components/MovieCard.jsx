@@ -15,8 +15,8 @@ function MovieCard({ movie }) {
         alt={movie.title}
       />
 
-      <h3>{movie.title}</h3>
-      <p>{movie.description}</p>
+      <h3 style={styles.title}>{movie.title}</h3>
+      <p style={styles.desc}>{movie.description}</p>
     </div>
   );
 }
@@ -30,13 +30,37 @@ const styles = {
     cursor: "pointer",
     textAlign: "center",
     transition: "all 0.3s ease",   // 👈 ทำให้ลื่น
-    boxShadow: "0 0 10px rgba(0,0,0,0.3)"
+    boxShadow: "0 0 10px rgba(0,0,0,0.3)",
+    overflow: "hidden",
+    minHeight: "420px"
   },
   image: {
     width: "100%",
     height: "clamp(180px, 40vw, 250px)", // 👈 responsive
     objectFit: "cover",
     borderRadius: "10px"
+  },
+  title: {
+    fontSize: "clamp(14px, 2vw, 22px)",
+    fontWeight: 700,
+    lineHeight: 1.4,
+    margin: "12px 0 8px",
+    overflow: "hidden",
+    display: "-webkit-box",
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: "vertical",
+    wordBreak: "break-word"
+  },
+
+  desc: {
+    fontSize: "clamp(12px, 1.5vw, 16px)",
+    color: "#ccc",
+    lineHeight: 1.5,
+    overflow: "hidden",
+    display: "-webkit-box",
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: "vertical",
+    wordBreak: "break-word"
   }
 };
 
