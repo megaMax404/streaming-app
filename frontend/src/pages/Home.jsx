@@ -119,7 +119,7 @@ function Home({ search }) {
   }
 
   return (
-    <div style={{ border: "5px solid lime" }}>
+    <div>
       {/* CAROUSEL */}
       <div style={styles.carouselSection}>
         <div style={styles.sectionTitle}>
