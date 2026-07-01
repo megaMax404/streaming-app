@@ -110,14 +110,11 @@ function Navbar({ search, setSearch }) {
               หน้าแรก
             </div>
 
-            <div className="nav-item">
+            <div className="nav-item" onClick={() => handleCategory("หนังทั้งหมด")}>
               ดูหนังฟรี HD
             </div>
 
-            <div
-              className="nav-item"
-              onClick={() => handleCategory("หนังปี 2026")}
-            >
+            <div className="nav-item" onClick={() => handleCategory("หนังปี 2026")}>
               ดูหนังชนโรง 2026
             </div>
 

@@ -200,7 +200,7 @@ function Home({ search }) {
             </div>
             {/* PAGINATION */}
             {totalPages > 1 && (
-              <div style={styles.pagination}>
+              <div className="pagination">
                 <button
                   disabled={currentPage === 1}
                   onClick={() => setCurrentPage(1)}
@@ -358,13 +358,6 @@ const styles = {
     alignItems: "stretch",
   },
 
-  pagination: {
-    display: "flex",
-    justifyContent: "center",
-    gap: "8px",
-    flexWrap: "wrap",
-    marginTop: "30px",
-  },
   carouselSection: {
     width: "100%",
     background:
