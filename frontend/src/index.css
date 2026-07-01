@@ -15,7 +15,7 @@ body,
 }
 
 .page-container {
-  width: min(1400px, calc(100vw - 40px));
+  width: min(1200px, calc(100vw - 40px));
   margin-inline: auto;
 }
 
@@ -116,8 +116,28 @@ body,
   }
 }
 
+.mobile-menu-btn {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  .navLinks {
+    display: none !important;
+  }
+
+  .search-box {
+    width: 180px !important;
+  }
+}
+
 /* ===== CARD ===== */
 .card-hover:hover {
   transform: scale(1.01) translateY(-1px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
 }
+
+
