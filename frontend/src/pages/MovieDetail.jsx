@@ -58,6 +58,19 @@ function MovieDetail() {
     setVideoError(false);
   }, [id]);
 
+  useEffect(() => {
+    console.time("movie-api");
+
+    axios.get(`${API_URL}/api/movies/${id}`)
+      .then((res) => {
+        setMovie(res.data);
+      })
+      .finally(() => {
+        console.timeEnd("movie-api");
+      });
+  }, [id]);
+
+
   // เล่น m3u8
   useEffect(() => {
     if (!movie || !startMovie) return;
@@ -168,19 +181,6 @@ function MovieDetail() {
       </div>
     );
   }
-
-  useEffect(() => {
-    console.time("movie-api");
-
-    axios.get(`${API_URL}/api/movies/${id}`)
-      .then((res) => {
-        setMovie(res.data);
-      })
-      .finally(() => {
-        console.timeEnd("movie-api");
-      });
-  }, [id]);
-
 
   const topBanners =
     banners.filter(
