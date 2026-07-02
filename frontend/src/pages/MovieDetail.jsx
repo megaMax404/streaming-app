@@ -21,6 +21,8 @@ function MovieDetail() {
     setLoading(true);
     setNotFound(false);
 
+    console.time("movie-api");
+
     axios
       .get(`${API_URL}/api/movies/${id}`)
       .then((res) => {
@@ -35,6 +37,7 @@ function MovieDetail() {
         }
       })
       .finally(() => {
+        console.timeEnd("movie-api");
         setLoading(false);
       });
   }, [id]);
@@ -58,18 +61,6 @@ function MovieDetail() {
     setVideoError(false);
   }, [id]);
 
-  useEffect(() => {
-    console.time("movie-api");
-
-    axios.get(`${API_URL}/api/movies/${id}`)
-      .then((res) => {
-        setMovie(res.data);
-      })
-      .finally(() => {
-        console.timeEnd("movie-api");
-      });
-  }, [id]);
-
 
   // เล่น m3u8
   useEffect(() => {
@@ -85,10 +76,10 @@ function MovieDetail() {
     if (Hls.isSupported()) {
       hls = new Hls({
         maxLoadingDelay: 4,
-        manifestLoadingTimeOut: 10000,
-        manifestLoadingMaxRetry: 2,
-        levelLoadingTimeOut: 10000,
-        fragLoadingTimeOut: 15000,
+        manifestLoadingTimeOut: 30000,
+        manifestLoadingMaxRetry: 4,
+        levelLoadingTimeOut: 30000,
+        fragLoadingTimeOut: 40000,
       });
 
       hls.loadSource(movie.video);
@@ -105,13 +96,24 @@ function MovieDetail() {
 
       // ถ้าไฟล์เสีย / URL ผิด
       hls.on(Hls.Events.ERROR, (event, data) => {
-        console.error("HLS Error:", data);
+        console.log(data);
 
         if (data.fatal) {
-          setLoadingPlayer(false);
-          setVideoError(true);
+          switch (data.type) {
+            case Hls.ErrorTypes.NETWORK_ERROR:
+              console.log("retry loading...");
+              hls.startLoad();
+              break;
 
-          hls.destroy();
+            case Hls.ErrorTypes.MEDIA_ERROR:
+              hls.recoverMediaError();
+              break;
+
+            default:
+              setVideoError(true);
+              hls.destroy();
+              break;
+          }
         }
       });
     } else if (
