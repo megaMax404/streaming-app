@@ -135,7 +135,10 @@ router.post("/", auth, async (req, res) => {
     }
 
     const cleanData = sanitizeObject(sanitized);
-    cleanData.slug = makeSlug(cleanData.title);
+
+    if (cleanData.title) {
+      cleanData.slug = makeSlug(cleanData.title);
+    }
     if (
       !isValidUrl(cleanData.image) ||
       !isValidUrl(cleanData.video) ||
