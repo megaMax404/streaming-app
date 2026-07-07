@@ -49,17 +49,18 @@ function App() {
         />
 
         <Route
-          path="/category/:slug"
+          path="/c/:category"
           element={
             <Layout>
-              <Home search={search} />
+              <CategoryPage />
             </Layout>
           }
         />
 
-        <Route path="/movie/:slug" element={<MovieDetail />} />
-
-        <Route path="/c/:category" element={<CategoryPage />} />
+        <Route
+          path="/:slug"
+          element={<MovieDetail />}
+        />
 
         <Route
           path="/9x9adm-panel"
@@ -75,7 +76,11 @@ function App() {
           element={<AdminLogin setIsAdmin={setIsAdmin} />}
         />
 
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*"
+          element={<Navigate to="/" replace
+          />}
+        />
+        
       </Routes>
     </BrowserRouter>
   );

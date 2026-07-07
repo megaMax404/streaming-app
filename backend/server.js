@@ -46,8 +46,6 @@ app.use(express.json({ limit: "1mb" }));
 // CORS
 //
 const allowedOrigins = [
-  "http://localhost:5173",
-  "http://192.168.1.16:5173",
   "https://streaming-app.vercel.app",
   "http://doohd.vip",
   "https://doohd.vip",

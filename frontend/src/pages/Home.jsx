@@ -65,7 +65,7 @@ function Home({ search }) {
       return;
     }
 
-    navigate(`/category/${categoryToSlug(cat)}`);
+    navigate(`/${categoryToSlug(cat)}`);
   };
 
   /* ======================
