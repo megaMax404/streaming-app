@@ -6,7 +6,7 @@ import Hls from "hls.js";
 import PlayerNavbar from "../components/PlayerNavbar";
 
 function MovieDetail() {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [movie, setMovie] = useState(null);
   const [banners, setBanners] = useState([]);
   const [startMovie, setStartMovie] = useState(false);
@@ -24,7 +24,7 @@ function MovieDetail() {
     console.time("movie-api");
 
     axios
-      .get(`${API_URL}/api/movies/${id}`)
+      .get(`${API_URL}/api/movies/slug/${slug}`)
       .then((res) => {
         setMovie(res.data);
       })
@@ -40,7 +40,7 @@ function MovieDetail() {
         console.timeEnd("movie-api");
         setLoading(false);
       });
-  }, [id]);
+  }, [slug]);
 
 
   useEffect(() => {
@@ -59,7 +59,7 @@ function MovieDetail() {
   useEffect(() => {
     setStartMovie(false);
     setVideoError(false);
-  }, [id]);
+  }, [slug]);
 
 
   // เล่น m3u8

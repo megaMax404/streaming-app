@@ -67,9 +67,9 @@ const movieSchema = new mongoose.Schema({
   },
 
   category: [{
-  type: String,
-  maxlength: 50
-}],category: [String],
+    type: String,
+    maxlength: 50
+  }],
 
   deleted: {
     type: Boolean,
@@ -81,10 +81,19 @@ const movieSchema = new mongoose.Schema({
   videoStatus: {
     type: String,
     default: "unknown"
+  },
+  slug: {
+    type: String,
+    unique: true,
+    index: true
   }
 }, {
   timestamps: true
 });
 movieSchema.index({ deleted: 1 });
 movieSchema.index({ createdAt: -1 });
+
+movieSchema.index({ title: 1 });
+movieSchema.index({ category: 1 });
+
 module.exports = mongoose.model("Movie", movieSchema);

@@ -57,23 +57,9 @@ function App() {
           }
         />
 
-        <Route
-          path="/movie/:id"
-          element={
-            <Layout>
-              <MovieDetail />
-            </Layout>
-          }
-        />
+        <Route path="/movie/:slug" element={<MovieDetail />} />
 
-        <Route
-          path="/categories"
-          element={
-            <Layout>
-              <CategoryPage />
-            </Layout>
-          }
-        />
+        <Route path="/c/:category" element={<CategoryPage />} />
 
         <Route
           path="/9x9adm-panel"

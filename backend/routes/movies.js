@@ -8,6 +8,15 @@ const auth = require("../data/middleware/auth");
 const createBackup = require("../utils/autoBackup");
 const { sanitizeObject } = require("../utils/sanitize");
 const { isValidUrl } = require("../utils/urlValidator");
+
+function makeSlug(text) {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w\u0E00-\u0E7F-]/g, "");
+}
+
 /*
 =========================
 GET ALL MOVIES
@@ -53,14 +62,16 @@ router.get("/trash/list", auth, async (req, res) => {
 GET MOVIE BY ID
 =========================
 */
-router.get("/:id", async (req, res) => {
-  if (!isValidId(req.params.id)) {
-    return res.status(400).json({
-      message: "Invalid ID"
-    });
-  }
+router.get("/slug/:slug", async (req, res) => {
   try {
-    const movie = await Movie.findById(req.params.id);
+    console.time("findMovie");
+
+    const movie = await Movie.findOne({
+      slug: req.params.slug,
+      deleted: false
+    });
+
+    console.timeEnd("findMovie");
 
     if (!movie || movie.deleted) {
       return res.status(404).json({
@@ -68,17 +79,27 @@ router.get("/:id", async (req, res) => {
       });
     }
 
-    movie.views = (movie.views || 0) + 1;
-    await movie.save();
+    console.time("saveViews");
 
+    const updatedMovie = await Movie.findByIdAndUpdate(
+      movie._id,
+      { $inc: { views: 1 } },
+      { new: true }
+    );
 
-    res.json(movie);
+    console.timeEnd("saveViews");
+
+    res.json(updatedMovie);
+
   } catch (err) {
-    return res.status(404).json({
-      message: "Movie not found"
+    console.error(err);
+
+    res.status(500).json({
+      message: err.message
     });
   }
 });
+
 
 /*
 =========================
@@ -114,6 +135,7 @@ router.post("/", auth, async (req, res) => {
     }
 
     const cleanData = sanitizeObject(sanitized);
+    cleanData.slug = makeSlug(cleanData.title);
     if (
       !isValidUrl(cleanData.image) ||
       !isValidUrl(cleanData.video) ||
@@ -172,7 +194,9 @@ router.put("/:id", auth, async (req, res) => {
       }
     }
 
-    const cleanData = sanitizeObject(sanitized);
+    if (cleanData.title) {
+      cleanData.slug = makeSlug(cleanData.title);
+    }
     if (
       !isValidUrl(cleanData.image) ||
       !isValidUrl(cleanData.video) ||

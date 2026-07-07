@@ -1,4 +1,3 @@
-console.log("NEW MOVIECARD LOADED");
 import { useNavigate } from "react-router-dom";
 
 function MovieCard({ movie }) {
@@ -9,7 +8,7 @@ function MovieCard({ movie }) {
   return (
     <div
       className="movie-card"
-      onClick={() => navigate(`/movie/${movie._id}`)}
+      onClick={() => navigate(`/movie/${movie.slug}`)}
     >
       <img
         src={movie.image || "/no-image.jpg"}

@@ -153,13 +153,13 @@ async function startServer() {
   try {
     await mongoose.connect(process.env.MONGO_URI);
 
-    await createBackup();
-    console.log("Initial backup completed");
+    // await createBackup();
+    // console.log("Initial backup completed");
 
-    setInterval(async () => {
-      await createBackup();
-      console.log("Auto backup completed");
-    }, 1000 * 60 * 60);
+    // setInterval(async () => {
+    //   await createBackup();
+    //   console.log("Auto backup completed");
+    // }, 1000 * 60 * 60);
 
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
