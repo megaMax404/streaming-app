@@ -20,6 +20,7 @@ function Home({ search }) {
 
   const [movies, setMovies] = useState([]);
   const [articles, setArticles] = useState([]);
+
   const category = slug
     ? slugToCategory(slug)
     : "หนังทั้งหมด";
@@ -65,7 +66,7 @@ function Home({ search }) {
       return;
     }
 
-    navigate(`/${categoryToSlug(cat)}`);
+    navigate(`/c/${categoryToSlug(cat)}`);
   };
 
   /* ======================
