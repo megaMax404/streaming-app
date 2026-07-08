@@ -197,6 +197,8 @@ router.put("/:id", auth, async (req, res) => {
       }
     }
 
+    const cleanData = sanitizeObject(sanitized);
+
     if (cleanData.title) {
       cleanData.slug = makeSlug(cleanData.title);
     }

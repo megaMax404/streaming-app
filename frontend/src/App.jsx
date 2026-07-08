@@ -58,7 +58,7 @@ function App() {
         />
 
         <Route
-          path="/:slug"
+          path="/movie/:slug"
           element={<MovieDetail />}
         />
 
@@ -80,7 +80,7 @@ function App() {
           element={<Navigate to="/" replace
           />}
         />
-        
+
       </Routes>
     </BrowserRouter>
   );

@@ -1,95 +1,117 @@
-import { useNavigate } from "react-router-dom";
-import { categories } from "../data/categories";
+import { useEffect, useMemo, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+
+import { API_URL } from "../config";
+import MovieCard from "../components/MovieCard";
+import { slugToCategory } from "../data/categoryMap";
 
 function CategoryPage() {
-    const navigate = useNavigate();
+  const { category } = useParams();
+  const navigate = useNavigate();
 
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  const categoryName = slugToCategory(category);
 
-    const selectCategory = (cat) => {
-        navigate(`/?category=${encodeURIComponent(cat)}`);
-    };
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/api/movies`)
+      .then((res) => {
+        setMovies(res.data);
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
 
-    return (
-        <div style={styles.wrapper}>
-            <div style={styles.box}>
-                {/* ปุ่มกลับหน้าแรก */}
-                <div style={styles.backWrap}>
-                    <button
-                        style={styles.backBtn}
-                        onClick={() =>
-                            navigate("/?category=หนังทั้งหมด")
-                        }
-                    >
-                        ← กลับหน้าแรก
-                    </button>
-                </div>
-                <h1 style={styles.title}>แยกหมวดหมู่หนัง</h1>
-
-                <div style={styles.grid}>
-                    {categories.map((cat) => (
-                        <button
-                            key={cat}
-                            style={styles.tag}
-                            onClick={() => selectCategory(cat)}
-                        >
-                            {cat}
-                        </button>
-                    ))}
-                </div>
-            </div>
-        </div>
+  const filteredMovies = useMemo(() => {
+    return movies.filter((movie) =>
+      movie.category?.includes(categoryName)
     );
+  }, [movies, categoryName]);
+
+  if (loading) {
+    return (
+      <div style={styles.loading}>
+        กำลังโหลด...
+      </div>
+    );
+  }
+
+  return (
+    <div style={styles.wrapper}>
+
+      <div style={styles.topBar}>
+        <button
+          style={styles.backBtn}
+          onClick={() => navigate("/")}
+        >
+          ← หน้าแรก
+        </button>
+
+        <h2 style={styles.title}>
+          {categoryName}
+        </h2>
+      </div>
+
+      <div className="movie-grid">
+        {filteredMovies.map((movie) => (
+          <MovieCard
+            key={movie._id}
+            movie={movie}
+          />
+        ))}
+      </div>
+
+      {filteredMovies.length === 0 && (
+        <div style={styles.empty}>
+          ยังไม่มีหนังในหมวดนี้
+        </div>
+      )}
+    </div>
+  );
 }
 
 const styles = {
-    wrapper: {
-        minHeight: "100vh",
-        background: "#000",
-        padding: "30px"
-    },
+  wrapper: {
+    width: "100%",
+  },
 
-    box: {
-        maxWidth: "1200px",
-        margin: "auto",
-        background: "#111",
-        border: "1px solid #222",
-        borderRadius: "20px",
-        padding: "25px"
-    },
+  topBar: {
+    display: "flex",
+    alignItems: "center",
+    gap: "20px",
+    marginBottom: "25px",
+  },
 
-    title: {
-        color: "#fff",
-        marginBottom: "25px"
-    },
+  title: {
+    color: "#fff",
+    borderLeft: "5px solid #ffd000",
+    paddingLeft: "12px",
+    fontSize: "32px",
+  },
 
-    grid: {
-        display: "flex",
-        flexWrap: "wrap",
-        gap: "10px"
-    },
+  backBtn: {
+    background: "#222",
+    color: "#fff",
+    border: "1px solid #444",
+    borderRadius: "10px",
+    padding: "10px 18px",
+    cursor: "pointer",
+  },
 
-    tag: {
-        background: "#181818",
-        color: "#fff",
-        border: "1px solid #333",
-        borderRadius: "12px",
-        padding: "10px 14px",
-        cursor: "pointer"
-    },
-    backWrap: {
-        display: "flex",
-        justifyContent: "flex-start",
-        marginBottom: "20px"
-    },
-    backBtn: {
-        background: "#222",
-        color: "#fff",
-        border: "1px solid #444",
-        padding: "10px 16px",
-        borderRadius: "10px",
-        cursor: "pointer"
-    },
+  loading: {
+    color: "#fff",
+    textAlign: "center",
+    padding: "100px",
+  },
+
+  empty: {
+    color: "#999",
+    textAlign: "center",
+    padding: "80px",
+  },
 };
 
 export default CategoryPage;
