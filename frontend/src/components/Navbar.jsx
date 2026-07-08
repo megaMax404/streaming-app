@@ -32,7 +32,7 @@ function Navbar({ search, setSearch }) {
     if (slug === "all") {
       navigate("/");
     } else {
-      navigate(`/category/${slug}`);
+      navigate(`/c/${slug}`);
     }
 
     closeMobileMenu();

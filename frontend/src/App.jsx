@@ -58,6 +58,15 @@ function App() {
         />
 
         <Route
+          path="/categories"
+          element={
+            <Layout>
+              <CategoryPage />
+            </Layout>
+          }
+        />
+        
+        <Route
           path="/movie/:slug"
           element={<MovieDetail />}
         />

@@ -243,3 +243,35 @@ body,
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+.nav-item{
+    position:relative;
+    cursor:pointer;
+    color:#ddd;
+    transition:all .25s ease;
+    padding:10px 6px;
+    font-weight:600;
+}
+
+.nav-item:hover{
+    color:#ffd000;
+    transform:translateY(-2px) scale(1.08);
+    text-shadow:0 0 10px rgba(255,208,0,.5);
+}
+
+.nav-item::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:-6px;
+    width:0;
+    height:3px;
+    border-radius:50px;
+    background:#ffd000;
+    transition:.25s;
+    transform:translateX(-50%);
+}
+
+.nav-item:hover::after{
+    width:100%;
+}
