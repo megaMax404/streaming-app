@@ -14,6 +14,7 @@ import CategoryPage from "./pages/CategoryPage";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import CategoryList from "./pages/CategoryList";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(
@@ -61,11 +62,11 @@ function App() {
           path="/categories"
           element={
             <Layout>
-              <CategoryPage />
+              <CategoryList />
             </Layout>
           }
         />
-        
+
         <Route
           path="/movie/:slug"
           element={<MovieDetail />}
