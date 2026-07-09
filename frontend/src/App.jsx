@@ -40,7 +40,15 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-        {/* HOME */}
+        <Route
+          path="/"
+          element={
+            <Layout>
+              <Home search={search} />
+            </Layout>
+          }
+        />
+
         <Route
           path="/category/:slug"
           element={
@@ -50,22 +58,20 @@ function App() {
           }
         />
 
-        {/* CATEGORY */}
-        <Route
-          path="/category/:category"
-          element={
-            <Layout>
-              <CategoryPage />
-            </Layout>
-          }
-        />
-
-        {/* CATEGORY LIST */}
         <Route
           path="/categories"
           element={
             <Layout>
               <CategoryList />
+            </Layout>
+          }
+        />
+
+        <Route
+          path="/categories/:category"
+          element={
+            <Layout>
+              <CategoryPage />
             </Layout>
           }
         />

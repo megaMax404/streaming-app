@@ -11,7 +11,7 @@ function CategoryList() {
       return;
     }
 
-    navigate(`/c/${categoryToSlug(cat)}`);
+    navigate(`/categories/${categoryToSlug(cat)}`);
   };
 
   return (
