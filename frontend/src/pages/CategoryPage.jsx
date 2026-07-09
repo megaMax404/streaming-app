@@ -9,11 +9,13 @@ import { slugToCategory } from "../data/categoryMap";
 function CategoryPage() {
   const { category } = useParams();
   const navigate = useNavigate();
-
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const categoryName = slugToCategory(category);
+
+  const MOVIES_PER_PAGE = 36;
+  const [currentPage, setCurrentPage] = useState(1);
+
 
   useEffect(() => {
     axios
@@ -25,11 +27,41 @@ function CategoryPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [category]);
+
   const filteredMovies = useMemo(() => {
     return movies.filter((movie) =>
       movie.category?.includes(categoryName)
     );
   }, [movies, categoryName]);
+
+  const totalPages = Math.ceil(
+    filteredMovies.length / MOVIES_PER_PAGE
+  );
+
+  const currentMovies = useMemo(() => {
+    const start =
+      (currentPage - 1) * MOVIES_PER_PAGE;
+
+    return filteredMovies.slice(
+      start,
+      start + MOVIES_PER_PAGE
+    );
+  }, [filteredMovies, currentPage]);
+
+  const visiblePages = [];
+
+  for (let i = 1; i <= totalPages; i++) {
+    if (
+      i === 1 ||
+      i === totalPages ||
+      Math.abs(i - currentPage) <= 2
+    ) {
+      visiblePages.push(i);
+    }
+  }
 
   if (loading) {
     return (
@@ -56,13 +88,95 @@ function CategoryPage() {
       </div>
 
       <div className="movie-grid">
-        {filteredMovies.map((movie) => (
+        {currentMovies.map((movie) => (
           <MovieCard
             key={movie._id}
             movie={movie}
           />
         ))}
       </div>
+      {totalPages > 1 && (
+        <div className="pagination">
+
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(1)}
+          >
+            {"<<"}
+          </button>
+
+          <button
+            disabled={currentPage === 1}
+            onClick={() =>
+              setCurrentPage((p) =>
+                Math.max(1, p - 1)
+              )
+            }
+          >
+            {"<"}
+          </button>
+
+          {visiblePages.map((page, index) => {
+            const prev = visiblePages[index - 1];
+
+            return (
+              <div
+                key={page}
+                style={{
+                  display: "flex",
+                  gap: "8px",
+                }}
+              >
+                {prev && page - prev > 1 && (
+                  <span
+                    style={{
+                      color: "#aaa",
+                      padding: "10px",
+                    }}
+                  >
+                    ...
+                  </span>
+                )}
+
+                <button
+                  className={
+                    currentPage === page
+                      ? "active"
+                      : ""
+                  }
+                  onClick={() =>
+                    setCurrentPage(page)
+                  }
+                >
+                  {page}
+                </button>
+              </div>
+            );
+          })}
+
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() =>
+              setCurrentPage((p) =>
+                Math.min(totalPages, p + 1)
+              )
+            }
+          >
+            {">"}
+          </button>
+
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() =>
+              setCurrentPage(totalPages)
+            }
+          >
+            {">>"}
+          </button>
+
+        </div>
+      )}
+
 
       {filteredMovies.length === 0 && (
         <div style={styles.empty}>
