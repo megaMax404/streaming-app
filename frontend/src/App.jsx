@@ -42,7 +42,7 @@ function App() {
 
         {/* HOME */}
         <Route
-          path="/"
+          path="/category/:slug"
           element={
             <Layout>
               <Home search={search} />

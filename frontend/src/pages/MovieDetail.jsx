@@ -23,8 +23,6 @@ function MovieDetail() {
     setLoading(true);
     setNotFound(false);
 
-    console.time("movie-api");
-
     axios
       .get(`${API_URL}/api/movies/slug/${slug}`)
       .then((res) => {
@@ -39,7 +37,6 @@ function MovieDetail() {
         }
       })
       .finally(() => {
-        console.timeEnd("movie-api");
         setLoading(false);
       });
   }, [slug]);

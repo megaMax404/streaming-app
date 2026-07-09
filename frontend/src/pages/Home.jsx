@@ -66,7 +66,7 @@ function Home({ search }) {
       return;
     }
 
-    navigate(`/c/${categoryToSlug(cat)}`);
+    navigate(`/category/${categoryToSlug(cat)}`);
   };
 
   /* ======================
@@ -118,10 +118,7 @@ function Home({ search }) {
       visiblePages.push(i);
     }
   }
-  console.log("movies =", movies.length);
-  console.log("filtered =", filteredMovies.length);
-  console.log("current =", currentMovies.length);
-  console.log("totalPages =", totalPages);
+  
   return (
     <div>
       {/* CAROUSEL */}
