@@ -11,10 +11,9 @@ import MovieDetail from "./pages/MovieDetail";
 import Admin from "./pages/Admin";
 import AdminLogin from "./pages/AdminLogin";
 import CategoryPage from "./pages/CategoryPage";
+import CategoryList from "./pages/CategoryList";
 
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import CategoryList from "./pages/CategoryList";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(
@@ -40,6 +39,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+
+        {/* HOME */}
         <Route
           path="/"
           element={
@@ -49,8 +50,9 @@ function App() {
           }
         />
 
+        {/* CATEGORY */}
         <Route
-          path="/c/:category"
+          path="/category/:category"
           element={
             <Layout>
               <CategoryPage />
@@ -58,6 +60,7 @@ function App() {
           }
         />
 
+        {/* CATEGORY LIST */}
         <Route
           path="/categories"
           element={
@@ -67,28 +70,40 @@ function App() {
           }
         />
 
+        {/* MOVIE */}
         <Route
           path="/movie/:slug"
           element={<MovieDetail />}
         />
 
+        {/* ADMIN */}
         <Route
           path="/9x9adm-panel"
           element={
-            isAdmin
-              ? <Admin />
-              : <Navigate to="/9x9adm-login" replace />
+            isAdmin ? (
+              <Admin />
+            ) : (
+              <Navigate
+                to="/9x9adm-login"
+                replace
+              />
+            )
           }
         />
 
         <Route
           path="/9x9adm-login"
-          element={<AdminLogin setIsAdmin={setIsAdmin} />}
+          element={
+            <AdminLogin
+              setIsAdmin={setIsAdmin}
+            />
+          }
         />
 
-        <Route path="*"
-          element={<Navigate to="/" replace
-          />}
+        {/* 404 */}
+        <Route
+          path="*"
+          element={<Navigate to="/" replace />}
         />
 
       </Routes>

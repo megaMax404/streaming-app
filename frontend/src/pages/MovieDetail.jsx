@@ -1,5 +1,6 @@
 import { API_URL } from "../config";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Hls from "hls.js";
@@ -7,6 +8,7 @@ import PlayerNavbar from "../components/PlayerNavbar";
 
 function MovieDetail() {
   const { slug } = useParams();
+  const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
   const [banners, setBanners] = useState([]);
   const [startMovie, setStartMovie] = useState(false);
@@ -167,7 +169,7 @@ function MovieDetail() {
         <h2>ไม่พบหนังเรื่องนี้</h2>
 
         <button
-          onClick={() => window.location.href = "/"}
+          onClick={() => navigate("/")}
           style={{
             marginTop: "20px",
             padding: "12px 24px",

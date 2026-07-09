@@ -62,8 +62,7 @@ router.get("/trash/list", auth, async (req, res) => {
 GET MOVIE BY ID
 =========================
 */
-// router.get("/slug/:slug", async (req, res) => {
-router.get("/:slug", async (req, res) => {
+router.get("/slug/:slug", async (req, res) => {
   try {
     console.time("findMovie");
 
