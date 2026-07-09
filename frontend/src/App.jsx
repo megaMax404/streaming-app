@@ -12,7 +12,7 @@ import Admin from "./pages/Admin";
 import AdminLogin from "./pages/AdminLogin";
 import CategoryPage from "./pages/CategoryPage";
 import CategoryList from "./pages/CategoryList";
-
+import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 
 function App() {

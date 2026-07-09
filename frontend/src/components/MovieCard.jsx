@@ -8,7 +8,7 @@ function MovieCard({ movie }) {
   return (
     <div
       className="movie-card"
-      onClick={() => navigate(`/${movie.slug}`)}
+      onClick={() => navigate(`/movie/${movie.slug}`)}
     >
       <img
         src={movie.image || "/no-image.jpg"}
