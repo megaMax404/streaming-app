@@ -33,7 +33,7 @@ function Home({ search }) {
     const loadData = async () => {
       try {
         const [movieRes, articleRes] = await Promise.all([
-          axios.get(`${API_URL}/api/movies`),
+          axios.get(`${API_URL}/api/movies/${encodeURIComponent(slug)}`),
           axios.get(`${API_URL}/api/articles`),
         ]);
 
