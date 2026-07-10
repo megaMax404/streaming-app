@@ -11,6 +11,7 @@ import {
 
 import MovieCard from "../components/MovieCard";
 import Carousel from "../components/Carousel";
+import Pagination from "../components/Pagination";
 
 const MOVIES_PER_PAGE = 36;
 
@@ -107,18 +108,7 @@ function Home({ search }) {
       movie.category?.includes("หนังใหม่ล่าสุด")
     );
   }, [movies]);
-  const visiblePages = [];
 
-  for (let i = 1; i <= totalPages; i++) {
-    if (
-      i === 1 ||
-      i === totalPages ||
-      Math.abs(i - currentPage) <= 2
-    ) {
-      visiblePages.push(i);
-    }
-  }
-  
   return (
     <div>
       {/* CAROUSEL */}
@@ -198,63 +188,13 @@ function Home({ search }) {
             </div>
             {/* PAGINATION */}
             {totalPages > 1 && (
-              <div className="pagination">
-                <button
-                  disabled={currentPage === 1}
-                  onClick={() => setCurrentPage(1)}
-                >
-                  {"<<"}
-                </button>
-
-                <button
-                  disabled={currentPage === 1}
-                  onClick={() =>
-                    setCurrentPage((p) => Math.max(1, p - 1))
-                  }
-                >
-                  {"<"}
-                </button>
-
-                {visiblePages.map((page, index) => {
-                  const prevPage = visiblePages[index - 1];
-
-                  return (
-                    <div key={page} style={{ display: "flex", gap: "8px" }}>
-                      {prevPage && page - prevPage > 1 && (
-                        <span style={{ color: "#aaa", padding: "10px" }}>
-                          ...
-                        </span>
-                      )}
-
-                      <button
-                        onClick={() => setCurrentPage(page)}
-                        className={currentPage === page ? "active" : ""}
-                      >
-                        {page}
-                      </button>
-                    </div>
-                  );
-                })}
-
-                <button
-                  disabled={currentPage === totalPages}
-                  onClick={() =>
-                    setCurrentPage((p) =>
-                      Math.min(totalPages, p + 1)
-                    )
-                  }
-                >
-                  {">"}
-                </button>
-
-                <button
-                  disabled={currentPage === totalPages}
-                  onClick={() => setCurrentPage(totalPages)}
-                >
-                  {">>"}
-                </button>
-              </div>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
             )}
+
           </main>
         </div>
       </div>
