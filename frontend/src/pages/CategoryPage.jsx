@@ -4,18 +4,24 @@ import axios from "axios";
 
 import { API_URL } from "../config";
 import MovieCard from "../components/MovieCard";
+import Pagination from "../components/Pagination";
 import { slugToCategory } from "../data/categoryMap";
+
+const MOVIES_PER_PAGE = 36;
 
 function CategoryPage() {
   const { category } = useParams();
   const navigate = useNavigate();
+
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
-  const categoryName = slugToCategory(category);
-
-  const MOVIES_PER_PAGE = 36;
   const [currentPage, setCurrentPage] = useState(1);
 
+  const categoryName = slugToCategory(category);
+
+  /* ===========================
+      LOAD MOVIES
+  =========================== */
 
   useEffect(() => {
     axios
@@ -27,15 +33,27 @@ function CategoryPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  /* ===========================
+      RESET PAGE WHEN CATEGORY CHANGES
+  =========================== */
+
   useEffect(() => {
     setCurrentPage(1);
   }, [category]);
+
+  /* ===========================
+      FILTER
+  =========================== */
 
   const filteredMovies = useMemo(() => {
     return movies.filter((movie) =>
       movie.category?.includes(categoryName)
     );
   }, [movies, categoryName]);
+
+  /* ===========================
+      PAGINATION
+  =========================== */
 
   const totalPages = Math.ceil(
     filteredMovies.length / MOVIES_PER_PAGE
@@ -51,17 +69,9 @@ function CategoryPage() {
     );
   }, [filteredMovies, currentPage]);
 
-  const visiblePages = [];
-
-  for (let i = 1; i <= totalPages; i++) {
-    if (
-      i === 1 ||
-      i === totalPages ||
-      Math.abs(i - currentPage) <= 2
-    ) {
-      visiblePages.push(i);
-    }
-  }
+  /* ===========================
+      LOADING
+  =========================== */
 
   if (loading) {
     return (
@@ -70,6 +80,10 @@ function CategoryPage() {
       </div>
     );
   }
+
+  /* ===========================
+      PAGE
+  =========================== */
 
   return (
     <div style={styles.wrapper}>
@@ -87,102 +101,29 @@ function CategoryPage() {
         </h2>
       </div>
 
-      <div className="movie-grid">
-        {currentMovies.map((movie) => (
-          <MovieCard
-            key={movie._id}
-            movie={movie}
+      {filteredMovies.length > 0 ? (
+        <>
+          <div className="movie-grid">
+            {currentMovies.map((movie) => (
+              <MovieCard
+                key={movie._id}
+                movie={movie}
+              />
+            ))}
+          </div>
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
           />
-        ))}
-      </div>
-      {totalPages > 1 && (
-        <div className="pagination">
-
-          <button
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage(1)}
-          >
-            {"<<"}
-          </button>
-
-          <button
-            disabled={currentPage === 1}
-            onClick={() =>
-              setCurrentPage((p) =>
-                Math.max(1, p - 1)
-              )
-            }
-          >
-            {"<"}
-          </button>
-
-          {visiblePages.map((page, index) => {
-            const prev = visiblePages[index - 1];
-
-            return (
-              <div
-                key={page}
-                style={{
-                  display: "flex",
-                  gap: "8px",
-                }}
-              >
-                {prev && page - prev > 1 && (
-                  <span
-                    style={{
-                      color: "#aaa",
-                      padding: "10px",
-                    }}
-                  >
-                    ...
-                  </span>
-                )}
-
-                <button
-                  className={
-                    currentPage === page
-                      ? "active"
-                      : ""
-                  }
-                  onClick={() =>
-                    setCurrentPage(page)
-                  }
-                >
-                  {page}
-                </button>
-              </div>
-            );
-          })}
-
-          <button
-            disabled={currentPage === totalPages}
-            onClick={() =>
-              setCurrentPage((p) =>
-                Math.min(totalPages, p + 1)
-              )
-            }
-          >
-            {">"}
-          </button>
-
-          <button
-            disabled={currentPage === totalPages}
-            onClick={() =>
-              setCurrentPage(totalPages)
-            }
-          >
-            {">>"}
-          </button>
-
-        </div>
-      )}
-
-
-      {filteredMovies.length === 0 && (
+        </>
+      ) : (
         <div style={styles.empty}>
           ยังไม่มีหนังในหมวดนี้
         </div>
       )}
+
     </div>
   );
 }
@@ -225,6 +166,7 @@ const styles = {
     color: "#999",
     textAlign: "center",
     padding: "80px",
+    fontSize: "18px",
   },
 };
 
