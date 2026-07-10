@@ -109,6 +109,7 @@ function Home({ search }) {
     );
   }, [movies]);
 
+  console.log(latestMovies);
   return (
     <div>
       {/* CAROUSEL */}
