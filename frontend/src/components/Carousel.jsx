@@ -59,6 +59,7 @@ function Carousel({ movies }) {
     });
   };
 
+  console.log("Carousel Movies =", movies);
   return (
     <div style={styles.wrapper}>
       <button
@@ -76,15 +77,22 @@ function Carousel({ movies }) {
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
       >
-        {movies.map((movie) => (
-          <Link key={movie._id} to={`/movie/${movie._slug}`}>
-            <img
-              src={movie.image || "/no-image.jpg"}
-              alt={movie.title}
-              style={styles.image}
-            />
-          </Link>
-        ))}
+        {movies.map((movie) => {
+          console.log(movie);
+
+          return (
+            <Link
+              key={movie._id}
+              to={`/movie/${movie.slug}`}
+            >
+              <img
+                src={movie.image}
+                alt={movie.title}
+                style={styles.image}
+              />
+            </Link>
+          );
+        })}
       </div>
 
       <button

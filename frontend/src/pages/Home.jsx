@@ -109,7 +109,11 @@ function Home({ search }) {
     );
   }, [movies]);
 
-  console.log(latestMovies);
+  useEffect(() => {
+  console.log("HOME LOADED");
+  console.log("movies =", movies);
+  console.log("latestMovies =", latestMovies);
+}, [movies, latestMovies]);
   return (
     <div>
       {/* CAROUSEL */}
