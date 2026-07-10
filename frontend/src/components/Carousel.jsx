@@ -77,7 +77,7 @@ function Carousel({ movies }) {
         onMouseMove={handleMouseMove}
       >
         {movies.map((movie) => (
-          <Link key={movie._id} to={`/movie/${movie._id}`}>
+          <Link key={movie._id} to={`/movie/${movie._slug}`}>
             <img
               src={movie.image || "/no-image.jpg"}
               alt={movie.title}
