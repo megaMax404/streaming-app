@@ -153,6 +153,7 @@ function MovieDetail() {
 
     const timer = setInterval(() => {
       if (!video.paused) {
+        console.log("SAVE", video.currentTime);
         saveContinueWatching({
           slug: movie.slug,
           title: movie.title,
