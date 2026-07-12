@@ -1,0 +1,575 @@
+[33mcommit 3a96fe7badf15ced7f0dd380b509864897928832[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Sun Jul 12 13:44:42 2026 +0700
+
+    console MovieDetail.jsx
+
+[33mcommit c19a68753a3301de726dd362cc664928e5b7684e[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Sun Jul 12 12:36:31 2026 +0700
+
+    add console save MovieDetail.jsx
+
+[33mcommit f610ec20577b3abf4596b486dbeb53a4e84de464[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Sun Jul 12 12:32:14 2026 +0700
+
+    check console MovieDetail.jsx
+
+[33mcommit d34c3b26bf455dcb88f88988715e65b3cd100fd5[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Sun Jul 12 12:07:16 2026 +0700
+
+    move file continueWatching.js to frontend/utils
+
+[33mcommit 925db0d5489bd44a24e747db93632f0cad4ad34b[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Sun Jul 12 11:41:28 2026 +0700
+
+    Creat continueWatching.js
+
+[33mcommit f204313ef059a3e8c4e199bb0f8da7e183e36c2a[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Fri Jul 10 16:24:40 2026 +0700
+
+    console.log Carousel.jsx
+
+[33mcommit f04a537c9faef685ff46bd23fa9424b9f6e8e283[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Fri Jul 10 15:34:35 2026 +0700
+
+    add console.log to file Home.jsx
+
+[33mcommit f1993fccea8dd335fbb4b712cf1a17e8246e6e6a[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Fri Jul 10 15:26:37 2026 +0700
+
+    add slug to Carousel.jsx
+
+[33mcommit 6dee790cf705ab6631235c5261d02064d16d8e26[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Fri Jul 10 13:13:08 2026 +0700
+
+    refactor CategoryPage.jsx
+
+[33mcommit 75546c8873fcb78e04874ad10263382936ef30a8[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Fri Jul 10 12:27:13 2026 +0700
+
+    Create Pagination.jsx
+
+[33mcommit 8d8026d85e1c14d9ea2e5b31e1d9ed575e173951[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Thu Jul 9 16:44:18 2026 +0700
+
+    refactor all v27
+
+[33mcommit 1ba654a531835b5fac23fd6fa2f70e6e4a0826b7[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Thu Jul 9 15:31:44 2026 +0700
+
+    refator all v26
+
+[33mcommit 97b8b60896322354cf5a5bf838dde309a8fc4165[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Thu Jul 9 15:05:55 2026 +0700
+
+    refactor all v26
+
+[33mcommit ac170d5da482bf5a429441626e618a6ea50ef42a[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Thu Jul 9 14:44:09 2026 +0700
+
+    refactor all v25
+
+[33mcommit 7706d0655ceaf46d1488ac42607d9e3425eb0640[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Thu Jul 9 14:21:43 2026 +0700
+
+    refactor all v24
+
+[33mcommit 93e0c915a70914baa46a4d3ab70f5e25129bc5ed[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Thu Jul 9 12:10:34 2026 +0700
+
+    refactor all v23
+
+[33mcommit 5b499635d01ebc6e5598a8540f71e3504d720325[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Thu Jul 9 11:29:04 2026 +0700
+
+    Chang router backend
+
+[33mcommit 581c5295a0121847de2b6a1b63bcaff4bcd54764[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jul 8 16:15:18 2026 +0700
+
+    Create CategoryList.jsx
+
+[33mcommit aad13e2153a448d47ad1df1d3968e25ce9140d72[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jul 8 14:11:39 2026 +0700
+
+    refactor all v22
+
+[33mcommit a3ca705c411c1bf8676797d273cdc9a02e18536b[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jul 8 13:07:25 2026 +0700
+
+    refactor all 22
+
+[33mcommit 5054e60846282ef8bfba3c50af294f175540b34a[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jul 8 11:16:33 2026 +0700
+
+    refactor all v21
+
+[33mcommit 6f6d38e91f383a6e914e4bf4313610f84b670aa9[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Tue Jul 7 17:21:40 2026 +0700
+
+    refactor all v20
+
+[33mcommit 80714d2264569d79294c182e966545be6c0e05b3[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Tue Jul 7 14:28:34 2026 +0700
+
+    add slug
+
+[33mcommit 0e268b330ee7d0bc5f3eeaa5acec4ae2aa8d72fd[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Tue Jul 7 14:01:23 2026 +0700
+
+    refactor all v19
+
+[33mcommit 653c37d87ebedc7e0463ccfcedf0bcfec3c6986f[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Thu Jul 2 12:02:56 2026 +0700
+
+    Refactor MovieDetail.jsx v1
+
+[33mcommit 17949995576eabe2110d12a885bc2660c113d507[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Thu Jul 2 11:51:39 2026 +0700
+
+    Create useEffect check time v1
+
+[33mcommit 43f82acff1d2adb2f4408ced15f38e72cc5057d7[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Thu Jul 2 11:47:44 2026 +0700
+
+    Create useEffect check time
+
+[33mcommit 75d4e3bba175a52a4300f99bf87837718e9511ee[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jul 1 19:28:32 2026 +0700
+
+    add arrow in Carousel.jsx all v20
+
+[33mcommit d3c218603bd28b405bf5e274b3385c088dffdc22[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jul 1 14:23:49 2026 +0700
+
+    refactor all v18
+
+[33mcommit 7fb1e2c30bfa586595e3532573fe78df4ee3138d[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jul 1 14:16:45 2026 +0700
+
+    refactor all v17
+
+[33mcommit 1041caa6b64025d144ef9242005676cfc6586481[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jul 1 14:10:03 2026 +0700
+
+    refactor all17
+
+[33mcommit 31c5d811ae3773ebeba5765251a10dcc7ef762d4[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jul 1 13:35:32 2026 +0700
+
+    tesing console
+
+[33mcommit 3df5d211e19f234b368ed59ef8b1440c5e6be734[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jul 1 13:32:19 2026 +0700
+
+    refactor css v9
+
+[33mcommit 8abf7178877d047a296188a2ae173e67587bf515[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jul 1 13:04:30 2026 +0700
+
+    refactor css v8
+
+[33mcommit 871e97f9fb3956908d3609a3c880ac59393107e0[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jul 1 12:40:31 2026 +0700
+
+    refactor css v7
+
+[33mcommit cc136d60516959ce9401fe0eb6e49059734259ec[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jul 1 12:37:40 2026 +0700
+
+    refactor v6
+
+[33mcommit 7b77545c096bcf358f608bff52481788aa656494[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jul 1 12:29:28 2026 +0700
+
+    refactor css v5
+
+[33mcommit 542658b6e4c4bc35b72fd7f49f9543d8c5e725c9[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jul 1 12:19:47 2026 +0700
+
+    refacetor css v4
+
+[33mcommit 743638b9460bb351457e7f78bbc3d9a840f6ad5c[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jul 1 11:43:33 2026 +0700
+
+    refractor css v3
+
+[33mcommit 4bfdbd211a2aa0b0df68d96fd3a39f7e729ae955[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jul 1 11:17:47 2026 +0700
+
+    refactor css v2
+
+[33mcommit 99a795c290d460475e418c558f132aa505eb8a85[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jul 1 11:13:46 2026 +0700
+
+    refactor css v1
+
+[33mcommit 23f91b6350162aa13973f037f6d82082183f9b81[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Tue Jun 30 19:05:51 2026 +0700
+
+    refacetor v16
+
+[33mcommit f3a74dfb2eae1cfd89fec3199b092995c16b9d93[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Tue Jun 30 18:17:32 2026 +0700
+
+    add index.css
+
+[33mcommit 6a9784fc6764f26dfa8834d188b83254b6bb8321[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Tue Jun 30 17:59:07 2026 +0700
+
+    refactor all v16
+
+[33mcommit 0f4aea14ffd833bea8a8510b54db7317e52e487f[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Tue Jun 30 17:42:10 2026 +0700
+
+    refactor all 15
+
+[33mcommit 85c30acc0ed80d79cb69aecde340c3b8c4a398de[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Tue Jun 30 16:46:41 2026 +0700
+
+    refactor all v14
+
+[33mcommit 4cf018ab02bcdc6152ea2ffd9c47ccf0cbd4f05f[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Tue Jun 30 15:46:26 2026 +0700
+
+    Refactor Home.jsx index.css
+
+[33mcommit f270bec86f65b8ccf8781dcb784217ad9c16f97d[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Tue Jun 30 15:25:47 2026 +0700
+
+    Create Script deploy.sh
+
+[33mcommit 0282715f27127f16801f23d69d5691959bf6a967[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Tue Jun 30 15:01:54 2026 +0700
+
+    chang logo-tab html
+
+[33mcommit 48e56569e99c3da3cd79cc6b33fa741a159fd29a[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Tue Jun 30 11:18:05 2026 +0700
+
+    refactor all v13
+
+[33mcommit 93575fe18fa73aef3d2008e4a3a1f82996450400[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Mon Jun 29 19:35:07 2026 +0700
+
+    Refactor All v13
+
+[33mcommit 39302b3a42dd89ca5496c42e43b8149b8e0e8ace[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Mon Jun 29 11:52:03 2026 +0700
+
+    Refactor All v12
+
+[33mcommit 172db762c281c322df0c12c8780ab3398bbec186[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Fri Jun 26 11:59:07 2026 +0700
+
+    refactor article title
+
+[33mcommit 138ea3589ad7ded6b56b7de931321ab0983b7536[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Fri Jun 26 11:47:25 2026 +0700
+
+    refactor all v10
+
+[33mcommit a961e3152d617015fb4ca3d673703a179d4120cf[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Fri Jun 26 11:29:43 2026 +0700
+
+    refactor all v9
+
+[33mcommit f601752338b4d81e4f54c2517aebc5269db91a1d[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Fri Jun 26 11:16:08 2026 +0700
+
+    refactor all v8
+
+[33mcommit b43c84b4c15d5cc5f69a3311a36860eac6125ba8[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Fri Jun 26 11:07:39 2026 +0700
+
+    refactor all v7
+
+[33mcommit a26ea533c8bcdcbeda32ed15d3c9e7d099fa2ca0[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Fri Jun 26 11:01:11 2026 +0700
+
+    refactor Home.jsx
+
+[33mcommit 9720a7b6833d03820740b26acdfac006aa752244[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Fri Jun 26 10:45:16 2026 +0700
+
+    refactor all file v6
+
+[33mcommit 58eeeb81db56a17863ff23284c2b12d217d02030[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Fri Jun 26 08:34:07 2026 +0700
+
+    refactor all file v5
+
+[33mcommit 11ac534ca3dc947c6fc279759839ddef6aad5df4[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Thu Jun 25 14:25:19 2026 +0700
+
+    refactor all file v4
+
+[33mcommit e4c7c9022e4012987f6fde4a0797edb65f0897d6[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Thu Jun 25 14:10:57 2026 +0700
+
+    refactor all file v3)
+
+[33mcommit 891091b5faf698359e91c7c76dccdb7c029795cd[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Thu Jun 25 13:21:46 2026 +0700
+
+    Test Article
+
+[33mcommit c5d0237e99a081f570a371e02cd85e0dc61e5bb4[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Thu Jun 25 13:12:55 2026 +0700
+
+    Refactor All File V2
+
+[33mcommit e2a9f67faf6ccc38b90e91e707d22cf258e97de6[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Thu Jun 25 12:36:51 2026 +0700
+
+    Refactor All File V1
+
+[33mcommit 7265bb2883fafc061a133e6107dd49b08caf0c12[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Thu Jun 25 12:27:51 2026 +0700
+
+    Refactor All File
+
+[33mcommit c6929635a2003514dbab76d500a10927678cfbb3[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Thu Jun 25 11:50:19 2026 +0700
+
+    add categoryMap.js
+
+[33mcommit 86c86a805382b5053bd4218bcc4541456377e22b[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Thu Jun 25 11:38:56 2026 +0700
+
+    refresh code App.jsx
+
+[33mcommit 5ca7b8bb159b8da64436116234ce2a86d857a98d[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Thu Jun 25 11:30:22 2026 +0700
+
+    Refactor Home.jsx App.jsx
+
+[33mcommit a2fb8fef77bf836018aad83587bd2eefdc125a2e[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jun 24 18:59:01 2026 +0700
+
+    Clean file
+
+[33mcommit e30dcc14ec668ff61282e9aa505434dafc5699c0[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jun 24 17:10:37 2026 +0700
+
+    Refactor categoryMap
+
+[33mcommit bcd95f1bfa706952c7638600ffaac184506b6bde[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jun 24 16:14:36 2026 +0700
+
+    chang currentMovies.map
+
+[33mcommit 57d15df8193ce1d980723aace7039df999137426[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jun 24 15:43:21 2026 +0700
+
+    refector App.jsx Home.jsx Navbar.jsx Create categoryMap.js
+
+[33mcommit aa5fabc505a8220989a67d9c07bd4bebd879a396[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Wed Jun 24 13:30:00 2026 +0700
+
+    refector Home.jsx App.jsx Navbar.jsx
+
+[33mcommit 344317875c5ec39044a4e5ac0f544321804a2873[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Tue Jun 23 15:24:14 2026 +0700
+
+    refactor server
+
+[33mcommit e45b1a929ea9fee676791054d7d6c15b2687fb80[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Tue Jun 23 15:13:23 2026 +0700
+
+    chang server
+
+[33mcommit a92b819a6f412278d94b3c3e9da9d85475305537[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Tue Jun 23 11:25:57 2026 +0700
+
+    Clean server
+
+[33mcommit a9f05661fb3ec7593c571cdb2a204e72cad67835[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Tue Jun 23 11:12:18 2026 +0700
+
+    Create file AutoBackup
+
+[33mcommit 3c3223dbd18de58568f5482a85206a7df076eb0e[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Mon Jun 22 17:11:49 2026 +0700
+
+    Fix vercel rounting
+
+[33mcommit 497aa9a72dfcca92e1d62578db399dc0be6c142e[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Mon Jun 22 16:46:29 2026 +0700
+
+    restore
+
+[33mcommit 102e51185793e2f4455b81d74b5aabe754088968[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Mon Jun 22 16:44:32 2026 +0700
+
+    test app.jsx
+
+[33mcommit ec3b3e7883f5b06e4707f571dba6ce3165454ff3[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Mon Jun 22 15:08:22 2026 +0700
+
+    Recode
+
+[33mcommit 1da5ec7e0af6a63bf26f36a39aba267ca6dd4333[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Mon Jun 22 13:14:49 2026 +0700
+
+    Check main jsx
+
+[33mcommit 4644d357746b1089129b6f2b37d5549e076058cc[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Mon Jun 22 13:09:29 2026 +0700
+
+    Check loader jsx
+
+[33mcommit 6273096c5cb30c134a0325f6356e52d244613b11[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Mon Jun 22 11:29:55 2026 +0700
+
+    Add HashRouter
+
+[33mcommit e69838310ac023b1a2ce7857662e72c549870658[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Sat Jun 20 20:27:38 2026 +0700
+
+    Add vercel.json on streaming-app
+
+[33mcommit f3e93d1e5bb77e47a1499856a6401d74dd233047[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Sat Jun 20 20:19:06 2026 +0700
+
+    Add vercel.json
+
+[33mcommit b8127e62c503ff59a3ce1b86b0b4b60bb4bbae8f[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Sat Jun 20 20:00:52 2026 +0700
+
+    Remove hash.js
+
+[33mcommit 7b3d6535b0ed8738d08689e2b5d95ee43e999df5[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Sat Jun 20 19:42:00 2026 +0700
+
+    CORS callback logic
+
+[33mcommit 51d7429e926a48009637e70dc7299cec5ca2c449[m
+Author: megaMax404 <tanaseklamai@gmail.com>
+Date:   Sat Jun 20 17:07:17 2026 +0700
+
+    Trigger redeploy with correct identity
+
+[33mcommit bfa120279a2d6fc534f447fa2dcd87f9e13834cc[m
+Author: SSSSSSS <testsys@example.com>
+Date:   Sat Jun 20 16:51:25 2026 +0700
+
+    Add hls.js
+
+[33mcommit 87e8294ff0f85a331474038148b36356046e465b[m
+Author: SSSSSSS <testsys@example.com>
+Date:   Sat Jun 20 16:29:04 2026 +0700
+
+    Install hls.js
+
+[33mcommit 12946f6a224700dad6be700e3430e8f14bed3f30[m
+Author: SSSSSSS <testsys@example.com>
+Date:   Sat Jun 20 16:04:36 2026 +0700
+
+    Update frontend production API
+
+[33mcommit 873899570594282694b2ac4cbf89287a0ec949c7[m
+Author: SSSSSSS <testsys@example.com>
+Date:   Sat Jun 20 15:09:33 2026 +0700
+
+    Ignore PSD files
+
+[33mcommit 2cb077c0ff20324aef4d3c234b8c44537f2ef59d[m
+Author: SSSSSSS <testsys@example.com>
+Date:   Sat Jun 20 13:41:20 2026 +0700
+
+    Remove PSD files
+
+[33mcommit 4dec20e9f3d5db859420b6b0105be2c005b82b68[m
+Author: SSSSSSS <testsys@example.com>
+Date:   Sat Jun 20 13:30:14 2026 +0700
+
+    Initial commit
