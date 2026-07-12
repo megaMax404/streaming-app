@@ -1,7 +1,9 @@
 #!/bin/bash
+
 cd /root/streaming-app || exit
 
-git pull
+git fetch origin
+git reset --hard origin/master
 
 cd frontend || exit
 npm install

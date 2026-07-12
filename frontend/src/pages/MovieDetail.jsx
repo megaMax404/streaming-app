@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Hls from "hls.js";
 import PlayerNavbar from "../components/PlayerNavbar";
-
+import { saveContinueWatching, } from "../utils/continueWatching";
 function MovieDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -58,6 +58,10 @@ function MovieDetail() {
   useEffect(() => {
     setStartMovie(false);
     setVideoError(false);
+
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+    }
   }, [slug]);
 
 
@@ -138,6 +142,29 @@ function MovieDetail() {
       }
     };
   }, [movie, startMovie]);
+
+  useEffect(() => {
+    if (!startMovie) return;
+    if (!movie) return;
+    if (!videoRef.current) return;
+
+    const video = videoRef.current;
+
+    const timer = setInterval(() => {
+      if (!video.paused) {
+        saveContinueWatching({
+          slug: movie.slug,
+          title: movie.title,
+          image: movie.image,
+          time: video.currentTime,
+          duration: video.duration || 0,
+        });
+      }
+    }, 5000);
+
+    return () => clearInterval(timer);
+
+  }, [startMovie, movie]);
 
   if (loading) {
     return (
@@ -400,6 +427,10 @@ function MovieDetail() {
                     onClick={() => {
                       setVideoError(false);
                       setStartMovie(true);
+
+                      if (videoRef.current) {
+                        videoRef.current.play();
+                      }
                     }}
                   >
                     ▶ เริ่มเล่นหนัง
