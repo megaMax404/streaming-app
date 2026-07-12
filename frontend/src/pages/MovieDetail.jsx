@@ -67,6 +67,11 @@ function MovieDetail() {
 
   // เล่น m3u8
   useEffect(() => {
+    console.log("HLS EFFECT", {
+      startMovie,
+      movie,
+      video: videoRef.current,
+    });
     if (!movie || !startMovie) return;
 
     if (!videoRef.current) return;
@@ -144,6 +149,11 @@ function MovieDetail() {
   }, [movie, startMovie]);
 
   useEffect(() => {
+    console.log({
+      startMovie,
+      movie,
+      video: videoRef.current,
+    });
     console.log("ContinueWatching useEffect");
     if (!startMovie) return;
     if (!movie) return;
@@ -429,7 +439,7 @@ function MovieDetail() {
                     onClick={() => {
                       setVideoError(false);
                       setStartMovie(true);
-
+                      console.log("CLICK PLAY");
                       if (videoRef.current) {
                         videoRef.current.play();
                       }
