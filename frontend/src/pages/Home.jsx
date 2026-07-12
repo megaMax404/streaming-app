@@ -12,6 +12,7 @@ import {
 import MovieCard from "../components/MovieCard";
 import Carousel from "../components/Carousel";
 import Pagination from "../components/Pagination";
+import ContinueWatching from "../components/ContinueWatching";
 
 const MOVIES_PER_PAGE = 36;
 
@@ -110,13 +111,11 @@ function Home({ search }) {
   }, [movies]);
 
   useEffect(() => {
-  console.log("HOME LOADED");
-  console.log("movies =", movies);
-  console.log("latestMovies =", latestMovies);
 }, [movies, latestMovies]);
   return (
     <div>
       {/* CAROUSEL */}
+      <ContinueWatching />
       <div style={styles.carouselSection}>
         <div style={styles.sectionTitle}>
           หนังใหม่ล่าสุด (2026)
