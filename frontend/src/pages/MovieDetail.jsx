@@ -91,6 +91,8 @@ function MovieDetail() {
           setLoadingPlayer(false);
           if (resumeTime > 0) {
             videoRef.current.currentTime = resumeTime;
+          } else {
+            videoRef.current.currentTime = 0;
           }
           videoRef.current
             ?.play()
@@ -125,6 +127,8 @@ function MovieDetail() {
         };
         if (resumeTime > 0) {
           videoRef.current.currentTime = resumeTime;
+        } else {
+          videoRef.current.currentTime = 0;
         }
         videoRef.current.onerror = () => {
           setLoadingPlayer(false);
@@ -160,7 +164,7 @@ function MovieDetail() {
     if (!videoRef.current) return;
     const video = videoRef.current;
     const timer = setInterval(() => {
-      if (!video.paused) {
+      if (!video.paused && video.currentTime > 5) {
         saveContinueWatching({
           slug: movie.slug,
           title: movie.title,
@@ -455,10 +459,6 @@ function MovieDetail() {
                 เล่นต่อจากเดิม?
               </h2>
 
-              <p style={{ color: "#bbb" }}>
-                พบประวัติการดูของเรื่องนี้
-              </p>
-
               <div style={{ display: "flex", gap: "15px", marginTop: "20px" }}>
 
                 <button
@@ -542,6 +542,13 @@ function MovieDetail() {
                     onError={() => {
                       setLoadingPlayer(false);
                       setVideoError(true);
+                      saveContinueWatching({
+                        slug: movie.slug,
+                        title: movie.title,
+                        image: movie.image,
+                        time: 0,
+                        duration: 0,
+                      });
                     }}
                     style={{
                       ...styles.video,

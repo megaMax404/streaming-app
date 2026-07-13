@@ -13,6 +13,7 @@ import MovieCard from "../components/MovieCard";
 import Carousel from "../components/Carousel";
 import Pagination from "../components/Pagination";
 import ContinueWatching from "../components/ContinueWatching";
+import { getContinueWatching } from "../utils/continueWatching";
 
 const MOVIES_PER_PAGE = 36;
 
@@ -21,6 +22,7 @@ function Home({ search }) {
   const navigate = useNavigate();
 
   const [movies, setMovies] = useState([]);
+  const [continueList, setContinueList] = useState([]);
   const [articles, setArticles] = useState([]);
 
   const category = slug
@@ -53,6 +55,10 @@ function Home({ search }) {
     };
 
     loadData();
+  }, []);
+
+  useEffect(() => {
+    setContinueList(getContinueWatching());
   }, []);
 
   /* ======================
@@ -111,7 +117,7 @@ function Home({ search }) {
   }, [movies]);
 
   useEffect(() => {
-}, [movies, latestMovies]);
+  }, [movies, latestMovies]);
   return (
     <div>
       {/* CAROUSEL */}
