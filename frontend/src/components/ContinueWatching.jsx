@@ -55,7 +55,7 @@ function ContinueWatching() {
                                 </div>
 
                                 <div style={styles.time}>
-                                    {Math.floor(movie.time)} วินาที
+                                    {formatTime(movie.time)} วินาที
                                 </div>
                             </div>
                         </div>
@@ -64,6 +64,24 @@ function ContinueWatching() {
             </div>
         </div>
     );
+}
+
+function formatTime(seconds) {
+    seconds = Math.floor(seconds);
+
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+
+    if (h > 0) {
+        return `${h} ชม. ${m} นาที`;
+    }
+
+    if (m > 0) {
+        return `${m} นาที ${s} วินาที`;
+    }
+
+    return `${s} วินาที`;
 }
 
 const styles = {
@@ -88,10 +106,12 @@ const styles = {
 
     card: {
         width: 220,
-        cursor: "pointer",
         flexShrink: 0,
         display: "flex",
         flexDirection: "column",
+        background: "#111",
+        borderRadius: 10,
+        overflow: "hidden",
     },
 
     image: {
@@ -100,9 +120,9 @@ const styles = {
     },
 
     info: {
-        marginTop: 10,
         display: "flex",
         flexDirection: "column",
+        padding: "10px",
         flex: 1,
     },
 
@@ -110,25 +130,24 @@ const styles = {
         color: "#fff",
         fontWeight: "bold",
 
-        height: 48,
-        lineHeight: "24px",
+        lineHeight: "22px",
 
-        overflow: "hidden",
+        height: "44px",
 
         display: "-webkit-box",
         WebkitBoxOrient: "vertical",
         WebkitLineClamp: 2,
 
+        overflow: "hidden",
         textOverflow: "ellipsis",
-
-        marginBottom: 10,
     },
 
     progressBg: {
         width: "100%",
         height: 6,
+        marginTop: "auto",
         background: "#333",
-        borderRadius: 10,
+        borderRadius: 99,
     },
 
     progress: {

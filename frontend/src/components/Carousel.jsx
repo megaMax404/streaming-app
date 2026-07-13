@@ -59,7 +59,6 @@ function Carousel({ movies }) {
     });
   };
 
-  console.log("Carousel Movies =", movies);
   return (
     <div style={styles.wrapper}>
       <button
@@ -78,8 +77,7 @@ function Carousel({ movies }) {
         onMouseMove={handleMouseMove}
       >
         {movies.map((movie) => {
-          console.log(movie);
-
+        
           return (
             <Link
               key={movie._id}
