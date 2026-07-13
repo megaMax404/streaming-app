@@ -18,6 +18,7 @@ function MovieDetail() {
   const [notFound, setNotFound] = useState(false);
   const [videoError, setVideoError] = useState(false);
   const [resumeTime, setResumeTime] = useState(0);
+  const [showResumePopup, setShowResumePopup] = useState(false);
   // โหลดข้อมูลหนัง
 
   useEffect(() => {
@@ -70,16 +71,11 @@ function MovieDetail() {
   useEffect(() => {
     if (!movie || !startMovie) return;
     if (!videoRef.current) return;
-
     let hls;
-
     const loadPlayer = async () => {
-
       const { default: Hls } = await import("hls.js");
-
       setVideoError(false);
       setLoadingPlayer(true);
-
       if (Hls.isSupported()) {
         hls = new Hls({
           maxLoadingDelay: 4,
@@ -88,37 +84,29 @@ function MovieDetail() {
           levelLoadingTimeOut: 30000,
           fragLoadingTimeOut: 40000,
         });
-
         hls.loadSource(movie.video);
         hls.attachMedia(videoRef.current);
-
         // โหลด playlist สำเร็จ
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
           setLoadingPlayer(false);
-
           if (resumeTime > 0) {
             videoRef.current.currentTime = resumeTime;
           }
-
           videoRef.current
             ?.play()
             .catch(() => { });
         });
-
         // ถ้าไฟล์เสีย / URL ผิด
         hls.on(Hls.Events.ERROR, (event, data) => {
-
           if (data.fatal) {
             switch (data.type) {
               case Hls.ErrorTypes.NETWORK_ERROR:
                 console.log("retry loading...");
                 hls.startLoad();
                 break;
-
               case Hls.ErrorTypes.MEDIA_ERROR:
                 hls.recoverMediaError();
                 break;
-
               default:
                 setVideoError(true);
                 hls.destroy();
@@ -132,24 +120,19 @@ function MovieDetail() {
         )
       ) {
         videoRef.current.src = movie.video;
-
         videoRef.current.onloadeddata = () => {
           setLoadingPlayer(false);
         };
-
         if (resumeTime > 0) {
           videoRef.current.currentTime = resumeTime;
         }
-
         videoRef.current.onerror = () => {
           setLoadingPlayer(false);
           setVideoError(true);
         };
       }
     };
-
     loadPlayer();
-
     return () => {
       if (hls) {
         hls.destroy();
@@ -159,31 +142,25 @@ function MovieDetail() {
 
   useEffect(() => {
     if (!movie) return;
-
     const list = getContinueWatching();
-
     const data = list.find(
       (m) => m.slug === movie.slug
     );
-
-    if (data) {
+    if (data && data.time > 30) {
       setResumeTime(data.time);
+      setShowResumePopup(true);
     } else {
       setResumeTime(0);
     }
   }, [movie]);
 
   useEffect(() => {
-
     if (!startMovie) return;
     if (!movie) return;
     if (!videoRef.current) return;
-
     const video = videoRef.current;
-
     const timer = setInterval(() => {
       if (!video.paused) {
-
         saveContinueWatching({
           slug: movie.slug,
           title: movie.title,
@@ -193,10 +170,45 @@ function MovieDetail() {
         });
       }
     }, 5000);
-
     return () => clearInterval(timer);
-
   }, [startMovie, movie]);
+
+  useEffect(() => {
+    return () => {
+      if (!videoRef.current || !movie) return;
+
+      saveContinueWatching({
+        slug: movie.slug,
+        title: movie.title,
+        image: movie.image,
+        time: videoRef.current.currentTime,
+        duration: videoRef.current.duration || 0,
+      });
+    };
+  }, [movie]);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (!videoRef.current || !movie) return;
+
+      saveContinueWatching({
+        slug: movie.slug,
+        title: movie.title,
+        image: movie.image,
+        time: videoRef.current.currentTime,
+        duration: videoRef.current.duration || 0,
+      });
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener(
+        "beforeunload",
+        handleBeforeUnload
+      );
+    };
+  }, [movie]);
 
   if (loading) {
     return (
@@ -437,6 +449,43 @@ function MovieDetail() {
             )}
           </div>
 
+          {showResumePopup && (
+            <div style={styles.resumePopup}>
+              <h2 style={{ color: "#fff" }}>
+                เล่นต่อจากเดิม?
+              </h2>
+
+              <p style={{ color: "#bbb" }}>
+                พบประวัติการดูของเรื่องนี้
+              </p>
+
+              <div style={{ display: "flex", gap: "15px", marginTop: "20px" }}>
+
+                <button
+                  style={styles.playButton}
+                  onClick={() => {
+                    setShowResumePopup(false);
+                    setStartMovie(true);
+                  }}
+                >
+                  ▶ เล่นต่อ
+                </button>
+
+                <button
+                  style={styles.resetButton}
+                  onClick={() => {
+                    setResumeTime(0);
+                    setShowResumePopup(false);
+                    setStartMovie(true);
+                  }}
+                >
+                  ↺ เริ่มใหม่
+                </button>
+
+              </div>
+            </div>
+          )}
+
           {/* VIDEO PLAYER */}
           <h2 style={styles.watchTitle}>
             🎬 ดูหนังออนไลน์
@@ -456,7 +505,7 @@ function MovieDetail() {
             </div>
           ) : (
             <>
-              {!startMovie && (
+              {!startMovie && !showResumePopup && (
                 <div style={styles.startBox}>
                   <button
                     style={styles.playButton}
@@ -821,6 +870,29 @@ const styles = {
   loadingSub: {
     color: "#999",
     margin: 0,
+  },
+
+  resumePopup: {
+    width: "100%",
+    minHeight: "220px",
+    background: "#111",
+    border: "1px solid #333",
+    borderRadius: "14px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  resetButton: {
+    background: "#333",
+    color: "#fff",
+    border: "none",
+    padding: "18px 35px",
+    borderRadius: "12px",
+    cursor: "pointer",
+    fontSize: "18px",
+    fontWeight: "bold",
   },
 
 };
