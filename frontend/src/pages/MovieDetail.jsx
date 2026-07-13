@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Hls from "hls.js";
 import PlayerNavbar from "../components/PlayerNavbar";
-import { saveContinueWatching, } from "../utils/continueWatching";
+import { getContinueWatching, saveContinueWatching, } from "../utils/continueWatching";
 function MovieDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -17,6 +17,7 @@ function MovieDetail() {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [videoError, setVideoError] = useState(false);
+  const [resumeTime, setResumeTime] = useState(0);
   // โหลดข้อมูลหนัง
 
   useEffect(() => {
@@ -97,6 +98,10 @@ function MovieDetail() {
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         setLoadingPlayer(false);
 
+        if (resumeTime > 0) {
+          videoRef.current.currentTime = resumeTime;
+        }
+
         videoRef.current
           ?.play()
           .catch(() => { });
@@ -135,6 +140,10 @@ function MovieDetail() {
         setLoadingPlayer(false);
       };
 
+      if (resumeTime > 0) {
+        videoRef.current.currentTime = resumeTime;
+      }
+
       videoRef.current.onerror = () => {
         setLoadingPlayer(false);
         setVideoError(true);
@@ -146,7 +155,23 @@ function MovieDetail() {
         hls.destroy();
       }
     };
-  }, [movie, startMovie]);
+  }, [movie, startMovie, resumeTime]);
+
+  useEffect(() => {
+    if (!movie) return;
+
+    const list = getContinueWatching();
+
+    const data = list.find(
+      (m) => m.slug === movie.slug
+    );
+
+    if (data) {
+      setResumeTime(data.time);
+    } else {
+      setResumeTime(0);
+    }
+  }, [movie]);
 
   useEffect(() => {
     console.log({
@@ -439,10 +464,6 @@ function MovieDetail() {
                     onClick={() => {
                       setVideoError(false);
                       setStartMovie(true);
-                      console.log("CLICK PLAY");
-                      if (videoRef.current) {
-                        videoRef.current.play();
-                      }
                     }}
                   >
                     ▶ เริ่มเล่นหนัง

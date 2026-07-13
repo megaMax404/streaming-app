@@ -55,7 +55,7 @@ function ContinueWatching() {
                                 </div>
 
                                 <div style={styles.time}>
-                                    {formatTime(movie.time)} วินาที
+                                    {formatTime(movie.time)}
                                 </div>
                             </div>
                         </div>
