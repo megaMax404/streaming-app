@@ -174,12 +174,7 @@ function MovieDetail() {
   }, [movie]);
 
   useEffect(() => {
-    console.log({
-      startMovie,
-      movie,
-      video: videoRef.current,
-    });
-    console.log("ContinueWatching useEffect");
+
     if (!startMovie) return;
     if (!movie) return;
     if (!videoRef.current) return;

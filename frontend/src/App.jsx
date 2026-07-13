@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -6,14 +6,16 @@ import {
   Navigate,
 } from "react-router-dom";
 
-import Home from "./pages/Home";
-import MovieDetail from "./pages/MovieDetail";
-import Admin from "./pages/Admin";
-import AdminLogin from "./pages/AdminLogin";
-import CategoryPage from "./pages/CategoryPage";
-import CategoryList from "./pages/CategoryList";
+const Home = lazy(() => import("./pages/Home"));
+const MovieDetail = lazy(() => import("./pages/MovieDetail"));
+const Admin = lazy(() => import("./pages/Admin"));
+const AdminLogin = lazy(() => import("./pages/AdminLogin"));
+const CategoryPage = lazy(() => import("./pages/CategoryPage"));
+const CategoryList = lazy(() => import("./pages/CategoryList"));
+
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
+import LoadingPage from "./components/LoadingPage";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(
@@ -38,81 +40,83 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
+      <Suspense fallback={<LoadingPage />}>
+        <Routes>
 
-        <Route
-          path="/"
-          element={
-            <Layout>
-              <Home search={search} />
-            </Layout>
-          }
-        />
+          <Route
+            path="/"
+            element={
+              <Layout>
+                <Home search={search} />
+              </Layout>
+            }
+          />
 
-        <Route
-          path="/category/:slug"
-          element={
-            <Layout>
-              <Home search={search} />
-            </Layout>
-          }
-        />
+          <Route
+            path="/category/:slug"
+            element={
+              <Layout>
+                <Home search={search} />
+              </Layout>
+            }
+          />
 
-        <Route
-          path="/categories"
-          element={
-            <Layout>
-              <CategoryList />
-            </Layout>
-          }
-        />
+          <Route
+            path="/categories"
+            element={
+              <Layout>
+                <CategoryList />
+              </Layout>
+            }
+          />
 
-        <Route
-          path="/categories/:category"
-          element={
-            <Layout>
-              <CategoryPage />
-            </Layout>
-          }
-        />
+          <Route
+            path="/categories/:category"
+            element={
+              <Layout>
+                <CategoryPage />
+              </Layout>
+            }
+          />
 
-        {/* MOVIE */}
-        <Route
-          path="/movie/:slug"
-          element={<MovieDetail />}
-        />
+          {/* MOVIE */}
+          <Route
+            path="/movie/:slug"
+            element={<MovieDetail />}
+          />
 
-        {/* ADMIN */}
-        <Route
-          path="/9x9adm-panel"
-          element={
-            isAdmin ? (
-              <Admin />
-            ) : (
-              <Navigate
-                to="/9x9adm-login"
-                replace
+          {/* ADMIN */}
+          <Route
+            path="/9x9adm-panel"
+            element={
+              isAdmin ? (
+                <Admin />
+              ) : (
+                <Navigate
+                  to="/9x9adm-login"
+                  replace
+                />
+              )
+            }
+          />
+
+          <Route
+            path="/9x9adm-login"
+            element={
+              <AdminLogin
+                setIsAdmin={setIsAdmin}
               />
-            )
-          }
-        />
+            }
+          />
 
-        <Route
-          path="/9x9adm-login"
-          element={
-            <AdminLogin
-              setIsAdmin={setIsAdmin}
-            />
-          }
-        />
+          {/* 404 */}
+          <Route
+            path="*"
+            element={<Navigate to="/" replace />}
+          />
 
-        {/* 404 */}
-        <Route
-          path="*"
-          element={<Navigate to="/" replace />}
-        />
-
-      </Routes>
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }
