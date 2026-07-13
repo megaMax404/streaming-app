@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import Hls from "hls.js";
+
 import PlayerNavbar from "../components/PlayerNavbar";
 import { getContinueWatching, saveContinueWatching, } from "../utils/continueWatching";
 function MovieDetail() {
@@ -68,87 +68,87 @@ function MovieDetail() {
 
   // เล่น m3u8
   useEffect(() => {
-    console.log("HLS EFFECT", {
-      startMovie,
-      movie,
-      video: videoRef.current,
-    });
     if (!movie || !startMovie) return;
-
     if (!videoRef.current) return;
 
     let hls;
 
-    setVideoError(false);
-    setLoadingPlayer(true);
+    const loadPlayer = async () => {
 
-    if (Hls.isSupported()) {
-      hls = new Hls({
-        maxLoadingDelay: 4,
-        manifestLoadingTimeOut: 30000,
-        manifestLoadingMaxRetry: 4,
-        levelLoadingTimeOut: 30000,
-        fragLoadingTimeOut: 40000,
-      });
+      const { default: Hls } = await import("hls.js");
 
-      hls.loadSource(movie.video);
-      hls.attachMedia(videoRef.current);
+      setVideoError(false);
+      setLoadingPlayer(true);
 
-      // โหลด playlist สำเร็จ
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        setLoadingPlayer(false);
+      if (Hls.isSupported()) {
+        hls = new Hls({
+          maxLoadingDelay: 4,
+          manifestLoadingTimeOut: 30000,
+          manifestLoadingMaxRetry: 4,
+          levelLoadingTimeOut: 30000,
+          fragLoadingTimeOut: 40000,
+        });
+
+        hls.loadSource(movie.video);
+        hls.attachMedia(videoRef.current);
+
+        // โหลด playlist สำเร็จ
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          setLoadingPlayer(false);
+
+          if (resumeTime > 0) {
+            videoRef.current.currentTime = resumeTime;
+          }
+
+          videoRef.current
+            ?.play()
+            .catch(() => { });
+        });
+
+        // ถ้าไฟล์เสีย / URL ผิด
+        hls.on(Hls.Events.ERROR, (event, data) => {
+
+          if (data.fatal) {
+            switch (data.type) {
+              case Hls.ErrorTypes.NETWORK_ERROR:
+                console.log("retry loading...");
+                hls.startLoad();
+                break;
+
+              case Hls.ErrorTypes.MEDIA_ERROR:
+                hls.recoverMediaError();
+                break;
+
+              default:
+                setVideoError(true);
+                hls.destroy();
+                break;
+            }
+          }
+        });
+      } else if (
+        videoRef.current.canPlayType(
+          "application/vnd.apple.mpegurl"
+        )
+      ) {
+        videoRef.current.src = movie.video;
+
+        videoRef.current.onloadeddata = () => {
+          setLoadingPlayer(false);
+        };
 
         if (resumeTime > 0) {
           videoRef.current.currentTime = resumeTime;
         }
 
-        videoRef.current
-          ?.play()
-          .catch(() => { });
-      });
-
-      // ถ้าไฟล์เสีย / URL ผิด
-      hls.on(Hls.Events.ERROR, (event, data) => {
-        console.log(data);
-
-        if (data.fatal) {
-          switch (data.type) {
-            case Hls.ErrorTypes.NETWORK_ERROR:
-              console.log("retry loading...");
-              hls.startLoad();
-              break;
-
-            case Hls.ErrorTypes.MEDIA_ERROR:
-              hls.recoverMediaError();
-              break;
-
-            default:
-              setVideoError(true);
-              hls.destroy();
-              break;
-          }
-        }
-      });
-    } else if (
-      videoRef.current.canPlayType(
-        "application/vnd.apple.mpegurl"
-      )
-    ) {
-      videoRef.current.src = movie.video;
-
-      videoRef.current.onloadeddata = () => {
-        setLoadingPlayer(false);
-      };
-
-      if (resumeTime > 0) {
-        videoRef.current.currentTime = resumeTime;
+        videoRef.current.onerror = () => {
+          setLoadingPlayer(false);
+          setVideoError(true);
+        };
       }
+    };
 
-      videoRef.current.onerror = () => {
-        setLoadingPlayer(false);
-        setVideoError(true);
-      };
-    }
+    loadPlayer();
 
     return () => {
       if (hls) {
@@ -183,7 +183,7 @@ function MovieDetail() {
 
     const timer = setInterval(() => {
       if (!video.paused) {
-        console.log("SAVE", video.currentTime);
+
         saveContinueWatching({
           slug: movie.slug,
           title: movie.title,
@@ -283,6 +283,8 @@ function MovieDetail() {
                   src={ad.image}
                   style={styles.adImg}
                   alt="ad"
+                  loading="lazy"
+                  decoding="async"
                 />
               </a>
             )
@@ -309,6 +311,7 @@ function MovieDetail() {
                   src={banner.image}
                   style={styles.banner}
                   alt="banner"
+                  fetchPriority="high"
                 />
               </a>
             )
@@ -329,6 +332,7 @@ function MovieDetail() {
                 "/no-image.jpg"}
               alt={movie.title}
               style={styles.poster}
+              fetchPriority="high"
             />
 
             {/* TRAILER */}
@@ -513,11 +517,14 @@ function MovieDetail() {
                 href={ad.link}
                 target="_blank"
                 rel="noreferrer"
+
               >
                 <img
                   src={ad.image}
                   style={styles.adImg}
                   alt="ad"
+                  loading="lazy"
+                  decoding="async"
                 />
               </a>
             )

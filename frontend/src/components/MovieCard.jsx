@@ -13,6 +13,8 @@ function MovieCard({ movie }) {
       <img
         src={movie.image || "/no-image.jpg"}
         alt={movie.title || "movie"}
+        loading="lazy"
+        decoding="async"
       />
 
       <h3>{movie.title || "Untitled"}</h3>

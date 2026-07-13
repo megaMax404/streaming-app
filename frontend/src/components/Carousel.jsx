@@ -77,7 +77,7 @@ function Carousel({ movies }) {
         onMouseMove={handleMouseMove}
       >
         {movies.map((movie) => {
-        
+
           return (
             <Link
               key={movie._id}
@@ -87,6 +87,8 @@ function Carousel({ movies }) {
                 src={movie.image}
                 alt={movie.title}
                 style={styles.image}
+                loading="lazy"
+                decoding="async"
               />
             </Link>
           );

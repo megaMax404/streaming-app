@@ -38,6 +38,8 @@ function ContinueWatching() {
                                 src={movie.image}
                                 alt={movie.title}
                                 style={styles.image}
+                                loading="lazy"
+                                decoding="async"
                             />
 
                             <div style={styles.info}>
