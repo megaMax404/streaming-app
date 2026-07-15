@@ -24,6 +24,7 @@ function MovieDetail() {
   const [resumeTime, setResumeTime] = useState(0);
   const [showResumePopup, setShowResumePopup] = useState(false);
   const [forceRestart, setForceRestart] = useState(false);
+  const [allowResume, setAllowResume] = useState(false);
   // โหลดข้อมูลหนัง
 
   useEffect(() => {
@@ -100,7 +101,8 @@ function MovieDetail() {
             if (forceRestart) {
               videoRef.current.currentTime = 0;
               setForceRestart(false);
-            } else if (resumeTime > 0) {
+
+            } else if (allowResume && resumeTime > 0) {
               videoRef.current.currentTime = resumeTime;
             }
 
@@ -137,7 +139,8 @@ function MovieDetail() {
           if (forceRestart) {
             videoRef.current.currentTime = 0;
             setForceRestart(false);
-          } else if (resumeTime > 0) {
+
+          } else if (allowResume && resumeTime > 0) {
             videoRef.current.currentTime = resumeTime;
           }
 
@@ -156,7 +159,7 @@ function MovieDetail() {
         hls.destroy();
       }
     };
-  }, [movie, startMovie, resumeTime, forceRestart]);
+  }, [movie, startMovie, resumeTime, forceRestart, allowResume,]);
 
   useEffect(() => {
     if (!movie) return;
@@ -193,13 +196,7 @@ function MovieDetail() {
 
     // ดูเกิน 95% ให้ลบออกจาก Continue Watching
     if (duration > 0 && current / duration >= 0.95) {
-      saveContinueWatching({
-        slug: movie.slug,
-        title: movie.title,
-        image: movie.image,
-        time: 0,
-        duration: 0,
-      });
+      removeContinueWatching(movie.slug);
       return;
     }
 
@@ -542,9 +539,10 @@ function MovieDetail() {
                       "0 12px 35px rgba(255,180,0,.35)";
                   }}
                   onClick={() => {
-                    sessionStorage.removeItem(
-                      `dismiss-${movie.slug}`
-                    );
+                    sessionStorage.removeItem(`dismiss-${movie.slug}`);
+
+                    setAllowResume(true);
+
                     setShowResumePopup(false);
                     setStartMovie(true);
                   }}
@@ -565,10 +563,11 @@ function MovieDetail() {
                       "0 12px 35px rgba(255,180,0,.35)";
                   }}
                   onClick={() => {
-                    sessionStorage.removeItem(
-                      `dismiss-${movie.slug}`
-                    );
+                    sessionStorage.removeItem(`dismiss-${movie.slug}`);
+
                     removeContinueWatching(movie.slug);
+
+                    setAllowResume(false);
 
                     setForceRestart(true);
                     setResumeTime(0);
@@ -583,10 +582,16 @@ function MovieDetail() {
                 <button
                   style={styles.resumeCloseButton}
                   onClick={() => {
+
                     sessionStorage.setItem(
                       `dismiss-${movie.slug}`,
                       "1"
                     );
+
+                    setAllowResume(false);
+
+                    setResumeTime(0);
+
                     setShowResumePopup(false);
                   }}
                 >
@@ -627,11 +632,21 @@ function MovieDetail() {
                     }}
                     style={styles.playButton}
                     onClick={() => {
-                      sessionStorage.removeItem(
-                        `dismiss-${movie.slug}`
-                      );
+
+                      sessionStorage.removeItem(`dismiss-${movie.slug}`);
+
+                      removeContinueWatching(movie.slug);
+
+                      setAllowResume(false);
+
+                      setResumeTime(0);
+
+                      setForceRestart(true);
+
                       setVideoError(false);
+
                       setStartMovie(true);
+
                     }}
                   >
                     ▶ เริ่มเล่นหนัง
