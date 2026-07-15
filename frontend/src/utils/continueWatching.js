@@ -9,6 +9,11 @@ export function getContinueWatching() {
 }
 
 export function saveContinueWatching(movie) {
+  if (!movie.time || movie.time <= 0) {
+    removeContinueWatching(movie.slug);
+    return;
+  }
+
   let list = getContinueWatching();
 
   list = list.filter((m) => m.slug !== movie.slug);

@@ -89,14 +89,14 @@ function MovieDetail() {
         // โหลด playlist สำเร็จ
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
           setLoadingPlayer(false);
-          if (resumeTime > 0) {
-            videoRef.current.currentTime = resumeTime;
-          } else {
-            videoRef.current.currentTime = 0;
-          }
-          videoRef.current
-            ?.play()
-            .catch(() => { });
+          videoRef.current.onloadedmetadata = null;
+          videoRef.current.onloadedmetadata = () => {
+            if (resumeTime > 0) {
+              videoRef.current.currentTime = resumeTime;
+            }
+
+            videoRef.current.play().catch(() => { });
+          };
         });
         // ถ้าไฟล์เสีย / URL ผิด
         hls.on(Hls.Events.ERROR, (event, data) => {
@@ -122,14 +122,17 @@ function MovieDetail() {
         )
       ) {
         videoRef.current.src = movie.video;
-        videoRef.current.onloadeddata = () => {
+        videoRef.current.onloadedmetadata = null;
+        videoRef.current.onloadedmetadata = () => {
           setLoadingPlayer(false);
+
+          if (resumeTime > 0) {
+            videoRef.current.currentTime = resumeTime;
+          }
+
+          videoRef.current.play().catch(() => { });
         };
-        if (resumeTime > 0) {
-          videoRef.current.currentTime = resumeTime;
-        } else {
-          videoRef.current.currentTime = 0;
-        }
+
         videoRef.current.onerror = () => {
           setLoadingPlayer(false);
           setVideoError(true);
@@ -158,50 +161,70 @@ function MovieDetail() {
     }
   }, [movie]);
 
-  useEffect(() => {
-    if (!startMovie) return;
-    if (!movie) return;
-    if (!videoRef.current) return;
-    const video = videoRef.current;
-    const timer = setInterval(() => {
-      if (!video.paused && video.currentTime > 5) {
-        saveContinueWatching({
-          slug: movie.slug,
-          title: movie.title,
-          image: movie.image,
-          time: video.currentTime,
-          duration: video.duration || 0,
-        });
-      }
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [startMovie, movie]);
+  const saveProgress = () => {
+    if (!videoRef.current || !movie) return;
 
-  useEffect(() => {
-    return () => {
-      if (!videoRef.current || !movie) return;
+    const current = videoRef.current.currentTime;
+    const duration = videoRef.current.duration || 0;
 
+    // ดูเกิน 95% ให้ลบออกจาก Continue Watching
+    if (duration > 0 && current / duration >= 0.95) {
       saveContinueWatching({
         slug: movie.slug,
         title: movie.title,
         image: movie.image,
-        time: videoRef.current.currentTime,
-        duration: videoRef.current.duration || 0,
+        time: 0,
+        duration: 0,
       });
+      return;
+    }
+
+    if (current < 5) return;
+
+    saveContinueWatching({
+      slug: movie.slug,
+      title: movie.title,
+      image: movie.image,
+      time: current,
+      duration,
+    });
+  };
+
+  useEffect(() => {
+    if (!startMovie) return;
+    if (!videoRef.current) return;
+
+    const video = videoRef.current;
+
+    const timer = setInterval(() => {
+      if (!video.paused) {
+        saveProgress();
+      }
+    }, 10000);
+    // เซฟเมื่อกด Pause
+    video.addEventListener("pause", saveProgress);
+
+    // เซฟเมื่อเลื่อนเวลา
+    video.addEventListener("seeked", saveProgress);
+
+    return () => {
+      clearInterval(timer);
+
+      video.removeEventListener("pause", saveProgress);
+      video.removeEventListener("seeked", saveProgress);
+    };
+
+  }, [startMovie, movie]);
+
+  useEffect(() => {
+    return () => {
+      saveProgress();
     };
   }, [movie]);
 
   useEffect(() => {
     const handleBeforeUnload = () => {
-      if (!videoRef.current || !movie) return;
-
-      saveContinueWatching({
-        slug: movie.slug,
-        title: movie.title,
-        image: movie.image,
-        time: videoRef.current.currentTime,
-        duration: videoRef.current.duration || 0,
-      });
+      saveProgress();
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);
@@ -482,6 +505,14 @@ function MovieDetail() {
                   ↺ เริ่มใหม่
                 </button>
 
+                <button
+                  onClick={() => {
+                    setShowResumePopup(false);
+                  }}
+                >
+                  ปิด
+                </button>
+
               </div>
             </div>
           )}
@@ -539,9 +570,10 @@ function MovieDetail() {
                     ref={videoRef}
                     controls
                     autoPlay
-                    onError={() => {
-                      setLoadingPlayer(false);
-                      setVideoError(true);
+
+                    onEnded={() => {
+                      setResumeTime(0);
+
                       saveContinueWatching({
                         slug: movie.slug,
                         title: movie.title,
@@ -550,6 +582,7 @@ function MovieDetail() {
                         duration: 0,
                       });
                     }}
+
                     style={{
                       ...styles.video,
                       display: loadingPlayer ? "none" : "block",
