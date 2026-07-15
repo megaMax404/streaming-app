@@ -160,16 +160,29 @@ function MovieDetail() {
 
   useEffect(() => {
     if (!movie) return;
+
+    const dismissed =
+      sessionStorage.getItem(
+        `dismiss-${movie.slug}`
+      );
+
+    if (dismissed) return;
+
     const list = getContinueWatching();
-    const data = list.find(
-      (m) => m.slug === movie.slug
-    );
+
+    const data =
+      list.find(
+        (m) => m.slug === movie.slug
+      );
+
     if (data && data.time > 30) {
+
       setResumeTime(data.time);
+
       setShowResumePopup(true);
-    } else {
-      setResumeTime(0);
+
     }
+
   }, [movie]);
 
   const saveProgress = () => {
@@ -230,6 +243,11 @@ function MovieDetail() {
   useEffect(() => {
     return () => {
       saveProgress();
+      if (movie) {
+        sessionStorage.removeItem(
+          `dismiss-${movie.slug}`
+        );
+      }
     };
   }, [movie]);
 
@@ -524,6 +542,9 @@ function MovieDetail() {
                       "0 12px 35px rgba(255,180,0,.35)";
                   }}
                   onClick={() => {
+                    sessionStorage.removeItem(
+                      `dismiss-${movie.slug}`
+                    );
                     setShowResumePopup(false);
                     setStartMovie(true);
                   }}
@@ -544,6 +565,9 @@ function MovieDetail() {
                       "0 12px 35px rgba(255,180,0,.35)";
                   }}
                   onClick={() => {
+                    sessionStorage.removeItem(
+                      `dismiss-${movie.slug}`
+                    );
                     removeContinueWatching(movie.slug);
 
                     setForceRestart(true);
@@ -559,7 +583,10 @@ function MovieDetail() {
                 <button
                   style={styles.resumeCloseButton}
                   onClick={() => {
-                    setResumeTime(0);
+                    sessionStorage.setItem(
+                      `dismiss-${movie.slug}`,
+                      "1"
+                    );
                     setShowResumePopup(false);
                   }}
                 >
@@ -571,10 +598,6 @@ function MovieDetail() {
           )}
 
           {/* VIDEO PLAYER */}
-          <h2 style={styles.watchTitle}>
-            🎬 ดูหนังออนไลน์
-          </h2>
-
           {videoError ? (
             <div style={styles.startBox}>
               <div>
@@ -604,6 +627,9 @@ function MovieDetail() {
                     }}
                     style={styles.playButton}
                     onClick={() => {
+                      sessionStorage.removeItem(
+                        `dismiss-${movie.slug}`
+                      );
                       setVideoError(false);
                       setStartMovie(true);
                     }}
@@ -615,6 +641,9 @@ function MovieDetail() {
 
               {startMovie && (
                 <>
+                  <h2 style={styles.watchTitle}>
+                    🎬 ดูหนังออนไลน์
+                  </h2>
                   {loadingPlayer && (
                     <div style={styles.loadingBox}>
                       <div style={styles.spinner}></div>
@@ -954,7 +983,8 @@ const styles = {
 
   resumePopup: {
     width: "100%",
-    minHeight: "250px",
+    minHeight: "520px",
+    aspectRatio: "16/9",
     background: "linear-gradient(180deg,#181818,#111)",
     borderRadius: "22px",
     border: "1px solid #333",
