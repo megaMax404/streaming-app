@@ -156,7 +156,7 @@ function MovieDetail() {
         hls.destroy();
       }
     };
-  }, [movie, startMovie, resumeTime]);
+  }, [movie, startMovie, resumeTime, forceRestart]);
 
   useEffect(() => {
     if (!movie) return;
