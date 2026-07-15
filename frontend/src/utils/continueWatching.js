@@ -40,16 +40,5 @@ export function removeContinueWatching(slug) {
     JSON.stringify(list)
   );
 
-  export const removeContinueWatching = (slug) => {
-    const list = getContinueWatching();
-
-    const newList = list.filter(
-      (item) => item.slug !== slug
-    );
-
-    localStorage.setItem(
-      "continueWatching",
-      JSON.stringify(newList)
-    );
-  };
+  
 }
