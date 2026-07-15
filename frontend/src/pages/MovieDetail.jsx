@@ -5,7 +5,11 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 import PlayerNavbar from "../components/PlayerNavbar";
-import { getContinueWatching, saveContinueWatching, } from "../utils/continueWatching";
+import {
+  getContinueWatching,
+  saveContinueWatching,
+  removeContinueWatching,
+} from "../utils/continueWatching";
 function MovieDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -19,6 +23,7 @@ function MovieDetail() {
   const [videoError, setVideoError] = useState(false);
   const [resumeTime, setResumeTime] = useState(0);
   const [showResumePopup, setShowResumePopup] = useState(false);
+  const [forceRestart, setForceRestart] = useState(false);
   // โหลดข้อมูลหนัง
 
   useEffect(() => {
@@ -91,7 +96,11 @@ function MovieDetail() {
           setLoadingPlayer(false);
           videoRef.current.onloadedmetadata = null;
           videoRef.current.onloadedmetadata = () => {
-            if (resumeTime > 0) {
+
+            if (forceRestart) {
+              videoRef.current.currentTime = 0;
+              setForceRestart(false);
+            } else if (resumeTime > 0) {
               videoRef.current.currentTime = resumeTime;
             }
 
@@ -124,9 +133,11 @@ function MovieDetail() {
         videoRef.current.src = movie.video;
         videoRef.current.onloadedmetadata = null;
         videoRef.current.onloadedmetadata = () => {
-          setLoadingPlayer(false);
 
-          if (resumeTime > 0) {
+          if (forceRestart) {
+            videoRef.current.currentTime = 0;
+            setForceRestart(false);
+          } else if (resumeTime > 0) {
             videoRef.current.currentTime = resumeTime;
           }
 
@@ -352,6 +363,7 @@ function MovieDetail() {
                   alt="banner"
                   fetchPriority="high"
                 />
+
               </a>
             )
           ))}
@@ -372,6 +384,15 @@ function MovieDetail() {
               alt={movie.title}
               style={styles.poster}
               fetchPriority="high"
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "scale(1.03)";
+                e.currentTarget.style.boxShadow = "0 25px 60px rgba(255,208,0,.25)";
+              }}
+
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.boxShadow = "0 15px 40px rgba(0,0,0,.55)";
+              }}
             />
 
             {/* TRAILER */}
@@ -383,6 +404,13 @@ function MovieDetail() {
                   style={styles.trailer}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "scale(1.01)";
+                  }}
+
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "scale(1)";
+                  }}
                 />
               )}
             </div>
@@ -516,7 +544,11 @@ function MovieDetail() {
                       "0 12px 35px rgba(255,180,0,.35)";
                   }}
                   onClick={() => {
+                    removeContinueWatching(movie.slug);
+
+                    setForceRestart(true);
                     setResumeTime(0);
+
                     setShowResumePopup(false);
                     setStartMovie(true);
                   }}
@@ -526,7 +558,10 @@ function MovieDetail() {
 
                 <button
                   style={styles.resumeCloseButton}
-                  onClick={() => setShowResumePopup(false)}
+                  onClick={() => {
+                    setResumeTime(0);
+                    setShowResumePopup(false);
+                  }}
                 >
                   ✕ ปิด
                 </button>
@@ -600,17 +635,10 @@ function MovieDetail() {
                     autoPlay
 
                     onEnded={() => {
+                      removeContinueWatching(movie.slug);
                       setResumeTime(0);
-
-                      saveContinueWatching({
-                        slug: movie.slug,
-                        title: movie.title,
-                        image: movie.image,
-                        time: 0,
-                        duration: 0,
-                      });
-                    }}
-
+                    }
+                    }
                     style={{
                       ...styles.video,
                       display: loadingPlayer ? "none" : "block",
@@ -710,6 +738,9 @@ const styles = {
     objectFit: "cover",
     boxShadow: "0 15px 40px rgba(0,0,0,.55)",
     border: "1px solid rgba(255,255,255,.08)",
+
+    transition: "all .35s ease",
+    cursor: "pointer",
   },
 
   movieInfo: {
@@ -725,6 +756,8 @@ const styles = {
     borderRadius: "18px",
     boxShadow: "0 18px 50px rgba(0,0,0,.45)",
     background: "#000",
+
+    transition: "all .35s ease",
   },
 
   metaCard: {
@@ -793,6 +826,7 @@ const styles = {
     border: "2px solid #2b2b2b",
     boxShadow: "0 25px 70px rgba(0,0,0,.55)",
     background: "#000",
+    transition: ".35s",
   },
 
   startBox: {
