@@ -378,8 +378,7 @@ function MovieDetail() {
             <div style={styles.movieInfo}>
               {movie.trailer && (
                 <iframe
-                  src={movie.trailer ||
-                    "/no-image.jpg"}
+                  src={movie.trailer}
                   title="Trailer"
                   style={styles.trailer}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -486,6 +485,16 @@ function MovieDetail() {
 
                 <button
                   style={styles.resumePlayButton}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-3px) scale(1.05)";
+                    e.currentTarget.style.boxShadow =
+                      "0 18px 45px rgba(255,180,0,.55)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow =
+                      "0 12px 35px rgba(255,180,0,.35)";
+                  }}
                   onClick={() => {
                     setShowResumePopup(false);
                     setStartMovie(true);
@@ -496,6 +505,16 @@ function MovieDetail() {
 
                 <button
                   style={styles.resumeRestartButton}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-3px) scale(1.05)";
+                    e.currentTarget.style.boxShadow =
+                      "0 18px 45px rgba(255,180,0,.55)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow =
+                      "0 12px 35px rgba(255,180,0,.35)";
+                  }}
                   onClick={() => {
                     setResumeTime(0);
                     setShowResumePopup(false);
@@ -538,6 +557,16 @@ function MovieDetail() {
               {!startMovie && !showResumePopup && (
                 <div style={styles.startBox}>
                   <button
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = "translateY(-3px) scale(1.05)";
+                      e.currentTarget.style.boxShadow =
+                        "0 18px 45px rgba(255,180,0,.55)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.boxShadow =
+                        "0 12px 35px rgba(255,180,0,.35)";
+                    }}
                     style={styles.playButton}
                     onClick={() => {
                       setVideoError(false);
@@ -778,15 +807,16 @@ const styles = {
   },
 
   playButton: {
-    background:
-      "linear-gradient(90deg,#ffd000,#ff9900)",
+    background: "linear-gradient(135deg,#ffd000,#ff9800)",
+    color: "#111",
     border: "none",
-    color: "#000",
-    fontSize: "24px",
-    fontWeight: "bold",
-    padding: "20px 45px",
-    borderRadius: "14px",
+    borderRadius: "18px",
+    padding: "18px 48px",
+    fontSize: "22px",
+    fontWeight: "700",
     cursor: "pointer",
+    transition: "all .35s ease",
+    boxShadow: "0 12px 35px rgba(255,180,0,.35)",
   },
 
   sectionTitle: {
@@ -814,34 +844,6 @@ const styles = {
     position: "relative",
   },
 
-  skipButton: {
-    position: "absolute",
-    top: "15px",
-    right: "15px",
-    border: "none",
-    borderRadius: "10px",
-    padding: "12px 18px",
-    background: "#630000",
-    fontWeight: "bold",
-    cursor: "pointer",
-  },
-
-  adPlayer: {
-    position: "relative",
-  },
-
-  skipButton: {
-    position: "absolute",
-    top: "15px",
-    right: "15px",
-    border: "none",
-    borderRadius: "10px",
-    padding: "12px 18px",
-    background: "#630000",
-    color: "white",
-    fontWeight: "bold",
-    cursor: "pointer",
-  },
   categoryCard: {
     background: "#111",
     border: "1px solid #222",
@@ -886,46 +888,47 @@ const styles = {
   loadingBox: {
     width: "100%",
     minHeight: "520px",
-    background: "#111",
-    borderRadius: "14px",
+    background: "linear-gradient(180deg,#171717,#0f0f0f)",
+    borderRadius: "20px",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    gap: "20px",
-    border: "1px solid #222",
+    gap: "24px",
+    border: "1px solid #333",
   },
 
   spinner: {
-    width: "70px",
-    height: "70px",
-    border: "6px solid #333",
-    borderTop: "6px solid #ffd000",
+    width: "75px",
+    height: "75px",
     borderRadius: "50%",
+    border: "6px solid #2b2b2b",
+    borderTop: "6px solid #ffd000",
     animation: "spin 1s linear infinite",
   },
 
   loadingText: {
     color: "#fff",
-    fontSize: "28px",
-    margin: 0,
+    fontSize: "30px",
+    fontWeight: "700",
   },
 
   loadingSub: {
-    color: "#999",
-    margin: 0,
+    color: "#888",
+    fontSize: "16px",
   },
 
   resumePopup: {
     width: "100%",
-    minHeight: "220px",
-    background: "#111",
+    minHeight: "250px",
+    background: "linear-gradient(180deg,#181818,#111)",
+    borderRadius: "22px",
     border: "1px solid #333",
-    borderRadius: "14px",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    boxShadow: "0 25px 70px rgba(0,0,0,.45)",
   },
 
   resumeButtonGroup: {
@@ -977,14 +980,15 @@ const styles = {
   },
 
   resetButton: {
-    background: "#333",
+    background: "#262626",
     color: "#fff",
-    border: "none",
-    padding: "18px 35px",
-    borderRadius: "12px",
+    border: "1px solid #444",
+    padding: "18px 40px",
+    borderRadius: "18px",
     cursor: "pointer",
     fontSize: "18px",
-    fontWeight: "bold",
+    fontWeight: "700",
+    transition: ".3s",
   },
 
 };
