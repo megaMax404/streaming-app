@@ -482,10 +482,10 @@ function MovieDetail() {
                 เล่นต่อจากเดิม?
               </h2>
 
-              <div style={{ display: "flex", gap: "15px", marginTop: "20px" }}>
+              <div style={styles.resumeButtonGroup}>
 
                 <button
-                  style={styles.playButton}
+                  style={styles.resumePlayButton}
                   onClick={() => {
                     setShowResumePopup(false);
                     setStartMovie(true);
@@ -495,7 +495,7 @@ function MovieDetail() {
                 </button>
 
                 <button
-                  style={styles.resetButton}
+                  style={styles.resumeRestartButton}
                   onClick={() => {
                     setResumeTime(0);
                     setShowResumePopup(false);
@@ -506,11 +506,10 @@ function MovieDetail() {
                 </button>
 
                 <button
-                  onClick={() => {
-                    setShowResumePopup(false);
-                  }}
+                  style={styles.resumeCloseButton}
+                  onClick={() => setShowResumePopup(false)}
                 >
-                  ปิด
+                  ✕ ปิด
                 </button>
 
               </div>
@@ -670,58 +669,63 @@ const styles = {
   },
 
   topSection: {
-    display: "flex",
-    gap: "20px",
-    alignItems: "flex-start",
-    flexWrap: "wrap",
+    display: "grid",
+    gridTemplateColumns: "280px 1fr",
+    gap: "24px",
+    alignItems: "stretch",
   },
 
   poster: {
-    width: "260px",
-    borderRadius: "12px",
-    flexShrink: 0,
+    width: "100%",
+    borderRadius: "18px",
+    objectFit: "cover",
+    boxShadow: "0 15px 40px rgba(0,0,0,.55)",
+    border: "1px solid rgba(255,255,255,.08)",
   },
 
   movieInfo: {
-    flex: 1,
     display: "flex",
     flexDirection: "column",
-    gap: "20px",
-    minWidth: 0,
+    justifyContent: "center",
   },
 
   trailer: {
     width: "100%",
-    minHeight: "420px",
-    border: "none",
-    borderRadius: "12px",
-    background: "#111",
+    aspectRatio: "16/9",
+    border: "1px solid rgba(255,255,255,.08)",
+    borderRadius: "18px",
+    boxShadow: "0 18px 50px rgba(0,0,0,.45)",
+    background: "#000",
   },
 
   metaCard: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     alignItems: "center",
-    gap: "20px",
-    background: "#111",
-    border: "1px solid #222",
-    borderRadius: "14px",
-    padding: "20px",
-    width: "100%",
-    boxSizing: "border-box",
+    background: "linear-gradient(180deg,#151515,#0d0d0d)",
+    borderRadius: "18px",
+    border: "1px solid rgba(255,255,255,.08)",
+    padding: "22px",
+    boxShadow: "0 12px 35px rgba(0,0,0,.45)",
   },
 
   metaItem: {
-    flex: 1,
     display: "flex",
     alignItems: "center",
+    gap: "14px",
+    color: "#fff",
+    flex: 1,
     justifyContent: "center",
-    gap: "12px",
-    color: "white",
-    textAlign: "center",
   },
 
   icon: {
+    width: "58px",
+    height: "58px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "#1b1b1b",
+    borderRadius: "50%",
     fontSize: "28px",
   },
 
@@ -755,11 +759,11 @@ const styles = {
 
   video: {
     width: "100%",
-    aspectRatio: "16 / 9",
-    minHeight: "520px",
-    borderRadius: "14px",
+    aspectRatio: "16/9",
+    borderRadius: "18px",
+    border: "2px solid #2b2b2b",
+    boxShadow: "0 25px 70px rgba(0,0,0,.55)",
     background: "#000",
-    objectFit: "contain",
   },
 
   startBox: {
@@ -924,6 +928,54 @@ const styles = {
     alignItems: "center",
   },
 
+  resumeButtonGroup: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "18px",
+    marginTop: "30px",
+    flexWrap: "wrap",
+  },
+
+  resumePlayButton: {
+    background: "linear-gradient(135deg,#FFD54A,#FFB300)",
+    color: "#111",
+    border: "none",
+    padding: "18px 36px",
+    borderRadius: "12px",
+    fontSize: "20px",
+    fontWeight: "700",
+    cursor: "pointer",
+    minWidth: "180px",
+    transition: ".25s",
+    boxShadow: "0 6px 18px rgba(255,193,7,.35)",
+  },
+
+  resumeRestartButton: {
+    background: "#2a2a2a",
+    color: "#fff",
+    border: "1px solid #444",
+    padding: "18px 36px",
+    borderRadius: "12px",
+    fontSize: "20px",
+    fontWeight: "700",
+    cursor: "pointer",
+    minWidth: "180px",
+    transition: ".25s",
+  },
+
+  resumeCloseButton: {
+    background: "transparent",
+    color: "#999",
+    border: "1px solid #555",
+    padding: "18px 28px",
+    borderRadius: "12px",
+    fontSize: "18px",
+    fontWeight: "700",
+    cursor: "pointer",
+    transition: ".25s",
+  },
+
   resetButton: {
     background: "#333",
     color: "#fff",
@@ -936,9 +988,5 @@ const styles = {
   },
 
 };
-if (typeof window !== "undefined" && window.innerWidth <= 768) {
-  styles.topSection.flexDirection = "column";
-  styles.poster.width = "100%";
-  styles.trailer.minHeight = "240px";
-}
+
 export default MovieDetail;
