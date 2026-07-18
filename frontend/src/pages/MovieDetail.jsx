@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-
+import "../styles/MovieDetailStyle.css";
 import PlayerNavbar from "../components/PlayerNavbar";
 import {
   getContinueWatching,
@@ -265,13 +265,7 @@ function MovieDetail() {
 
   if (loading) {
     return (
-      <div
-        style={{
-          color: "#fff",
-          textAlign: "center",
-          padding: "100px",
-        }}
-      >
+      <div className="movie-loading-page">
         <h2>กำลังโหลด...</h2>
       </div>
     );
@@ -279,27 +273,13 @@ function MovieDetail() {
 
   if (notFound) {
     return (
-      <div
-        style={{
-          color: "#fff",
-          textAlign: "center",
-          padding: "100px",
-        }}
-      >
+      <div className="movie-notfound-page">
         <h1>404</h1>
         <h2>ไม่พบหนังเรื่องนี้</h2>
 
         <button
           onClick={() => navigate("/")}
-          style={{
-            marginTop: "20px",
-            padding: "12px 24px",
-            borderRadius: "10px",
-            border: "none",
-            background: "#ffd000",
-            cursor: "pointer",
-            fontWeight: "bold",
-          }}
+          className="movie-back-home-button"
         >
           กลับหน้าแรก
         </button>
@@ -329,13 +309,10 @@ function MovieDetail() {
     <div>
       <PlayerNavbar />
 
-      <div style={styles.page}>
+      <div className="movie-page">
 
         {/* LEFT ADS */}
-        <div
-          style={styles.sideAds}
-          className="hide-mobile"
-        >
+        <div className="movie-side-ads hide-mobile">
           {leftAds.map((ad) => (
             ad.image && (
               <a
@@ -346,7 +323,7 @@ function MovieDetail() {
               >
                 <img
                   src={ad.image}
-                  style={styles.adImg}
+                  className="movie-ad-img"
                   alt="ad"
                   loading="lazy"
                   decoding="async"
@@ -357,7 +334,7 @@ function MovieDetail() {
         </div>
 
         {/* MAIN */}
-        <div style={styles.main}>
+        <div className="movie-main">
 
           {/* TOP BANNER */}
           {topBanners.map((banner) => (
@@ -374,7 +351,7 @@ function MovieDetail() {
               >
                 <img
                   src={banner.image}
-                  style={styles.banner}
+                  className="movie-banner"
                   alt="banner"
                   fetchPriority="high"
                 />
@@ -384,20 +361,20 @@ function MovieDetail() {
           ))}
 
           {/* TITLE */}
-          <h2 style={styles.pageTitle}>
+          <h2 className="movie-page-title">
             {movie.title}{" "}
             {movie.description}
           </h2>
 
           {/* TOP */}
-          <div style={styles.topSection}>
+          <div className="movie-top-section">
 
             {/* POSTER */}
             <img
               src={movie.image ||
                 "/no-image.jpg"}
               alt={movie.title}
-              style={styles.poster}
+              className="movie-poster"
               fetchPriority="high"
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "scale(1.03)";
@@ -411,12 +388,12 @@ function MovieDetail() {
             />
 
             {/* TRAILER */}
-            <div style={styles.movieInfo}>
+            <div className="movie-info">
               {movie.trailer && (
                 <iframe
                   src={movie.trailer}
                   title="Trailer"
-                  style={styles.trailer}
+                  className="movie-trailer"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                   onMouseEnter={(e) => {
@@ -432,26 +409,26 @@ function MovieDetail() {
           </div>
 
           {/* META */}
-          <div style={styles.metaCard}>
+          <div className="movie-meta-card">
 
-            <div style={styles.metaItem}>
-              <span style={styles.icon}>📅</span>
+            <div className="movie-meta-item">
+              <span className="movie-meta-icon">📅</span>
               <div>
                 <small>ปีที่ฉาย</small>
                 <strong>{movie.year}</strong>
               </div>
             </div>
 
-            <div style={styles.metaItem}>
-              <span style={styles.icon}>⭐</span>
+            <div className="movie-meta-item">
+              <span className="movie-meta-icon">⭐</span>
               <div>
                 <small>IMDb</small>
                 <strong>{movie.rating}</strong>
               </div>
             </div>
 
-            <div style={styles.metaItem}>
-              <span style={styles.icon}>👁</span>
+            <div className="movie-meta-item">
+              <span className="movie-meta-icon">👁</span>
               <div>
                 <small>เข้าชม</small>
                 <strong>{movie.views}</strong>
@@ -460,7 +437,7 @@ function MovieDetail() {
 
           </div>
 
-          <div style={styles.categoryText}>
+          <div className="movie-category-text">
             <svg
               width="18"
               height="18"
@@ -478,22 +455,22 @@ function MovieDetail() {
           </div>
 
           {/* ARTICLE */}
-          <div style={styles.articleBox}>
-            <h2 style={styles.articleTitle}>
+          <div className="movie-article-box">
+            <h2 className="movie-article-title">
               เรื่องย่อของ {movie.title}{" "}{movie.description}
             </h2>
 
-            <div style={styles.articleText}>
+            <div className="movie-article-text">
               {movie.content}
             </div>
 
             {movie.highlights?.length > 0 && (
               <>
-                <h3 style={styles.sectionTitle}>
+                <h3 className="movie-section-title">
                   จุดเด่น
                 </h3>
 
-                <ul style={styles.highlightList}>
+                <ul className="movie-highlight-list">
                   {movie.highlights.map(
                     (item, index) => (
                       <li key={index}>
@@ -507,11 +484,11 @@ function MovieDetail() {
 
             {movie.summary && (
               <>
-                <h3 style={styles.sectionTitle}>
+                <h3 className="movie-section-title">
                   สรุป
                 </h3>
 
-                <p style={styles.summaryText}>
+                <p className="movie-summary-text">
                   {movie.summary}
                 </p>
               </>
@@ -519,15 +496,15 @@ function MovieDetail() {
           </div>
 
           {showResumePopup && (
-            <div style={styles.resumePopup}>
-              <h2 style={{ color: "#fff" }}>
+            <div className="resume-popup">
+              <h2 className="resume-title">
                 เล่นต่อจากเดิม?
               </h2>
 
-              <div style={styles.resumeButtonGroup}>
+              <div className="resume-button-group">
 
                 <button
-                  style={styles.resumePlayButton}
+                  className="resume-play-button"
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = "translateY(-3px) scale(1.05)";
                     e.currentTarget.style.boxShadow =
@@ -551,7 +528,7 @@ function MovieDetail() {
                 </button>
 
                 <button
-                  style={styles.resumeRestartButton}
+                  className="resume-restart-button"
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = "translateY(-3px) scale(1.05)";
                     e.currentTarget.style.boxShadow =
@@ -580,7 +557,7 @@ function MovieDetail() {
                 </button>
 
                 <button
-                  style={styles.resumeCloseButton}
+                  className="resume-close-button"
                   onClick={() => {
 
                     sessionStorage.setItem(
@@ -604,13 +581,13 @@ function MovieDetail() {
 
           {/* VIDEO  */}
           {videoError ? (
-            <div style={styles.startBox}>
+            <div className="movie-start-box">
               <div>
-                <h2 style={{ color: "#fff" }}>
+                <h2 className="movie-error-title">
                   ❌ ไม่สามารถโหลดหนังได้
                 </h2>
 
-                <p style={{ color: "#999" }}>
+                <p className="movie-error-text">
                   ไฟล์หนังอาจถูกลบ หรือ URL ไม่ถูกต้อง
                 </p>
               </div>
@@ -618,7 +595,7 @@ function MovieDetail() {
           ) : (
             <>
               {!startMovie && !showResumePopup && (
-                <div style={styles.startBox}>
+                <div className="movie-start-box">
                   <button
                     onMouseEnter={(e) => {
                       e.currentTarget.style.transform = "translateY(-3px) scale(1.05)";
@@ -630,7 +607,7 @@ function MovieDetail() {
                       e.currentTarget.style.boxShadow =
                         "0 12px 35px rgba(255,180,0,.35)";
                     }}
-                    style={styles.playButton}
+                    className="movie-play-button"
                     onClick={() => {
 
                       sessionStorage.removeItem(`dismiss-${movie.slug}`);
@@ -656,18 +633,18 @@ function MovieDetail() {
 
               {startMovie && (
                 <>
-                  <h2 style={styles.watchTitle}>
+                  <h2 className="movie-watch-title">
                     🎬 ดูหนังออนไลน์
                   </h2>
                   {loadingPlayer && (
-                    <div style={styles.loadingBox}>
-                      <div style={styles.spinner}></div>
+                    <div className="movie-loading-box">
+                      <div className="movie-spinner"></div>
 
-                      <h2 style={styles.loadingText}>
+                      <h2 className="movie-loading-text">
                         กำลังโหลดหนัง...
                       </h2>
 
-                      <p style={styles.loadingSub}>
+                      <p className="movie-loading-sub">
                         กรุณารอสักครู่
                       </p>
                     </div>
@@ -683,8 +660,8 @@ function MovieDetail() {
                       setResumeTime(0);
                     }
                     }
+                    className="movie-video"
                     style={{
-                      ...styles.video,
                       display: loadingPlayer ? "none" : "block",
                     }}
                   />
@@ -695,10 +672,7 @@ function MovieDetail() {
         </div>
 
         {/* RIGHT ADS */}
-        <div
-          style={styles.sideAds}
-          className="hide-mobile"
-        >
+        <div className="movie-side-ads hide-mobile">
           {rightAds.map((ad) => (
             ad.image && (
               <a
@@ -710,10 +684,7 @@ function MovieDetail() {
               >
                 <img
                   src={ad.image}
-                  style={styles.adImg}
-                  alt="ad"
-                  loading="lazy"
-                  decoding="async"
+                  className="movie-ad-img"
                 />
               </a>
             )
@@ -723,353 +694,5 @@ function MovieDetail() {
     </div >
   );
 }
-
-const styles = {
-  page: {
-    display: "flex",
-    justifyContent: "center",
-    gap: "20px",
-    padding: "20px",
-    background: "#000",
-  },
-
-  main: {
-    width: "100%",
-    maxWidth: "900px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "20px",
-  },
-
-  banner: {
-    width: "100%",
-    borderRadius: "10px",
-  },
-
-  sideAds: {
-    width: "200px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "15px",
-  },
-
-  adImg: {
-    width: "100%",
-    borderRadius: "10px",
-  },
-
-  pageTitle: {
-    width: "100%",
-    color: "white",
-    fontSize: "34px",
-    fontWeight: "bold",
-    borderLeft: "5px solid #ffd000",
-    paddingLeft: "12px",
-    textAlign: "left",
-    marginBottom: "10px",
-  },
-
-  topSection: {
-    display: "grid",
-    gridTemplateColumns: "280px 1fr",
-    gap: "24px",
-    alignItems: "stretch",
-  },
-
-  poster: {
-    width: "100%",
-    borderRadius: "18px",
-    objectFit: "cover",
-    boxShadow: "0 15px 40px rgba(0,0,0,.55)",
-    border: "1px solid rgba(255,255,255,.08)",
-
-    transition: "all .35s ease",
-    cursor: "pointer",
-  },
-
-  movieInfo: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-  },
-
-  trailer: {
-    width: "100%",
-    aspectRatio: "16/9",
-    border: "1px solid rgba(255,255,255,.08)",
-    borderRadius: "18px",
-    boxShadow: "0 18px 50px rgba(0,0,0,.45)",
-    background: "#000",
-
-    transition: "all .35s ease",
-  },
-
-  metaCard: {
-    display: "flex",
-    justifyContent: "space-around",
-    alignItems: "center",
-    background: "linear-gradient(180deg,#151515,#0d0d0d)",
-    borderRadius: "18px",
-    border: "1px solid rgba(255,255,255,.08)",
-    padding: "22px",
-    boxShadow: "0 12px 35px rgba(0,0,0,.45)",
-  },
-
-  metaItem: {
-    display: "flex",
-    alignItems: "center",
-    gap: "14px",
-    color: "#fff",
-    flex: 1,
-    justifyContent: "center",
-  },
-
-  icon: {
-    width: "58px",
-    height: "58px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    background: "#1b1b1b",
-    borderRadius: "50%",
-    fontSize: "28px",
-  },
-
-  articleBox: {
-    background: "#111",
-    border: "1px solid #222",
-    borderRadius: "14px",
-    padding: "22px",
-    textAlign: "left",
-  },
-
-  articleTitle: {
-    color: "white",
-    marginBottom: "15px",
-    fontSize: "28px",
-  },
-
-  articleText: {
-    color: "#ccc",
-    lineHeight: 1.9,
-    fontSize: "16px",
-    whiteSpace: "pre-line",
-  },
-
-  watchTitle: {
-    color: "white",
-    fontSize: "26px",
-    borderLeft: "5px solid #ffd000",
-    paddingLeft: "10px",
-  },
-
-  video: {
-    width: "100%",
-    aspectRatio: "16/9",
-    borderRadius: "18px",
-    border: "2px solid #2b2b2b",
-    boxShadow: "0 25px 70px rgba(0,0,0,.55)",
-    background: "#000",
-    transition: ".35s",
-  },
-
-  startBox: {
-    width: "100%",
-    minHeight: "520px",
-    background: "#111",
-    borderRadius: "14px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    border: "1px solid #222",
-  },
-
-  playButton: {
-    background: "linear-gradient(135deg,#ffd000,#ff9800)",
-    color: "#111",
-    border: "none",
-    borderRadius: "18px",
-    padding: "18px 48px",
-    fontSize: "22px",
-    fontWeight: "700",
-    cursor: "pointer",
-    transition: "all .35s ease",
-    boxShadow: "0 12px 35px rgba(255,180,0,.35)",
-  },
-
-  sectionTitle: {
-    color: "#fff",
-    marginTop: "25px",
-    marginBottom: "10px",
-    fontSize: "22px",
-    fontWeight: "700",
-  },
-
-  highlightList: {
-    color: "#ccc",
-    paddingLeft: "24px",
-    lineHeight: 2,
-    textAlign: "left",
-  },
-
-  summaryText: {
-    color: "#ccc",
-    lineHeight: 1.9,
-    fontSize: "16px",
-  },
-
-  adPlayer: {
-    position: "relative",
-  },
-
-  categoryCard: {
-    background: "#111",
-    border: "1px solid #222",
-    borderRadius: "14px",
-    padding: "20px",
-  },
-
-  categoryTitle: {
-    color: "#fff",
-    margin: "0 0 14px",
-    fontSize: "22px",
-    fontWeight: "700",
-  },
-
-  categoryWrap: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "10px",
-  },
-
-  categoryChip: {
-    background:
-      "linear-gradient(90deg,#ffd000,#ffb700)",
-    color: "#111",
-    fontWeight: "700",
-    padding: "10px 16px",
-    borderRadius: "999px",
-    fontSize: "14px",
-  },
-  categoryText: {
-    color: "#ccc",
-    fontSize: "16px",
-    textAlign: "left",
-    marginTop: "4px",
-    marginBottom: "12px",
-  },
-
-  tagIcon: {
-    marginRight: "8px",
-    fontSize: "18px",
-  },
-  loadingBox: {
-    width: "100%",
-    minHeight: "520px",
-    background: "linear-gradient(180deg,#171717,#0f0f0f)",
-    borderRadius: "20px",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: "24px",
-    border: "1px solid #333",
-  },
-
-  spinner: {
-    width: "75px",
-    height: "75px",
-    borderRadius: "50%",
-    border: "6px solid #2b2b2b",
-    borderTop: "6px solid #ffd000",
-    animation: "spin 1s linear infinite",
-  },
-
-  loadingText: {
-    color: "#fff",
-    fontSize: "30px",
-    fontWeight: "700",
-  },
-
-  loadingSub: {
-    color: "#888",
-    fontSize: "16px",
-  },
-
-  resumePopup: {
-    width: "100%",
-    minHeight: "520px",
-    aspectRatio: "16/9",
-    background: "linear-gradient(180deg,#181818,#111)",
-    borderRadius: "22px",
-    border: "1px solid #333",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    boxShadow: "0 25px 70px rgba(0,0,0,.45)",
-  },
-
-  resumeButtonGroup: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: "18px",
-    marginTop: "30px",
-    flexWrap: "wrap",
-  },
-
-  resumePlayButton: {
-    background: "linear-gradient(135deg,#FFD54A,#FFB300)",
-    color: "#111",
-    border: "none",
-    padding: "18px 36px",
-    borderRadius: "12px",
-    fontSize: "20px",
-    fontWeight: "700",
-    cursor: "pointer",
-    minWidth: "180px",
-    transition: ".25s",
-    boxShadow: "0 6px 18px rgba(255,193,7,.35)",
-  },
-
-  resumeRestartButton: {
-    background: "#2a2a2a",
-    color: "#fff",
-    border: "1px solid #444",
-    padding: "18px 36px",
-    borderRadius: "12px",
-    fontSize: "20px",
-    fontWeight: "700",
-    cursor: "pointer",
-    minWidth: "180px",
-    transition: ".25s",
-  },
-
-  resumeCloseButton: {
-    background: "transparent",
-    color: "#999",
-    border: "1px solid #555",
-    padding: "18px 28px",
-    borderRadius: "12px",
-    fontSize: "18px",
-    fontWeight: "700",
-    cursor: "pointer",
-    transition: ".25s",
-  },
-
-  resetButton: {
-    background: "#262626",
-    color: "#fff",
-    border: "1px solid #444",
-    padding: "18px 40px",
-    borderRadius: "18px",
-    cursor: "pointer",
-    fontSize: "18px",
-    fontWeight: "700",
-    transition: ".3s",
-  },
-
-};
 
 export default MovieDetail;

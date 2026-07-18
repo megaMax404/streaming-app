@@ -1,0 +1,544 @@
+/* ==========================================================
+   Movie Detail
+========================================================== */
+
+.movie-page {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    background: #111;
+    min-height: 100vh;
+    color: #fff;
+    padding: 20px;
+}
+
+.movie-main {
+    width: 100%;
+    max-width: 1200px;
+}
+
+
+/* ==========================================================
+   Banner
+========================================================== */
+
+.movie-banner {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    display: block;
+}
+
+
+/* ==========================================================
+   Layout
+========================================================== */
+
+.movie-top-section {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+.movie-page-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+
+/* ==========================================================
+   Poster
+========================================================== */
+
+.movie-poster {
+    width: 300px;
+    border-radius: 16px;
+    object-fit: cover;
+    transition: .3s;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, .55);
+}
+
+
+/* ==========================================================
+   Trailer
+========================================================== */
+
+.movie-info {
+    flex: 1;
+}
+
+.movie-trailer {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border: none;
+    border-radius: 16px;
+    transition: .3s;
+}
+
+
+/* ==========================================================
+   Meta
+========================================================== */
+
+.movie-meta-card {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    background: #1a1a1a;
+    border-radius: 14px;
+    padding: 18px 24px;
+    margin-top: 25px;
+}
+
+.movie-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.movie-meta-icon {
+    font-size: 28px;
+}
+
+.movie-meta-item small {
+    color: #999;
+    display: block;
+}
+
+.movie-meta-item strong {
+    color: #fff;
+    font-size: 18px;
+}
+
+
+/* ==========================================================
+   Category
+========================================================== */
+
+.movie-category-text {
+    margin-top: 20px;
+    color: #aaa;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+
+/* ==========================================================
+   Article
+========================================================== */
+
+.movie-article-box {
+    margin-top: 35px;
+    background: #181818;
+    padding: 25px;
+    border-radius: 16px;
+}
+
+.movie-article-title {
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+
+.movie-article-text {
+    line-height: 1.9;
+    color: #ddd;
+}
+
+.movie-section-title {
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+.movie-highlight-list {
+    padding-left: 20px;
+}
+
+.movie-highlight-list li {
+    margin-bottom: 8px;
+}
+
+.movie-summary-text {
+    color: #ddd;
+    line-height: 1.8;
+}
+
+
+/* ==========================================================
+   Resume Popup
+========================================================== */
+
+.resume-popup {
+    margin-top: 30px;
+    background: #191919;
+    border-radius: 18px;
+    padding: 25px;
+    text-align: center;
+}
+
+.resume-button-group {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.resume-play-button,
+.resume-restart-button,
+.resume-close-button {
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: .3s;
+}
+
+.resume-play-button,
+.resume-restart-button {
+    background: #ffb400;
+    color: #111;
+    padding: 14px 28px;
+}
+
+.resume-close-button {
+    background: #333;
+    color: #fff;
+    padding: 14px 24px;
+}
+
+
+/* ==========================================================
+   Player
+========================================================== */
+
+.movie-start-box {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.movie-play-button {
+    background: #ffb400;
+    color: #111;
+    border: none;
+    border-radius: 12px;
+    padding: 16px 36px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: .3s;
+}
+
+.movie-watch-title {
+    margin-top: 35px;
+    margin-bottom: 15px;
+}
+
+.movie-loading-box {
+    text-align: center;
+    padding: 60px;
+}
+
+.movie-spinner {
+    width: 55px;
+    height: 55px;
+    border: 6px solid #444;
+    border-top: 6px solid #ffb400;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: auto;
+}
+
+.movie-loading-text {
+    margin-top: 20px;
+}
+
+.movie-loading-sub {
+    color: #999;
+}
+
+.movie-video {
+    width: 100%;
+    border-radius: 16px;
+}
+
+
+/* ==========================================================
+   Ads
+========================================================== */
+
+.movie-side-ads {
+    width: 180px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.movie-ad-img {
+    width: 100%;
+    border-radius: 12px;
+}
+
+
+/* ==========================================================
+   Animation
+========================================================== */
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* ==========================================================
+   Responsive
+========================================================== */
+
+@media(max-width:900px) {
+
+    .movie-page {
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    .movie-top-section {
+        flex-direction: column;
+    }
+
+    .movie-poster {
+        width: 100%;
+        max-width: 320px;
+        margin: auto;
+    }
+
+    .movie-meta-card {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .movie-side-ads {
+        display: none;
+    }
+}
+
+/* ===========================
+   MOVIE PAGE
+=========================== */
+
+.movie-page {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 220px 1fr 220px;
+    gap: 20px;
+    max-width: 1800px;
+    margin: auto;
+    padding: 30px 20px 80px;
+    box-sizing: border-box;
+}
+
+.movie-main {
+    min-width: 0;
+}
+
+/* ===========================
+   PAGE TITLE
+=========================== */
+
+.movie-page-title {
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 28px;
+    line-height: 1.4;
+}
+
+/* ===========================
+   TOP SECTION
+=========================== */
+
+.movie-top-section {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    margin-bottom: 30px;
+}
+
+/* ===========================
+   POSTER
+=========================== */
+
+.movie-poster {
+    width: 300px;
+    border-radius: 16px;
+    transition: .35s;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, .55);
+}
+
+/* ===========================
+   TRAILER
+=========================== */
+
+.movie-info {
+    flex: 1;
+}
+
+.movie-trailer {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border: none;
+    border-radius: 16px;
+    transition: .3s;
+}
+
+/* ===========================
+   META CARD
+=========================== */
+
+.movie-meta-card {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+
+    background: #171717;
+
+    border-radius: 16px;
+
+    padding: 24px;
+
+    margin-bottom: 25px;
+}
+
+.movie-meta-item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.movie-meta-icon {
+    font-size: 2rem;
+}
+
+.movie-meta-item small {
+    display: block;
+    color: #999;
+    font-size: .8rem;
+}
+
+.movie-meta-item strong {
+    display: block;
+    color: #fff;
+    font-size: 1.2rem;
+    margin-top: 4px;
+}
+
+/* ===========================
+   CATEGORY
+=========================== */
+
+.movie-category-text {
+    display: flex;
+    align-items: center;
+
+    color: #999;
+
+    margin-bottom: 30px;
+
+    font-size: .95rem;
+}
+
+/* ===========================
+   ARTICLE
+=========================== */
+
+.movie-article-box {
+
+    background: #161616;
+
+    border-radius: 18px;
+
+    padding: 35px;
+
+    margin-bottom: 35px;
+
+    line-height: 1.8;
+}
+
+.movie-article-title {
+
+    color: #ffd000;
+
+    font-size: 1.5rem;
+
+    margin-bottom: 25px;
+}
+
+.movie-article-text {
+
+    color: #ddd;
+
+    white-space: pre-line;
+}
+
+.movie-section-title {
+
+    margin-top: 35px;
+
+    color: white;
+}
+
+.movie-highlight-list {
+
+    margin-top: 15px;
+
+    color: #ddd;
+
+    padding-left: 20px;
+}
+
+.movie-summary-text {
+
+    color: #ddd;
+
+    margin-top: 15px;
+}
+
+/* ===========================
+   WATCH TITLE
+=========================== */
+
+.movie-watch-title {
+
+    color: white;
+
+    margin: 35px 0 20px;
+}
+
+/* ===========================
+   VIDEO
+=========================== */
+
+.movie-video {
+
+    width: 100%;
+
+    border-radius: 18px;
+
+    background: black;
+}
+
+/* ===========================
+   BANNER
+=========================== */
+
+.movie-banner {
+
+    width: 100%;
+
+    border-radius: 14px;
+
+    margin-bottom: 35px;
+}
