@@ -8,13 +8,14 @@
     gap: 20px;
     background: #111;
     min-height: 100vh;
+    max-width: 1500px;
     color: #fff;
     padding: 20px;
 }
 
 .movie-main {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1000px;
 }
 
 
@@ -27,6 +28,7 @@
     border-radius: 12px;
     margin-bottom: 20px;
     display: block;
+    object-fit:cover;
 }
 
 
@@ -53,6 +55,7 @@
 ========================================================== */
 
 .movie-poster {
+    flex-shrink: 0;
     width: 300px;
     border-radius: 16px;
     object-fit: cover;
@@ -75,6 +78,7 @@
     border: none;
     border-radius: 16px;
     transition: .3s;
+
 }
 
 
@@ -231,6 +235,11 @@
     transition: .3s;
 }
 
+.movie-play-button:hover{
+    transform:translateY(-3px);
+    box-shadow:0 15px 40px rgba(255,180,0,.45);
+}
+
 .movie-watch-title {
     margin-top: 35px;
     margin-bottom: 15px;
@@ -261,7 +270,18 @@
 
 .movie-video {
     width: 100%;
-    border-radius: 16px;
+
+    aspect-ratio: 16/9;
+
+    background: #000;
+
+    border-radius: 18px;
+
+    border: 2px solid #2d2d2d;
+
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, .03),
+        0 20px 60px rgba(0, 0, 0, .55);
 }
 
 
@@ -296,6 +316,73 @@
 /* ==========================================================
    Responsive
 ========================================================== */
+@media(max-width:768px) {
+    .movie-page {
+        display: block;
+        padding: 12px;
+    }
+
+    .movie-page-title {
+        font-size: 1.4rem;
+
+    }
+
+    .movie-top-section {
+        display: block;
+    }
+
+    .movie-poster {
+        flex-shrink: 0;
+        width: 100%;
+        max-width: 260px;
+        margin: auto;
+        display: block;
+        margin-bottom: 20px;
+
+    }
+
+    .movie-info {
+        width: 100%;
+    }
+
+    .movie-trailer {
+        width: 100%;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, .45);
+        border-radius: 14px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, .45);
+    }
+
+    .movie-meta-card {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 18px;
+
+    }
+
+    .movie-article-box {
+        padding: 20px;
+    }
+
+    .movie-watch-title {
+        font-size: 1.2rem;
+    }
+
+    .movie-video {
+        border-radius: 12px;
+    }
+
+    .resume-button-group {
+        flex-direction: column;
+    }
+
+    .resume-play-button,
+    .resume-restart-button,
+    .resume-close-button {
+        width: 100%;
+    }
+
+}
 
 @media(max-width:900px) {
 
@@ -309,6 +396,7 @@
     }
 
     .movie-poster {
+        flex-shrink: 0;
         width: 100%;
         max-width: 320px;
         margin: auto;
@@ -322,223 +410,4 @@
     .movie-side-ads {
         display: none;
     }
-}
-
-/* ===========================
-   MOVIE PAGE
-=========================== */
-
-.movie-page {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 220px 1fr 220px;
-    gap: 20px;
-    max-width: 1800px;
-    margin: auto;
-    padding: 30px 20px 80px;
-    box-sizing: border-box;
-}
-
-.movie-main {
-    min-width: 0;
-}
-
-/* ===========================
-   PAGE TITLE
-=========================== */
-
-.movie-page-title {
-    color: #fff;
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 28px;
-    line-height: 1.4;
-}
-
-/* ===========================
-   TOP SECTION
-=========================== */
-
-.movie-top-section {
-    display: flex;
-    gap: 30px;
-    align-items: flex-start;
-    margin-bottom: 30px;
-}
-
-/* ===========================
-   POSTER
-=========================== */
-
-.movie-poster {
-    width: 300px;
-    border-radius: 16px;
-    transition: .35s;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, .55);
-}
-
-/* ===========================
-   TRAILER
-=========================== */
-
-.movie-info {
-    flex: 1;
-}
-
-.movie-trailer {
-    width: 100%;
-    aspect-ratio: 16/9;
-    border: none;
-    border-radius: 16px;
-    transition: .3s;
-}
-
-/* ===========================
-   META CARD
-=========================== */
-
-.movie-meta-card {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-
-    background: #171717;
-
-    border-radius: 16px;
-
-    padding: 24px;
-
-    margin-bottom: 25px;
-}
-
-.movie-meta-item {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.movie-meta-icon {
-    font-size: 2rem;
-}
-
-.movie-meta-item small {
-    display: block;
-    color: #999;
-    font-size: .8rem;
-}
-
-.movie-meta-item strong {
-    display: block;
-    color: #fff;
-    font-size: 1.2rem;
-    margin-top: 4px;
-}
-
-/* ===========================
-   CATEGORY
-=========================== */
-
-.movie-category-text {
-    display: flex;
-    align-items: center;
-
-    color: #999;
-
-    margin-bottom: 30px;
-
-    font-size: .95rem;
-}
-
-/* ===========================
-   ARTICLE
-=========================== */
-
-.movie-article-box {
-
-    background: #161616;
-
-    border-radius: 18px;
-
-    padding: 35px;
-
-    margin-bottom: 35px;
-
-    line-height: 1.8;
-}
-
-.movie-article-title {
-
-    color: #ffd000;
-
-    font-size: 1.5rem;
-
-    margin-bottom: 25px;
-}
-
-.movie-article-text {
-
-    color: #ddd;
-
-    white-space: pre-line;
-}
-
-.movie-section-title {
-
-    margin-top: 35px;
-
-    color: white;
-}
-
-.movie-highlight-list {
-
-    margin-top: 15px;
-
-    color: #ddd;
-
-    padding-left: 20px;
-}
-
-.movie-summary-text {
-
-    color: #ddd;
-
-    margin-top: 15px;
-}
-
-/* ===========================
-   WATCH TITLE
-=========================== */
-
-.movie-watch-title {
-
-    color: white;
-
-    margin: 35px 0 20px;
-}
-
-/* ===========================
-   VIDEO
-=========================== */
-
-.movie-video {
-
-    width: 100%;
-
-    border-radius: 18px;
-
-    background: black;
-}
-
-/* ===========================
-   BANNER
-=========================== */
-
-.movie-banner {
-
-    width: 100%;
-
-    border-radius: 14px;
-
-    margin-bottom: 35px;
 }
