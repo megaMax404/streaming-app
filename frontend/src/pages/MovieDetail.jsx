@@ -602,7 +602,7 @@ function MovieDetail() {
             </div>
           )}
 
-          {/* VIDEO PLAYER */}
+          {/* VIDEO  */}
           {videoError ? (
             <div style={styles.startBox}>
               <div>

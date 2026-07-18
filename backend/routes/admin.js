@@ -103,10 +103,7 @@ router.post(
       }
 
       try {
-        console.log(movie.video);
         const url = new URL(movie.video);
-        console.log(new URL(movie.video).hostname);
-
         if (
           !allowedDomains.some(domain =>
             url.hostname.includes(domain)
