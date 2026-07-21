@@ -114,10 +114,14 @@ const styles = {
         background: "#111",
         borderRadius: 10,
         overflow: "hidden",
+        cursor: "pointer",
     },
 
     image: {
         width: "100%",
+        height: 320,
+        objectFit: "cover",
+        display: "block",
         borderRadius: 10,
     },
 
@@ -134,14 +138,13 @@ const styles = {
 
         lineHeight: "22px",
 
-        height: "44px",
+        minHeight: 44,
 
         display: "-webkit-box",
-        WebkitBoxOrient: "vertical",
         WebkitLineClamp: 2,
+        WebkitBoxOrient: "vertical",
 
         overflow: "hidden",
-        textOverflow: "ellipsis",
     },
 
     progressBg: {
