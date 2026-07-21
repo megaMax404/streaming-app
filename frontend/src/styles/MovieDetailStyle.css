@@ -242,8 +242,8 @@
 }
 
 .movie-watch-title {
-    margin-top: 35px;
-    margin-bottom: 15px;
+    text-align:center;
+    margin-bottom:16px;
 }
 
 .movie-loading-box {
@@ -270,8 +270,8 @@
 }
 
 .movie-video {
-    width: 100%;
-    max-width: 920px;
+    width:100%;
+    max-width:100%;
     aspect-ratio: 16/9;
 
     display: block;
@@ -431,17 +431,17 @@
     width: 100%;
     max-width: 920px;
 
-    margin: 20px auto;
+    margin:40px 0;
 
-    padding: 12px;
+    padding: 16px;
 
     background: #181818;
 
+    border: 2px solid #2f2f2f;
+
     border-radius: 18px;
 
-    border: 1px solid #2d2d2d;
-
-    box-shadow: 0 20px 60px rgba(0, 0, 0, .45);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, .55);
 }
 
 
