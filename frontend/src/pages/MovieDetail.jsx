@@ -375,42 +375,7 @@ function MovieDetail() {
             </div>
           ) : (
             <>
-              {!startMovie && !showResumePopup && (
-                <div className="movie-start-box">
-                  <button
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = "translateY(-3px) scale(1.05)";
-                      e.currentTarget.style.boxShadow =
-                        "0 18px 45px rgba(255,180,0,.55)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = "translateY(0)";
-                      e.currentTarget.style.boxShadow =
-                        "0 12px 35px rgba(255,180,0,.35)";
-                    }}
-                    className="movie-play-button"
-                    onClick={() => {
 
-                      sessionStorage.removeItem(`dismiss-${movie.slug}`);
-
-                      removeContinueWatching(movie.slug);
-
-                      setAllowResume(false);
-
-                      setResumeTime(0);
-
-                      setForceRestart(true);
-
-                      setVideoError(false);
-
-                      setStartMovie(true);
-
-                    }}
-                  >
-                    ▶ เริ่มเล่นหนัง
-                  </button>
-                </div>
-              )}
 
               {/* TITLE */}
               <h2 className="movie-page-title">
@@ -506,89 +471,6 @@ function MovieDetail() {
                 {movie.category?.join(" • ")}
               </div>
 
-              {showResumePopup && (
-                <div className="resume-popup">
-                  <h2 className="resume-title">
-                    เล่นต่อจากเดิม?
-                  </h2>
-
-                  <div className="resume-button-group">
-
-                    <button
-                      className="resume-play-button"
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = "translateY(-3px) scale(1.05)";
-                        e.currentTarget.style.boxShadow =
-                          "0 18px 45px rgba(255,180,0,.55)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = "translateY(0)";
-                        e.currentTarget.style.boxShadow =
-                          "0 12px 35px rgba(255,180,0,.35)";
-                      }}
-                      onClick={() => {
-                        sessionStorage.removeItem(`dismiss-${movie.slug}`);
-
-                        setAllowResume(true);
-
-                        setShowResumePopup(false);
-                        setStartMovie(true);
-                      }}
-                    >
-                      ▶ เล่นต่อ
-                    </button>
-
-                    <button
-                      className="resume-restart-button"
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = "translateY(-3px) scale(1.05)";
-                        e.currentTarget.style.boxShadow =
-                          "0 18px 45px rgba(255,180,0,.55)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = "translateY(0)";
-                        e.currentTarget.style.boxShadow =
-                          "0 12px 35px rgba(255,180,0,.35)";
-                      }}
-                      onClick={() => {
-                        sessionStorage.removeItem(`dismiss-${movie.slug}`);
-
-                        removeContinueWatching(movie.slug);
-
-                        setAllowResume(false);
-
-                        setForceRestart(true);
-                        setResumeTime(0);
-
-                        setShowResumePopup(false);
-                        setStartMovie(true);
-                      }}
-                    >
-                      ↺ เริ่มใหม่
-                    </button>
-
-                    <button
-                      className="resume-close-button"
-                      onClick={() => {
-
-                        sessionStorage.setItem(
-                          `dismiss-${movie.slug}`,
-                          "1"
-                        );
-
-                        setAllowResume(false);
-
-                        setResumeTime(0);
-
-                        setShowResumePopup(false);
-                      }}
-                    >
-                      ✕ ปิด
-                    </button>
-
-                  </div>
-                </div>
-              )}
 
               {/* ARTICLE */}
               <div className="movie-article-box">
@@ -600,41 +482,124 @@ function MovieDetail() {
                   {movie.content}
                 </div>
 
+                <div className="movie-player-wrapper">
 
-                {startMovie && (
-                  <div className="movie-player-wrapper">
-                    
-                    {loadingPlayer && (
-                      <div className="movie-loading-box">
-                        <div className="movie-spinner"></div>
+                  {showResumePopup && (
+                    <div className="resume-popup">
+                      <h2 className="resume-title">
+                        เล่นต่อจากเดิม?
+                      </h2>
 
-                        <h2 className="movie-loading-text">
-                          กำลังโหลดหนัง...
-                        </h2>
+                      <div className="resume-button-group">
 
-                        <p className="movie-loading-sub">
-                          กรุณารอสักครู่
-                        </p>
+                        <button
+                          className="resume-play-button"
+                          onClick={() => {
+                            sessionStorage.removeItem(`dismiss-${movie.slug}`);
+                            setAllowResume(true);
+                            setShowResumePopup(false);
+                            setStartMovie(true);
+                          }}
+                        >
+                          ▶ เล่นต่อ
+                        </button>
+
+                        <button
+                          className="resume-restart-button"
+                          onClick={() => {
+                            sessionStorage.removeItem(`dismiss-${movie.slug}`);
+                            removeContinueWatching(movie.slug);
+
+                            setAllowResume(false);
+                            setForceRestart(true);
+                            setResumeTime(0);
+
+                            setShowResumePopup(false);
+                            setStartMovie(true);
+                          }}
+                        >
+                          ↺ เริ่มใหม่
+                        </button>
+
+                        <button
+                          className="resume-close-button"
+                          onClick={() => {
+                            sessionStorage.setItem(
+                              `dismiss-${movie.slug}`,
+                              "1"
+                            );
+
+                            setAllowResume(false);
+                            setResumeTime(0);
+                            setShowResumePopup(false);
+                          }}
+                        >
+                          ✕ ปิด
+                        </button>
+
                       </div>
-                    )}
+                    </div>
+                  )}
 
+                  {!startMovie && !showResumePopup && (
+                    <div className="movie-start-box">
+                      <button
+                        className="movie-play-button"
+                        onClick={() => {
+
+                          sessionStorage.removeItem(`dismiss-${movie.slug}`);
+
+                          removeContinueWatching(movie.slug);
+
+                          setAllowResume(false);
+
+                          setResumeTime(0);
+
+                          setForceRestart(true);
+
+                          setVideoError(false);
+
+                          setStartMovie(true);
+
+                        }}
+                      >
+                        ▶ เริ่มเล่นหนัง
+                      </button>
+                    </div>
+                  )}
+
+                  {loadingPlayer && (
+                    <div className="movie-loading-box">
+                      <div className="movie-spinner"></div>
+
+                      <h2 className="movie-loading-text">
+                        กำลังโหลดหนัง...
+                      </h2>
+
+                      <p className="movie-loading-sub">
+                        กรุณารอสักครู่
+                      </p>
+                    </div>
+                  )}
+
+                  {startMovie && (
                     <video
                       ref={videoRef}
                       controls
                       autoPlay
-
-                      onEnded={() => {
-                        removeContinueWatching(movie.slug);
-                        setResumeTime(0);
-                      }
-                      }
                       className="movie-video"
                       style={{
                         display: loadingPlayer ? "none" : "block",
                       }}
+                      onEnded={() => {
+                        removeContinueWatching(movie.slug);
+                        setResumeTime(0);
+                      }}
                     />
-                  </div>
-                )}
+                  )}
+
+                </div>
+
 
                 {movie.highlights?.length > 0 && (
                   <>
