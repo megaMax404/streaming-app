@@ -199,7 +199,7 @@
 
 .resume-button-group {
     display: flex;
-    flex-direction:column;
+    flex-direction: column;
     justify-content: center;
     gap: 12px;
     margin-top: 10px;
@@ -209,8 +209,8 @@
 .resume-play-button,
 .resume-restart-button,
 .resume-close-button {
-    width:220px;
-    margin:auto;
+    width: 220px;
+    margin: auto;
     border: none;
     border-radius: 12px;
     cursor: pointer;
@@ -229,8 +229,8 @@
     background: #333;
     color: #fff;
     padding: 14px 24px;
-    width:220px;
-    margin:auto;
+    width: 220px;
+    margin: auto;
 }
 
 
@@ -350,32 +350,55 @@
 /* ==========================================================
    Responsive
 ========================================================== */
-@media (max-width:768px){
+@media (max-width:768px) {
+    .movie-top-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
 
-  .movie-meta-card{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:10px;
-      padding:15px;
-  }
+    .movie-poster {
+        width: 100%;
+        max-width: 260px;
+        margin: 0 auto;
+        display: block;
+    }
 
-  .movie-meta-item{
-      flex-direction:column;
-      text-align:center;
-      gap:6px;
-  }
+    .movie-info {
+        width: 100%;
+        order: 2;
+    }
 
-  .movie-meta-icon{
-      font-size:24px;
-  }
+    .movie-trailer {
+        width: 100%;
+        display: block;
+    }
 
-  .movie-meta-item small{
-      font-size:12px;
-  }
+    .movie-meta-card {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        padding: 15px;
+    }
 
-  .movie-meta-item strong{
-      font-size:18px;
-  }
+    .movie-meta-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 6px;
+    }
+
+    .movie-meta-icon {
+        font-size: 24px;
+    }
+
+    .movie-meta-item small {
+        font-size: 12px;
+    }
+
+    .movie-meta-item strong {
+        font-size: 18px;
+    }
 }
 
 @media (max-width:1000px) {
@@ -424,26 +447,18 @@
     align-items: center;
 }
 
-.resume-popup{
+.resume-popup {
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    background:rgba(0,0,0,.75);
+    background: rgba(0, 0, 0, .75);
 
 }
 
-.resume-box{
-
-    width:min(360px,90%);
-    background:#111;
-    border-radius:18px;
-
-    padding:20px;
-
-    text-align:center;
-
-    border:2px solid #333;
-
+.resume-box {
+    width: min(360px, 90%);
+    padding: 10px;
+    text-align: center;
 }
