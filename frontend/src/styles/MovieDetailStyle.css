@@ -6,7 +6,7 @@
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    gap: 24px;
+    gap: 10px;
     padding: 24px;
     max-width: 1500px;
     margin: 0 auto;
@@ -26,6 +26,8 @@
 
 .movie-banner {
     width: 100%;
+    max-height: 220px;
+    object-fit: cover;
     border-radius: 12px;
     margin-bottom: 20px;
     display: block;
@@ -308,10 +310,10 @@
 ========================================================== */
 
 .movie-side-ads {
-    width: 180px;
+    width: 150px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
 }
 
 .movie-ad-img {
