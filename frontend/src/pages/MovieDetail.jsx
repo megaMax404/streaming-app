@@ -486,7 +486,7 @@ function MovieDetail() {
 
                   {showResumePopup && (
                     <div className="resume-popup">
-                      <h2 className="resume-title">
+                      <h2 className="resume-box">
                         เล่นต่อจากเดิม?
                       </h2>
 
