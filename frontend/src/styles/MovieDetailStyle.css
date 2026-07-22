@@ -3,19 +3,22 @@
 ========================================================== */
 
 .movie-page {
-    display: flex;
+    display: grid;
+    grid-template-columns: 120px 680px 120px;
     justify-content: center;
-    align-items: flex-start;
-    gap: 4px;
-    padding: 20px;
-    max-width: 1200px;
+
+    column-gap: 10px;
+
+    padding: 20px 0;
+
+    max-width: 950px;
     margin: 0 auto;
 }
 
 .movie-main {
     flex: 0 1 720px;
     max-width: 720px;
-    width: 100%;
+    width: 680px;
     margin: 0 auto;
 }
 
@@ -26,12 +29,15 @@
 
 .movie-banner {
     width: 100%;
-    height: 180px;
+    height: 155px;
+
     object-fit: cover;
+
     border-radius: 12px;
-    margin-bottom: 20px;
+
     display: block;
-    object-fit: cover;
+
+    margin-bottom: 18px;
 }
 
 
@@ -310,16 +316,18 @@
 ========================================================== */
 
 .movie-side-ads {
-    width: 130px;
-    flex-shrink: 0;
+    width: 120px;
+
     display: flex;
     flex-direction: column;
+
     gap: 8px;
 }
 
 .movie-ad-img {
-    width: 100%;
-    border-radius: 12px;
+    width: 120px;
+
+    border-radius: 10px;
 }
 
 
@@ -405,32 +413,21 @@
 
 }
 
-@media(max-width:900px) {
-
+@media (max-width:1000px) {
     .movie-page {
-        flex-direction: column;
+        display: block;
+        max-width: 700px;
         padding: 15px;
     }
 
-    .movie-top-section {
-        flex-direction: column;
-    }
-
-    .movie-poster {
-        flex-shrink: 0;
+    .movie-main {
         width: 100%;
-        max-width: 320px;
-        margin: auto;
-    }
-
-    .movie-meta-card {
-        flex-wrap: wrap;
-        justify-content: center;
     }
 
     .movie-side-ads {
         display: none;
     }
+
 }
 
 .continue-card-title {
