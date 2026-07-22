@@ -15,6 +15,7 @@ const movieRoutes = require("./routes/movies");
 const bannerRoutes = require("./routes/banners");
 const adminRoutes = require("./routes/admin");
 const articleRoutes = require("./routes/articleRoutes");
+const uploadRoute = require("./routes/upload");
 
 //
 // ENV CHECK
@@ -52,6 +53,8 @@ const allowedOrigins = [
   "http://www.doohd.vip",
   "https://www.doohd.vip"
 ];
+
+
 
 app.use(
   cors({
@@ -122,6 +125,7 @@ app.use("/api/stats", statsRoutes);
 
 app.use("/api/admin/login", loginLimiter);
 app.use("/api/admin", adminRoutes);
+app.use("/api/upload",uploadRoute);
 
 app.use("/api/movies", movieRoutes);
 app.use("/api/banners", bannerRoutes);
@@ -143,6 +147,7 @@ app.use((err, req, res, next) => {
     message: err.message || "Internal server error"
   });
 });
+
 
 //
 // START SERVER

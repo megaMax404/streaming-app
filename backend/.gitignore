@@ -7,6 +7,7 @@ backend/.env
 .env
 .env.local
 .env.production
+.env.*
 
 # Backup files
 backups/*.json
