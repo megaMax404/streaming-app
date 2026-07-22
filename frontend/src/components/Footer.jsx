@@ -1,3 +1,5 @@
+import { VERSION } from "../version";
+
 function Footer() {
   return (
     <div style={styles.footer}>
