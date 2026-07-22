@@ -99,7 +99,7 @@ function Navbar({ search, setSearch }) {
         <div style={styles.container}>
           <div style={styles.logoLink} onClick={handleHome}>
             <img
-              src="https://img2.pic.in.th/10392e98b172ab32c.png"
+              src="https://res.cloudinary.com/rrzns7a1/image/upload/v1784715594/1_koaq9b.png"
               alt="logo"
               style={styles.logoImage}
             />
