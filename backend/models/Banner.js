@@ -3,20 +3,37 @@ const mongoose = require("mongoose");
 const bannerSchema = new mongoose.Schema({
   image: {
     type: String,
-    maxlength: 500
+    maxlength: 100,
+    default: ""
   },
 
   link: {
     type: String,
-    maxlength: 500
+    maxlength: 500,
+    default: ""
   },
 
   type: {
     type: String,
-    default: "image",
-    maxlength: 20
+    enum: ["image", "video"],
+    default: "image"
+  },
+  position: {
+    type: String,
+    enum: ["home", "movie"],
+    default: "movie"
+  },
+
+  order: {
+    type: Number,
+    default: 0
+  },
+  active: {
+    type: Boolean,
+    default: true
   }
-}, {
+}, 
+{
   timestamps: true
 });
 

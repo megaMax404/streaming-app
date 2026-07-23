@@ -10,7 +10,11 @@ const createBackup = require("../utils/autoBackup");
 //GET
 router.get("/", async (req, res) => {
   try {
-    const banners = await Banner.find();
+    const banners = await Banner.find({
+      active: true
+    }).sort({
+      order: 1
+    });
     res.json(banners);
   } catch (err) {
     res.status(500).json({
@@ -24,9 +28,13 @@ router.get("/", async (req, res) => {
 router.post("/", auth, async (req, res) => {
   try {
     const allowedFields = [
+      "title",
       "image",
       "link",
-      "type"
+      "type",
+      "position",
+      "order",
+      "active"
     ];
 
     const sanitized = {};
@@ -65,9 +73,13 @@ router.put("/:id", auth, async (req, res) => {
   }
   try {
     const allowedFields = [
+      "title",
       "image",
       "link",
-      "type"
+      "type",
+      "position",
+      "order",
+      "active"
     ];
 
     const sanitized = {};
