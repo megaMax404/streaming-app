@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const isValidId = (id) => mongoose.Types.ObjectId.isValid(id);
 const express = require("express");
 const router = express.Router();
-
+const cache = require("../utils/cache");
 const Movie = require("../models/Movie");
 const auth = require("../data/middleware/auth");
 const createBackup = require("../utils/autoBackup");
@@ -23,13 +23,25 @@ GET ALL MOVIES
 =========================
 */
 router.get("/", async (req, res) => {
-
   try {
-    const movies = await Movie.find({
-      deleted: false
-    }).sort({ createdAt: -1 });
+    const movies = await Movie.find(
+      { deleted: false },
+      {
+        title: 1,
+        slug: 1,
+        image: 1,
+        rating: 1,
+        year: 1,
+        views: 1,
+        category: 1,
+        createdAt: 1
+      }
+    )
+      .sort({ createdAt: -1 })
+      .lean();
 
     res.json(movies);
+
   } catch (err) {
     res.status(500).json({
       message: err.message
@@ -47,7 +59,7 @@ router.get("/trash/list", auth, async (req, res) => {
   try {
     const trash = await Movie.find({
       deleted: true
-    });
+    }).lean();
 
     res.json(trash);
   } catch (err) {
@@ -64,14 +76,17 @@ GET MOVIE BY ID
 */
 router.get("/slug/:slug", async (req, res) => {
   try {
-    console.time("findMovie");
-
-    const movie = await Movie.findOne({
-      slug: req.params.slug,
-      deleted: false
-    });
-
-    console.timeEnd("findMovie");
+    const movie = await Movie.findOne(
+      {
+        slug: req.params.slug,
+        deleted: false
+      },
+      {
+        __v: 0,
+        deleted: 0,
+        deletedAt: 0
+      }
+    ).lean();
 
     if (!movie || movie.deleted) {
       return res.status(404).json({
@@ -79,17 +94,14 @@ router.get("/slug/:slug", async (req, res) => {
       });
     }
 
-    console.time("saveViews");
-
-    const updatedMovie = await Movie.findByIdAndUpdate(
+    await Movie.findByIdAndUpdate(
       movie._id,
-      { $inc: { views: 1 } },
-      { new: true }
+      { $inc: { views: 1 } }
     );
 
-    console.timeEnd("saveViews");
+    movie.views += 1;
 
-    res.json(updatedMovie);
+    res.json(movie);
 
   } catch (err) {
     console.error(err);
@@ -152,7 +164,9 @@ router.post("/", auth, async (req, res) => {
     await movie.save();
     await createBackup();
 
-    res.status(201).json(movie);
+    res.json({
+      success: true
+    });
   } catch (err) {
     res.status(500).json({
       message: err.message
@@ -211,15 +225,16 @@ router.put("/:id", auth, async (req, res) => {
         message: "Invalid URL"
       });
     }
-    const movie = await Movie.findByIdAndUpdate(
+    await Movie.findByIdAndUpdate(
       req.params.id,
-      cleanData,
-      { new: true }
+      cleanData
     );
 
     await createBackup();
 
-    res.json(movie);
+    res.json({
+      success: true
+    });
 
   } catch (err) {
     res.status(500).json({
