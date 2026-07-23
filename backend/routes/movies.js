@@ -24,6 +24,12 @@ GET ALL MOVIES
 */
 router.get("/", async (req, res) => {
   try {
+
+    const cached = cache.get("movies");
+    if (cached) {
+      return res.json(cached);
+    }
+
     const movies = await Movie.find(
       { deleted: false },
       {
@@ -39,6 +45,8 @@ router.get("/", async (req, res) => {
     )
       .sort({ createdAt: -1 })
       .lean();
+
+    cache.set("movies", movies, 60);
 
     res.json(movies);
 
@@ -71,11 +79,27 @@ router.get("/trash/list", auth, async (req, res) => {
 
 /*
 =========================
-GET MOVIE BY ID
+GET MOVIE BY SLUG
 =========================
 */
 router.get("/slug/:slug", async (req, res) => {
   try {
+    const key = `movie_${req.params.slug}`;
+    const cachedMovie = cache.get(key);
+    if (cachedMovie) {
+
+      const movie = { ...cachedMovie };
+
+      await Movie.findByIdAndUpdate(
+        movie._id,
+        { $inc: { views: 1 } }
+      );
+
+      movie.views += 1;
+
+      return res.json(movie);
+    }
+
     const movie = await Movie.findOne(
       {
         slug: req.params.slug,
@@ -101,6 +125,7 @@ router.get("/slug/:slug", async (req, res) => {
 
     movie.views += 1;
 
+    cache.set(key, movie, 60);
     res.json(movie);
 
   } catch (err) {
@@ -162,6 +187,7 @@ router.post("/", auth, async (req, res) => {
     }
     const movie = new Movie(cleanData);
     await movie.save();
+    cache.clear("movies");
     await createBackup();
 
     res.json({
@@ -225,11 +251,24 @@ router.put("/:id", auth, async (req, res) => {
         message: "Invalid URL"
       });
     }
-    await Movie.findByIdAndUpdate(
+
+    const oldMovie = await Movie.findById(req.params.id).lean();
+
+    const updatedMovie = await Movie.findByIdAndUpdate(
       req.params.id,
-      cleanData
+      cleanData,
+      { new: true }
     );
 
+    cache.clear("movies");
+
+    if (oldMovie?.slug) {
+      cache.clear(`movie_${oldMovie.slug}`);
+    }
+
+    if (updatedMovie?.slug) {
+      cache.clear(`movie_${updatedMovie.slug}`);
+    }
     await createBackup();
 
     res.json({
@@ -255,10 +294,18 @@ router.delete("/:id", auth, async (req, res) => {
     });
   }
   try {
+    const movie = await Movie.findById(req.params.id).lean();
+
     await Movie.findByIdAndUpdate(req.params.id, {
       deleted: true,
       deletedAt: new Date()
     });
+
+    cache.clear("movies");
+
+    if (movie?.slug) {
+      cache.clear(`movie_${movie.slug}`);
+    }
 
     await createBackup();
     res.json({
@@ -283,10 +330,19 @@ router.put("/trash/restore/:id", auth, async (req, res) => {
     });
   }
   try {
+
+    const movie = await Movie.findById(req.params.id).lean();
+
     await Movie.findByIdAndUpdate(req.params.id, {
       deleted: false,
       deletedAt: null
     });
+
+    cache.clear("movies");
+
+    if (movie?.slug) {
+      cache.clear(`movie_${movie.slug}`);
+    }
 
     await createBackup();
     res.json({
@@ -311,7 +367,16 @@ router.delete("/trash/permanent/:id", auth, async (req, res) => {
     });
   }
   try {
+
+    const movie = await Movie.findById(req.params.id).lean();
+
     await Movie.findByIdAndDelete(req.params.id);
+
+    cache.clear("movies");
+
+    if (movie?.slug) {
+      cache.clear(`movie_${movie.slug}`);
+    }
 
     await createBackup();
     res.json({

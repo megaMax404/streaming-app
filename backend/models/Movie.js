@@ -90,10 +90,18 @@ const movieSchema = new mongoose.Schema({
 }, {
   timestamps: true
 });
-movieSchema.index({ deleted: 1 });
-movieSchema.index({ createdAt: -1 });
+movieSchema.index({ 
+  deleted: 1,
+  slug: 1
+});
 
-movieSchema.index({ title: 1 });
-movieSchema.index({ category: 1 });
+movieSchema.index({ 
+  createdAt: -1,
+  deleted: 1 
+});
+
+movieSchema.index({ 
+  category: 1 
+});
 
 module.exports = mongoose.model("Movie", movieSchema);
