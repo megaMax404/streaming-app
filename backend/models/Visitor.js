@@ -7,9 +7,15 @@ const visitorSchema = new mongoose.Schema(
         unique: true,
     },
 
-    firstVisit: Date,
+    firstVisit: {
+        type: Date,
+        default: Date.now,
+    },
 
-    lastVisit: Date,
+    lastVisit: {
+        type: Date,
+        default: Date.now,
+    },
 
     visitCount: {
         type: Number,

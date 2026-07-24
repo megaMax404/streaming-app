@@ -4,86 +4,171 @@ const router = express.Router();
 const SiteStat = require("../models/SiteStat");
 const Visitor = require("../models/Visitor");
 
+/*
+==========================
+VISITOR
+==========================
+*/
+
 router.post("/visit", async (req, res) => {
-  try {
-    const ip =
-      req.headers["x-forwarded-for"]?.split(",")[0] ||
-      req.socket.remoteAddress;
 
-    const userAgent = req.headers["user-agent"] || "";
+    try {
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+        const fingerprint = req.body.fingerprint;
 
-    //---------------------------------------
-    // ตรวจว่าคนนี้เคยเข้าวันนี้หรือยัง
-    //---------------------------------------
+        if (!fingerprint) {
+            return res.status(400).json({
+                success: false,
+                message: "fingerprint missing"
+            });
+        }
 
-    let visitor = await Visitor.findOne({
-      ip,
-      lastVisit: { $gte: today },
-    });
+        //------------------------------------
+        // TODAY
+        //------------------------------------
 
-    let isUnique = false;
+        const now = new Date();
 
-    if (!visitor) {
-      visitor = await Visitor.create({
-        ip,
-        userAgent,
-        lastVisit: new Date(),
-      });
+        const today =
+            now.toISOString().slice(0, 10);
 
-      isUnique = true;
-    } else {
-      visitor.lastVisit = new Date();
-      await visitor.save();
+        //------------------------------------
+        // VISITOR
+        //------------------------------------
+
+        let visitor =
+            await Visitor.findOne({
+                fingerprint
+            });
+
+        let isUniqueToday = false;
+
+        if (!visitor) {
+
+            visitor =
+                await Visitor.create({
+
+                    fingerprint,
+
+                    firstVisit: now,
+
+                    lastVisit: now,
+
+                    visitCount: 1
+
+                });
+
+            isUniqueToday = true;
+
+        } else {
+
+            const last =
+                visitor.lastVisit
+                    .toISOString()
+                    .slice(0, 10);
+
+            if (last !== today) {
+
+                isUniqueToday = true;
+
+            }
+
+            visitor.lastVisit = now;
+
+            visitor.visitCount += 1;
+
+            await visitor.save();
+
+        }
+
+        //------------------------------------
+        // SITE STAT
+        //------------------------------------
+
+        let stat =
+            await SiteStat.findOne({
+                date: today
+            });
+
+        if (!stat) {
+
+            stat =
+                await SiteStat.create({
+
+                    date: today
+
+                });
+
+        }
+
+        stat.pageViews += 1;
+
+        stat.todayVisitors += 1;
+
+        if (isUniqueToday) {
+
+            stat.uniqueVisitors += 1;
+
+        }
+
+        await stat.save();
+
+        res.json({
+
+            success: true,
+
+            stat
+
+        });
+
     }
 
-    //---------------------------------------
-    // Site Stat
-    //---------------------------------------
+    catch (err) {
 
-    let stat = await SiteStat.findOne();
+        console.error(err);
 
-    if (!stat) {
-      stat = await SiteStat.create({});
+        res.status(500).json({
+
+            success: false
+
+        });
+
     }
 
-    stat.totalVisits += 1;
+});
 
-    if (isUnique) {
-      stat.uniqueVisitors += 1;
+/*
+==========================
+GET TODAY
+==========================
+*/
+
+router.get("/", async (req, res) => {
+
+    try {
+
+        const today =
+            new Date()
+                .toISOString()
+                .slice(0, 10);
+
+        const stat =
+            await SiteStat.findOne({
+                date: today
+            });
+
+        res.json(stat);
+
     }
 
-    const lastDay = new Date(stat.lastReset);
+    catch (err) {
 
-    if (
-      lastDay.getDate() !== new Date().getDate() ||
-      lastDay.getMonth() !== new Date().getMonth() ||
-      lastDay.getFullYear() !== new Date().getFullYear()
-    ) {
-      stat.todayVisits = 0;
-      stat.lastReset = new Date();
+        res.status(500).json({
+            message: err.message
+        });
+
     }
 
-    stat.todayVisits += 1;
-
-    await stat.save();
-
-    res.json({
-      success: true,
-      totalVisits: stat.totalVisits,
-      todayVisits: stat.todayVisits,
-      uniqueVisitors: stat.uniqueVisitors,
-    });
-
-  } catch (err) {
-    console.error(err);
-
-    res.status(500).json({
-      success: false,
-    });
-  }
 });
 
 module.exports = router;
