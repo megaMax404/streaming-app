@@ -24,14 +24,33 @@ GET ALL MOVIES
 */
 router.get("/", async (req, res) => {
   try {
+    const page = Math.max(parseInt(req.query.page) || 1, 1);
+    const limit = Math.max(parseInt(req.query.limit) || 36, 1);
 
-    const cached = cache.get("movies");
-    if (cached) {
-      return res.json(cached);
+    const search = (req.query.search || "").trim();
+    const category = (req.query.category || "").trim();
+
+    const filter = {
+      deleted: false,
+    };
+
+    if (search) {
+      filter.title = {
+        $regex: search,
+        $options: "i",
+      };
     }
 
+    if (category && category !== "หนังทั้งหมด") {
+      filter.category = {
+        $in: [category]
+      };
+    }
+
+    const totalMovies = await Movie.countDocuments(filter);
+
     const movies = await Movie.find(
-      { deleted: false },
+      filter,
       {
         title: 1,
         slug: 1,
@@ -40,19 +59,24 @@ router.get("/", async (req, res) => {
         year: 1,
         views: 1,
         category: 1,
-        createdAt: 1
+        createdAt: 1,
       }
     )
       .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit)
       .lean();
 
-    cache.set("movies", movies, 60);
-
-    res.json(movies);
+    res.json({
+      movies,
+      currentPage: page,
+      totalPages: Math.ceil(totalMovies / limit),
+      totalMovies,
+    });
 
   } catch (err) {
     res.status(500).json({
-      message: err.message
+      message: err.message,
     });
   }
 });
@@ -187,7 +211,7 @@ router.post("/", auth, async (req, res) => {
     }
     const movie = new Movie(cleanData);
     await movie.save();
-    cache.clear("movies");
+    cache.flushAll();
     await createBackup();
 
     res.json({
@@ -260,7 +284,7 @@ router.put("/:id", auth, async (req, res) => {
       { new: true }
     );
 
-    cache.clear("movies");
+    cache.flushAll();
 
     if (oldMovie?.slug) {
       cache.clear(`movie_${oldMovie.slug}`);
@@ -301,7 +325,7 @@ router.delete("/:id", auth, async (req, res) => {
       deletedAt: new Date()
     });
 
-    cache.clear("movies");
+    cache.flushAll();
 
     if (movie?.slug) {
       cache.clear(`movie_${movie.slug}`);
@@ -338,7 +362,7 @@ router.put("/trash/restore/:id", auth, async (req, res) => {
       deletedAt: null
     });
 
-    cache.clear("movies");
+    cache.flushAll();
 
     if (movie?.slug) {
       cache.clear(`movie_${movie.slug}`);
@@ -372,7 +396,7 @@ router.delete("/trash/permanent/:id", auth, async (req, res) => {
 
     await Movie.findByIdAndDelete(req.params.id);
 
-    cache.clear("movies");
+    cache.flushAll();
 
     if (movie?.slug) {
       cache.clear(`movie_${movie.slug}`);
