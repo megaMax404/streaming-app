@@ -16,8 +16,15 @@ const CategoryList = lazy(() => import("./pages/CategoryList"));
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import LoadingPage from "./components/LoadingPage";
+import { useEffect } from "react";
+import { trackVisitor } from "./utils/visitorTracker";
 
 function App() {
+
+  useEffect(() => {
+    trackVisitor();
+  }, []);
+
   const [isAdmin, setIsAdmin] = useState(
     !!sessionStorage.getItem("adminToken")
   );
