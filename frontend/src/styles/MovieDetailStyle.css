@@ -461,3 +461,18 @@
     align-items:center;
 }
 
+.movie-trailer-placeholder{
+    position:relative;
+}
+
+.movie-trailer-loading{
+    position:absolute;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#fff;
+    font-size:20px;
+    font-weight:bold;
+    background:rgba(0,0,0,.45);
+}

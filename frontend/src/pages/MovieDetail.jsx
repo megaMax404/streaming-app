@@ -1,8 +1,15 @@
 import { API_URL } from "../config";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  lazy,
+  Suspense,
+} from "react";
 import axios from "axios";
+const TrailerPlayer = lazy(() => import("../components/TrailerPlayer"));
 import "../styles/MovieDetailStyle.css";
 import PlayerNavbar from "../components/PlayerNavbar";
 import {
@@ -10,6 +17,7 @@ import {
   saveContinueWatching,
   removeContinueWatching,
 } from "../utils/continueWatching";
+
 function MovieDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -17,6 +25,8 @@ function MovieDetail() {
   const [banners, setBanners] = useState([]);
   const [startMovie, setStartMovie] = useState(false);
   const [loadingPlayer, setLoadingPlayer] = useState(false);
+  const [showTrailer, setShowTrailer] = useState(false);
+  const trailerRef = useRef(null);
   const videoRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -72,6 +82,26 @@ function MovieDetail() {
     }
   }, [slug]);
 
+
+  useEffect(() => {
+    if (!trailerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShowTrailer(true);
+          observer.disconnect();
+        }
+      },
+      {
+        rootMargin: "200px",
+      }
+    );
+
+    observer.observe(trailerRef.current);
+
+    return () => observer.disconnect();
+  }, []);
 
   // เล่น m3u8
   useEffect(() => {
@@ -405,24 +435,33 @@ function MovieDetail() {
                 />
 
                 {/* TRAILER */}
-                <div className="movie-info">
-                  {movie.trailer && (
-                    <iframe
-                      src={movie.trailer}
-                      title="Trailer"
-                      className="movie-trailer"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowFullScreen
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = "scale(1.01)";
-                      }}
+                <div
+                  className="movie-info"
+                  ref={trailerRef}
+                >
+                  <Suspense
+                    fallback={
+                      <div className="movie-trailer-placeholder">
+                        <img
+                          src={movie.image}
+                          alt={movie.title}
+                          className="movie-trailer"
+                        />
 
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = "scale(1)";
-                      }}
-                    />
-                  )}
+                        <div className="movie-trailer-loading">
+                          ▶ กำลังโหลด Trailer...
+                        </div>
+                      </div>
+                    }
+                  >
+                    {showTrailer && movie.trailer && (
+                      <TrailerPlayer
+                        trailer={movie.trailer}
+                      />
+                    )}
+                  </Suspense>
                 </div>
+
               </div>
 
               {/* META */}
