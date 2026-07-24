@@ -9,7 +9,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 const siteStats = require("./routes/siteStats");
 const createBackup = require("./utils/autoBackup");
 
-const statsRoutes = require("./routes/stats");
+const siteStatsRoutes = require("./routes/siteStats");
 const restoreRoutes = require("./routes/restore");
 const movieRoutes = require("./routes/movies");
 const bannerRoutes = require("./routes/banners");
@@ -121,7 +121,7 @@ app.use("/images", express.static("public/images"));
 //
 // ROUTES
 //
-app.use("/api/stats", statsRoutes);
+app.use("/api/site", siteStatsRoutes);
 
 app.use("/api/admin/login", loginLimiter);
 app.use("/api/admin", adminRoutes);
