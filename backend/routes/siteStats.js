@@ -139,36 +139,30 @@ router.post("/visit", async (req, res) => {
 
 /*
 ==========================
-GET TODAY
+GET TODAY STATS
 ==========================
 */
 
-router.get("/", async (req, res) => {
-
+router.get("/stats", async (req, res) => {
     try {
+        const today = new Date().toISOString().slice(0, 10);
 
-        const today =
-            new Date()
-                .toISOString()
-                .slice(0, 10);
+        const stat = await SiteStat.findOne({ date: today });
 
-        const stat =
-            await SiteStat.findOne({
-                date: today
-            });
-
-        res.json(stat);
-
-    }
-
-    catch (err) {
-
+        res.json(
+            stat || {
+                date: today,
+                pageViews: 0,
+                uniqueVisitors: 0,
+                movieViews: 0,
+                todayVisitors: 0,
+            }
+        );
+    } catch (err) {
         res.status(500).json({
-            message: err.message
+            message: err.message,
         });
-
     }
-
 });
 
 module.exports = router;

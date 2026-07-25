@@ -23,7 +23,6 @@ function Home({ search }) {
   const navigate = useNavigate();
 
   const [movies, setMovies] = useState([]);
-  const [continueList, setContinueList] = useState([]);
   const [articles, setArticles] = useState([]);
 
   const category = slug
@@ -60,10 +59,6 @@ function Home({ search }) {
 
   useEffect(() => {
     trackVisitor();
-  }, []);
-
-  useEffect(() => {
-    setContinueList(getContinueWatching());
   }, []);
 
   /* ======================
