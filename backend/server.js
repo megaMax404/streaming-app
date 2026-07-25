@@ -6,7 +6,6 @@ const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const mongoose = require("mongoose");
 const mongoSanitize = require("express-mongo-sanitize");
-const siteStats = require("./routes/siteStats");
 const createBackup = require("./utils/autoBackup");
 
 const siteStatsRoutes = require("./routes/siteStats");
@@ -130,7 +129,6 @@ app.use("/api/upload",uploadRoute);
 app.use("/api/movies", movieRoutes);
 app.use("/api/banners", bannerRoutes);
 app.use("/api/articles", articleRoutes);
-app.use("/api/site", siteStats);
 
 app.use(
   "/api/restore",

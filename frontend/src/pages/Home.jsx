@@ -13,6 +13,7 @@ import MovieCard from "../components/MovieCard";
 import Carousel from "../components/Carousel";
 import Pagination from "../components/Pagination";
 import ContinueWatching from "../components/ContinueWatching";
+import { trackVisitor } from "../utils/visitorTracker";
 import { getContinueWatching } from "../utils/continueWatching";
 
 const MOVIES_PER_PAGE = 36;
@@ -41,7 +42,7 @@ function Home({ search }) {
           axios.get(`${API_URL}/api/articles`),
         ]);
 
-        const sortedMovies = [...movieRes.data].sort(
+        const sortedMovies = [...movieRes.data.movies].sort(
           (a, b) =>
             new Date(b.createdAt || 0) -
             new Date(a.createdAt || 0)
@@ -55,6 +56,10 @@ function Home({ search }) {
     };
 
     loadData();
+  }, []);
+
+  useEffect(() => {
+    trackVisitor();
   }, []);
 
   useEffect(() => {
