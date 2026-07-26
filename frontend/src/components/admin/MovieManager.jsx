@@ -339,11 +339,13 @@ function MovieManager({
     try {
       const res = await axios.get(MOVIE_API);
 
-      const sorted = res.data.sort(
-        (a, b) =>
-          new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
+      setMovies(
+        [...(res.data.movies || [])].sort(
+          (a, b) =>
+            new Date(b.createdAt || 0) -
+            new Date(a.createdAt || 0)
+        )
       );
-      setMovies(sorted);
     }
     catch (err) { console.error(err); }
   };
@@ -413,7 +415,7 @@ function MovieManager({
         alert("URL ไม่ถูกต้อง");
         return;
       }
-      
+
       const payload = {
         ...formData,
 
