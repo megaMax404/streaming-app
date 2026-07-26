@@ -11,6 +11,8 @@ function MovieManager({
   setEditMovieId
 }) {
 
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalMovies, setTotalMovies] = useState(0);
   const navigate = useNavigate();
 
   const MOVIE_API = `${API_URL}/api/movies`;
@@ -58,8 +60,6 @@ function MovieManager({
       return false;
     }
   };
-
-  const MOVIES_PER_PAGE = 20;
 
   const categoryOptions = ["หนังทั้งหมด", "หนังใหม่ล่าสุด",
     "หนังสยองขวัญ",
@@ -337,17 +337,25 @@ function MovieManager({
 
   const fetchMovies = async () => {
     try {
-      const res = await axios.get(MOVIE_API);
+      const res = await axios.get(MOVIE_API, {
+        params: {
+          page: currentPage,
+          limit: 20,
+          search,
+          category:
+            selectedCategory === "All"
+              ? ""
+              : selectedCategory,
+        },
+      });
 
-      setMovies(
-        [...(res.data.movies || [])].sort(
-          (a, b) =>
-            new Date(b.createdAt || 0) -
-            new Date(a.createdAt || 0)
-        )
-      );
+      setMovies(res.data.movies || []);
+      setTotalPages(res.data.totalPages);
+      setTotalMovies(res.data.totalMovies);
+
+    } catch (err) {
+      console.error(err);
     }
-    catch (err) { console.error(err); }
   };
 
   const fetchTrashMovies = async () => {
@@ -390,7 +398,11 @@ function MovieManager({
   useEffect(() => {
     fetchMovies();
     fetchTrashMovies();
-  }, []);
+  }, [
+    currentPage,
+    search,
+    selectedCategory,
+  ]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -522,18 +534,6 @@ function MovieManager({
     const all = movies.flatMap((movie) => movie.category || []);
     return ["All", ...new Set(all),];
   }, [movies]);
-  const filteredMovies = useMemo(() => {
-    return movies.filter((movie) => {
-      const matchSearch = movie.title?.toLowerCase().includes(search.toLowerCase());
-
-      const matchCategory = selectedCategory === "All" || movie.category?.includes(selectedCategory);
-      return (matchSearch && matchCategory);
-    });
-  }, [movies, search, selectedCategory,]);
-
-  const totalPages = Math.ceil(filteredMovies.length / MOVIES_PER_PAGE) || 1;
-
-  const currentMovies = filteredMovies.slice((currentPage - 1) * MOVIES_PER_PAGE, currentPage * MOVIES_PER_PAGE);
 
   const exportMovies = () => {
     const dataStr = JSON.stringify(
@@ -725,7 +725,7 @@ function MovieManager({
           <p className="movie-count">
             {showTrash
               ? `หนังในถังขยะ ${trashMovies.length} เรื่อง`
-              : `หนังทั้งหมด ${movies.length} เรื่อง`}
+              : `หนังทั้งหมด ${totalMovies} เรื่อง`}
           </p>
 
 
@@ -774,7 +774,7 @@ function MovieManager({
 
             ) : (
 
-              currentMovies.map((movie) => (
+              movies.map((movie) => (
 
                 <div
                   className="movie-row"

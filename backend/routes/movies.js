@@ -229,6 +229,31 @@ router.post("/", auth, async (req, res) => {
 UPDATE MOVIE
 =========================
 */
+router.get("/:id", async (req, res) => {
+  if (!isValidId(req.params.id)) {
+    return res.status(400).json({
+      message: "Invalid ID",
+    });
+  }
+
+  try {
+    const movie = await Movie.findById(req.params.id).lean();
+
+    if (!movie || movie.deleted) {
+      return res.status(404).json({
+        message: "Movie not found",
+      });
+    }
+
+    res.json(movie);
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+});
+
+
 router.put("/:id", auth, async (req, res) => {
   if (!isValidId(req.params.id)) {
     return res.status(400).json({
