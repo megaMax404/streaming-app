@@ -1,5 +1,5 @@
 import { API_URL } from "../../config";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import axios from "axios";
 import "../../styles/Admin.css";
 import {
@@ -334,7 +334,7 @@ function MovieManager({
   const [selectedCategory, setSelectedCategory,] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [formData, setFormData] = useState(emptyForm);
-
+  const formRef = useRef(null);
   const fetchMovies = async () => {
     try {
       const res = await axios.get(MOVIE_API, {
@@ -486,7 +486,7 @@ function MovieManager({
 
     const fullMovie = res.data;
     console.log(fullMovie);
-    
+
     setEditingId(fullMovie._id);
 
     setFormData({
@@ -506,33 +506,116 @@ function MovieManager({
       language: fullMovie.language ?? "",
       subtitle: fullMovie.subtitle ?? "",
       category: fullMovie.category ?? [],
+
+
     });
 
-    window.scrollTo({
-      top: 0,
+    formRef.current?.scrollIntoView({
       behavior: "smooth",
+      block: "start",
     });
   };
 
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
-};
+  const confirmDeleteMovie =
+    async () => {
+      try {
+        await axios.delete(
+          `${MOVIE_API}/${deleteMovieId}`,
+          authHeader
+        );
 
-const confirmDeleteMovie =
-  async () => {
+        fetchMovies();
+        fetchTrashMovies();
+
+        setDeleteMovieId(null);
+        setDeleteMovieTitle("");
+
+      } catch (err) {
+
+        console.error(err);
+
+      }
+    };
+  ////////////////////////////////////////////
+  const categories = useMemo(() => {
+    const all = movies.flatMap((movie) => movie.category || []);
+    return ["All", ...new Set(all),];
+  }, [movies]);
+
+  const exportMovies = () => {
+    const dataStr = JSON.stringify(
+      movies,
+      null,
+      2
+    );
+
+    const blob = new Blob(
+      [dataStr],
+      {
+        type:
+          "application/json",
+      }
+    );
+
+    const url =
+      URL.createObjectURL(
+        blob
+      );
+
+    const link =
+      document.createElement(
+        "a"
+      );
+
+    link.href = url;
+
+    link.download =
+      `movies-backup-${new Date()
+        .toISOString()
+        .split("T")[0]
+      }.json`;
+
+    link.click();
+
+    URL.revokeObjectURL(
+      url
+    );
+  };
+
+  const restoreMovie = async (id) => {
     try {
-      await axios.delete(
-        `${MOVIE_API}/${deleteMovieId}`,
+
+      await axios.put(
+        `${MOVIE_API}/trash/restore/${id}`,
+        {},
         authHeader
       );
 
       fetchMovies();
       fetchTrashMovies();
 
-      setDeleteMovieId(null);
-      setDeleteMovieTitle("");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const permanentDeleteMovie = async (id) => {
+
+    const ok =
+      window.confirm(
+        "ลบถาวร?"
+      );
+
+    if (!ok) return;
+
+    try {
+
+      await axios.delete(
+        `${MOVIE_API}/trash/permanent/${id}`,
+        authHeader
+      );
+
+      fetchTrashMovies();
 
     } catch (err) {
 
@@ -540,378 +623,290 @@ const confirmDeleteMovie =
 
     }
   };
-////////////////////////////////////////////
-const categories = useMemo(() => {
-  const all = movies.flatMap((movie) => movie.category || []);
-  return ["All", ...new Set(all),];
-}, [movies]);
 
-const exportMovies = () => {
-  const dataStr = JSON.stringify(
-    movies,
-    null,
-    2
-  );
+  return (
+    <>
+      <div className="movie-dashboard-grid">
+        {/* LEFT */}
 
-  const blob = new Blob(
-    [dataStr],
-    {
-      type:
-        "application/json",
-    }
-  );
+        <div className="admin-card movie-form-card" ref={formRef}>
+          <h2> {editingId ? "แก้ไขหนัง" : "เพิ่มหนัง"}</h2>
 
-  const url =
-    URL.createObjectURL(
-      blob
-    );
+          <form onSubmit={handleSubmit} className="admin-form">
+            <input name="title" placeholder="ชื่อหนัง" value={formData.title} onChange={handleChange} />
 
-  const link =
-    document.createElement(
-      "a"
-    );
+            <input name="image" placeholder="Poster URL" value={formData.image} onChange={handleChange} />
 
-  link.href = url;
+            <input name="video" placeholder="Video URL" value={formData.video} onChange={handleChange} />
 
-  link.download =
-    `movies-backup-${new Date()
-      .toISOString()
-      .split("T")[0]
-    }.json`;
+            <input
+              name="trailer"
+              placeholder="YouTube URL"
+              value={formData.trailer}
+              onChange={handleChange}
+            />
 
-  link.click();
+            <div className="input-row">
+              <input name="rating" placeholder="IMDb" value={formData.rating} onChange={handleChange} />
 
-  URL.revokeObjectURL(
-    url
-  );
-};
+              <input name="year" placeholder="ปี" value={formData.year} onChange={handleChange} />
 
-const restoreMovie = async (id) => {
-  try {
+              <input name="views" placeholder="Views" value={formData.views} onChange={handleChange} />
+            </div>
 
-    await axios.put(
-      `${MOVIE_API}/trash/restore/${id}`,
-      {},
-      authHeader
-    );
+            <div className="input-row">
+              <input name="language" placeholder="ภาษา" value={formData.language} onChange={handleChange} />
 
-    fetchMovies();
-    fetchTrashMovies();
+              <input name="subtitle" placeholder="ซับ" value={formData.subtitle} onChange={handleChange} /> </div>
 
-  } catch (err) {
-    console.error(err);
-  }
-};
+            <textarea name="description" placeholder="ชื่อเรื่องภาษาไทย" rows="3" value={formData.description} onChange={handleChange} />
 
-const permanentDeleteMovie = async (id) => {
+            <textarea name="content" placeholder="เรื่องย่อ" value={formData.content} onChange={handleChange} />
 
-  const ok =
-    window.confirm(
-      "ลบถาวร?"
-    );
+            <textarea name="highlights" placeholder="จุดเด่น (1 บรรทัดต่อ 1 จุด)" value={formData.highlights} onChange={handleChange} />
 
-  if (!ok) return;
+            <textarea name="summary" placeholder="สรุป" value={formData.summary} onChange={handleChange} />
 
-  try {
+            <div className="category-wrap"> {categoryOptions.map((cat) => (<button type="button" key={cat} onClick={() => toggleCategory(cat)} className={`category-chip ${formData.category.includes(cat) ? "active" : ""}`} > {cat} </button>))}
 
-    await axios.delete(
-      `${MOVIE_API}/trash/permanent/${id}`,
-      authHeader
-    );
+            </div> <button className="submit-btn" type="submit" > {editingId ? "บันทึกการแก้ไข" : "เพิ่มหนัง"} </button>
 
-    fetchTrashMovies();
-
-  } catch (err) {
-
-    console.error(err);
-
-  }
-};
-
-return (
-  <>
-    <div className="movie-dashboard-grid">
-      {/* LEFT */}
-
-      <div className="admin-card movie-form-card">
-        <h2> {editingId ? "แก้ไขหนัง" : "เพิ่มหนัง"}</h2>
-
-        <form onSubmit={handleSubmit} className="admin-form">
-          <input name="title" placeholder="ชื่อหนัง" value={formData.title} onChange={handleChange} />
-
-          <input name="image" placeholder="Poster URL" value={formData.image} onChange={handleChange} />
-
-          <input name="video" placeholder="Video URL" value={formData.video} onChange={handleChange} />
-
-          <input
-            name="trailer"
-            placeholder="YouTube URL"
-            value={formData.trailer}
-            onChange={handleChange}
-          />
-
-          <div className="input-row">
-            <input name="rating" placeholder="IMDb" value={formData.rating} onChange={handleChange} />
-
-            <input name="year" placeholder="ปี" value={formData.year} onChange={handleChange} />
-
-            <input name="views" placeholder="Views" value={formData.views} onChange={handleChange} />
-          </div>
-
-          <div className="input-row">
-            <input name="language" placeholder="ภาษา" value={formData.language} onChange={handleChange} />
-
-            <input name="subtitle" placeholder="ซับ" value={formData.subtitle} onChange={handleChange} /> </div>
-
-          <textarea name="description" placeholder="ชื่อเรื่องภาษาไทย" rows="3" value={formData.description} onChange={handleChange} />
-
-          <textarea name="content" placeholder="เรื่องย่อ" value={formData.content} onChange={handleChange} />
-
-          <textarea name="highlights" placeholder="จุดเด่น (1 บรรทัดต่อ 1 จุด)" value={formData.highlights} onChange={handleChange} />
-
-          <textarea name="summary" placeholder="สรุป" value={formData.summary} onChange={handleChange} />
-
-          <div className="category-wrap"> {categoryOptions.map((cat) => (<button type="button" key={cat} onClick={() => toggleCategory(cat)} className={`category-chip ${formData.category.includes(cat) ? "active" : ""}`} > {cat} </button>))}
-
-          </div> <button className="submit-btn" type="submit" > {editingId ? "บันทึกการแก้ไข" : "เพิ่มหนัง"} </button>
-
-        </form>
-      </div>
-
-      {/* CENTER */}
-      <div className="admin-card preview-card">
-        <h2>Preview</h2>
-        {formData.image ? (<img src={formData.image} alt="preview" className="preview-poster" />) : (
-          <div className="preview-placeholder"> ไม่มีรูป </div>)}
-        {formData.trailer && (
-          <iframe
-            src={convertYoutubeToEmbed(
-              formData.trailer
-            )}
-            title="Trailer"
-            allowFullScreen
-            className="preview-trailer"
-          />
-        )}
-      </div>
-
-      {/* RIGHT */}
-      <div className="admin-card movie-list-card">
-        <div className="movie-tabs">
-
-          <button
-            className={
-              !showTrash
-                ? "tab-btn active"
-                : "tab-btn"
-            }
-            onClick={() =>
-              setShowTrash(false)
-            }
-          >
-            🎬 หนังทั้งหมด
-          </button>
-
-          <button
-            className={
-              showTrash
-                ? "tab-btn active"
-                : "tab-btn"
-            }
-            onClick={() =>
-              setShowTrash(true)
-            }
-          >
-            🗑 ถังขยะ
-          </button>
-
+          </form>
         </div>
 
-        <h2>
-          {showTrash
-            ? "ถังขยะ"
-            : "รายการหนังทั้งหมด"}
-        </h2>
-
-        <p className="movie-count">
-          {showTrash
-            ? `หนังในถังขยะ ${trashMovies.length} เรื่อง`
-            : `หนังทั้งหมด ${totalMovies} เรื่อง`}
-        </p>
-
-
-        <div className="search-row">
-          <input placeholder="ค้นหาหนัง..." value={search} onChange={(e) => setSearch(e.target.value)} />
-          <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} > {categories.map((cat) => (
-            <option key={cat} > {cat} </option>))}
-          </select>
-        </div>
-
-        <div className="movie-scroll">
-
-          {showTrash ? (
-
-            trashMovies.map((movie) => (
-
-              <div className="movie-row" key={movie._id}>
-                <img src={movie.image ||
-                  "/no-image.jpg"} alt={movie.title} />
-
-                <div className="movie-info">
-                  <h3>{movie.title}</h3>
-                </div>
-
-                <div className="action-buttons">
-                  <button
-                    onClick={() =>
-                      restoreMovie(movie._id)
-                    }
-                  >
-                    ♻ กู้คืน
-                  </button>
-
-                  <button
-                    className="delete-btn"
-                    onClick={() =>
-                      permanentDeleteMovie(movie._id)
-                    }
-                  >
-                    ❌ ลบถาวร
-                  </button>
-                </div>
-              </div>
-
-            ))
-
-          ) : (
-
-            movies.map((movie) => (
-
-              <div
-                className="movie-row"
-                key={movie._id}
-              >
-                <img
-                  src={movie.image ||
-                    "/no-image.jpg"}
-                  alt={movie.title}
-                />
-
-                <div className="movie-info">
-                  <h3>{movie.title}</h3>
-
-                  <p>
-                    ⭐ {movie.rating}
-                    {" | "}
-                    📅 {movie.year}
-                  </p>
-                </div>
-
-                <div className="action-buttons">
-
-                  <button
-                    onClick={() =>
-                      editMovie(movie)
-                    }
-                  >
-                    แก้ไข
-                  </button>
-
-                  <button
-                    className="delete-btn"
-                    onClick={() => {
-                      setDeleteMovieId(movie._id);
-                      setDeleteMovieTitle(movie.title);
-                    }}
-                  >
-                    🗑 ลบ
-                  </button>
-
-                </div>
-              </div>
-
-            ))
-
+        {/* CENTER */}
+        <div className="admin-card preview-card">
+          <h2>Preview</h2>
+          {formData.image ? (<img src={formData.image} alt="preview" className="preview-poster" />) : (
+            <div className="preview-placeholder"> ไม่มีรูป </div>)}
+          {formData.trailer && (
+            <iframe
+              src={convertYoutubeToEmbed(
+                formData.trailer
+              )}
+              title="Trailer"
+              allowFullScreen
+              className="preview-trailer"
+            />
           )}
-
         </div>
 
-        {!showTrash && (
-          <div className="pagination">
+        {/* RIGHT */}
+        <div className="admin-card movie-list-card">
+          <div className="movie-tabs">
 
             <button
-              disabled={currentPage === 1}
+              className={
+                !showTrash
+                  ? "tab-btn active"
+                  : "tab-btn"
+              }
               onClick={() =>
-                setCurrentPage((p) => p - 1)
+                setShowTrash(false)
               }
             >
-              Prev
+              🎬 หนังทั้งหมด
             </button>
 
-            <span>
-              {currentPage} / {totalPages}
-            </span>
-
             <button
-              disabled={currentPage === totalPages}
+              className={
+                showTrash
+                  ? "tab-btn active"
+                  : "tab-btn"
+              }
               onClick={() =>
-                setCurrentPage((p) => p + 1)
+                setShowTrash(true)
               }
             >
-              Next
+              🗑 ถังขยะ
             </button>
 
           </div>
-        )}
-      </div>
-    </div>
-    {deleteMovieId && (
-      <div className="modal-overlay">
-
-        <div className="delete-modal">
 
           <h2>
-            ⚠ ยืนยันการลบ
+            {showTrash
+              ? "ถังขยะ"
+              : "รายการหนังทั้งหมด"}
           </h2>
 
-          <p>
-            ต้องการลบหนัง
+          <p className="movie-count">
+            {showTrash
+              ? `หนังในถังขยะ ${trashMovies.length} เรื่อง`
+              : `หนังทั้งหมด ${totalMovies} เรื่อง`}
           </p>
 
-          <strong>
-            {deleteMovieTitle}
-          </strong>
 
-          <div className="modal-actions">
+          <div className="search-row">
+            <input placeholder="ค้นหาหนัง..." value={search} onChange={(e) => setSearch(e.target.value)} />
+            <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} > {categories.map((cat) => (
+              <option key={cat} > {cat} </option>))}
+            </select>
+          </div>
 
-            <button
-              className="cancel-btn"
-              onClick={() => {
-                setDeleteMovieId(null);
-                setDeleteMovieTitle("");
-              }}
-            >
-              ยกเลิก
-            </button>
+          <div className="movie-scroll">
 
-            <button
-              className="danger-btn"
-              onClick={
-                confirmDeleteMovie
-              }
-            >
-              ลบ
-            </button>
+            {showTrash ? (
+
+              trashMovies.map((movie) => (
+
+                <div className="movie-row" key={movie._id}>
+                  <img src={movie.image ||
+                    "/no-image.jpg"} alt={movie.title} />
+
+                  <div className="movie-info">
+                    <h3>{movie.title}</h3>
+                  </div>
+
+                  <div className="action-buttons">
+                    <button
+                      onClick={() =>
+                        restoreMovie(movie._id)
+                      }
+                    >
+                      ♻ กู้คืน
+                    </button>
+
+                    <button
+                      className="delete-btn"
+                      onClick={() =>
+                        permanentDeleteMovie(movie._id)
+                      }
+                    >
+                      ❌ ลบถาวร
+                    </button>
+                  </div>
+                </div>
+
+              ))
+
+            ) : (
+
+              movies.map((movie) => (
+
+                <div
+                  className="movie-row"
+                  key={movie._id}
+                >
+                  <img
+                    src={movie.image ||
+                      "/no-image.jpg"}
+                    alt={movie.title}
+                  />
+
+                  <div className="movie-info">
+                    <h3>{movie.title}</h3>
+
+                    <p>
+                      ⭐ {movie.rating}
+                      {" | "}
+                      📅 {movie.year}
+                    </p>
+                  </div>
+
+                  <div className="action-buttons">
+
+                    <button
+                      onClick={() =>
+                        editMovie(movie)
+                      }
+                    >
+                      แก้ไข
+                    </button>
+
+                    <button
+                      className="delete-btn"
+                      onClick={() => {
+                        setDeleteMovieId(movie._id);
+                        setDeleteMovieTitle(movie.title);
+                      }}
+                    >
+                      🗑 ลบ
+                    </button>
+
+                  </div>
+                </div>
+
+              ))
+
+            )}
+
+          </div>
+
+          {!showTrash && (
+            <div className="pagination">
+
+              <button
+                disabled={currentPage === 1}
+                onClick={() =>
+                  setCurrentPage((p) => p - 1)
+                }
+              >
+                Prev
+              </button>
+
+              <span>
+                {currentPage} / {totalPages}
+              </span>
+
+              <button
+                disabled={currentPage === totalPages}
+                onClick={() =>
+                  setCurrentPage((p) => p + 1)
+                }
+              >
+                Next
+              </button>
+
+            </div>
+          )}
+        </div>
+      </div>
+      {deleteMovieId && (
+        <div className="modal-overlay">
+
+          <div className="delete-modal">
+
+            <h2>
+              ⚠ ยืนยันการลบ
+            </h2>
+
+            <p>
+              ต้องการลบหนัง
+            </p>
+
+            <strong>
+              {deleteMovieTitle}
+            </strong>
+
+            <div className="modal-actions">
+
+              <button
+                className="cancel-btn"
+                onClick={() => {
+                  setDeleteMovieId(null);
+                  setDeleteMovieTitle("");
+                }}
+              >
+                ยกเลิก
+              </button>
+
+              <button
+                className="danger-btn"
+                onClick={
+                  confirmDeleteMovie
+                }
+              >
+                ลบ
+              </button>
+
+            </div>
 
           </div>
 
         </div>
+      )}
 
-      </div>
-    )}
-
-  </>
-);
-
-
-} export default MovieManager;
+    </>
+  );
+}
+export default MovieManager;
