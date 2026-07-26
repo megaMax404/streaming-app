@@ -102,13 +102,10 @@ router.post("/visit", async (req, res) => {
         }
 
         stat.pageViews += 1;
-
-        stat.todayVisitors += 1;
-
+        
         if (isUniqueToday) {
-
             stat.uniqueVisitors += 1;
-
+            stat.todayVisitors += 1;
         }
 
         await stat.save();
