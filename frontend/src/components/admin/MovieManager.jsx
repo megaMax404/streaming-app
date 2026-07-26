@@ -453,7 +453,7 @@ function MovieManager({
           formData.views || 0
         ),
       };
-
+      console.log(payload);
       if (editingId) {
         await axios.put(
           `${MOVIE_API}/${editingId}`,
