@@ -24,6 +24,7 @@ function MovieDetail() {
   const [movie, setMovie] = useState(null);
   const [banners, setBanners] = useState([]);
   const [startMovie, setStartMovie] = useState(false);
+  const [countedView, setCountedView] = useState(false);
   const [loadingPlayer, setLoadingPlayer] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
   const trailerRef = useRef(null);
@@ -43,8 +44,15 @@ function MovieDetail() {
 
     axios
       .get(`${API_URL}/api/movies/slug/${slug}`)
-      .then((res) => {
+      .then(async (res) => {
         setMovie(res.data);
+
+        // เพิ่มการนับ Movie View
+        try {
+          await axios.post(`${API_URL}/api/site/movie-view`);
+        } catch (err) {
+          console.error("Movie view error", err);
+        }
       })
       .catch((err) => {
         console.error(err);
@@ -76,6 +84,7 @@ function MovieDetail() {
   useEffect(() => {
     setStartMovie(false);
     setVideoError(false);
+    setCountedView(false);
 
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
@@ -102,6 +111,19 @@ function MovieDetail() {
 
     return () => observer.disconnect();
   }, []);
+
+
+  useEffect(() => {
+    if (!startMovie || !movie || countedView) return;
+
+    axios
+      .post(`${API_URL}/api/site/movie-view`)
+      .then(() => {
+        setCountedView(true);
+      })
+      .catch(console.error);
+
+  }, [startMovie, movie, countedView]);
 
   // เล่น m3u8
   useEffect(() => {
