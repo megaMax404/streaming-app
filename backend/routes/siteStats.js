@@ -102,7 +102,7 @@ router.post("/visit", async (req, res) => {
         }
 
         stat.pageViews += 1;
-        
+
         if (isUniqueToday) {
             stat.uniqueVisitors += 1;
             stat.todayVisitors += 1;
@@ -160,6 +160,43 @@ router.get("/stats", async (req, res) => {
             message: err.message,
         });
     }
+});
+
+/*
+==========================
+MOVIE VIEW
+==========================
+*/
+
+router.post("/movie-view", async (req, res) => {
+  try {
+    const today = new Date().toISOString().slice(0, 10);
+
+    let stat = await SiteStat.findOne({ date: today });
+
+    if (!stat) {
+      stat = await SiteStat.create({
+        date: today,
+      });
+    }
+
+    stat.movieViews += 1;
+
+    await stat.save();
+
+    res.json({
+      success: true,
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+    res.status(500).json({
+      success: false,
+    });
+
+  }
 });
 
 module.exports = router;

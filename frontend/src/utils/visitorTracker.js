@@ -11,7 +11,6 @@ export async function trackVisitor() {
       fingerprint: result.visitorId,
     });
 
-    console.log("Visitor tracked:", result.visitorId);
   } catch (err) {
     console.error("Visitor tracking failed:", err);
   }
