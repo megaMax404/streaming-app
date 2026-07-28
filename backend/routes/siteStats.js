@@ -136,6 +136,47 @@ router.post("/visit", async (req, res) => {
 
 /*
 ==========================
+HEARTBEAT
+==========================
+*/
+
+router.post("/heartbeat", async (req, res) => {
+
+    try {
+
+        const { fingerprint } = req.body;
+
+        if (!fingerprint) {
+            return res.status(400).json({
+                success: false
+            });
+        }
+
+        await Visitor.findOneAndUpdate(
+            { fingerprint },
+            {
+                lastSeen: new Date()
+            }
+        );
+
+        res.json({
+            success: true
+        });
+
+    } catch (err) {
+
+        console.error(err);
+
+        res.status(500).json({
+            success: false
+        });
+
+    }
+
+});
+
+/*
+==========================
 GET TODAY STATS
 ==========================
 */
@@ -146,15 +187,25 @@ router.get("/stats", async (req, res) => {
 
         const stat = await SiteStat.findOne({ date: today });
 
-        res.json(
-            stat || {
-                date: today,
-                pageViews: 0,
-                uniqueVisitors: 0,
-                movieViews: 0,
-                todayVisitors: 0,
-            }
-        );
+        const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+
+        const onlineNow = await Visitor.countDocuments({
+            lastSeen: { $gte: fiveMinutesAgo }
+        });
+
+        res.json({
+            date: today,
+
+            pageViews: stat?.pageViews || 0,
+
+            uniqueVisitors: stat?.uniqueVisitors || 0,
+
+            movieViews: stat?.movieViews || 0,
+
+            todayVisitors: stat?.todayVisitors || 0,
+
+            onlineNow,
+        });
     } catch (err) {
         res.status(500).json({
             message: err.message,
@@ -169,34 +220,34 @@ MOVIE VIEW
 */
 
 router.post("/movie-view", async (req, res) => {
-  try {
-    const today = new Date().toISOString().slice(0, 10);
+    try {
+        const today = new Date().toISOString().slice(0, 10);
 
-    let stat = await SiteStat.findOne({ date: today });
+        let stat = await SiteStat.findOne({ date: today });
 
-    if (!stat) {
-      stat = await SiteStat.create({
-        date: today,
-      });
+        if (!stat) {
+            stat = await SiteStat.create({
+                date: today,
+            });
+        }
+
+        stat.movieViews += 1;
+
+        await stat.save();
+
+        res.json({
+            success: true,
+        });
+
+    } catch (err) {
+
+        console.error(err);
+
+        res.status(500).json({
+            success: false,
+        });
+
     }
-
-    stat.movieViews += 1;
-
-    await stat.save();
-
-    res.json({
-      success: true,
-    });
-
-  } catch (err) {
-
-    console.error(err);
-
-    res.status(500).json({
-      success: false,
-    });
-
-  }
 });
 
 module.exports = router;
