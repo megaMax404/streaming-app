@@ -76,6 +76,10 @@ router.post("/visit", async (req, res) => {
             visitor.visitCount += 1;
 
             await visitor.save();
+            const check = await Visitor.findById(visitor._id);
+
+            console.log("AFTER SAVE");
+            console.log(check);
             console.log(visitor);
         }
 
