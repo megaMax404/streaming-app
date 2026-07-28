@@ -12,6 +12,7 @@ export async function trackVisitor() {
     const fingerprint = result.visitorId;
 
     // Visit ครั้งแรก
+    console.log("POST /visit", fingerprint);
     await axios.post(`${API_URL}/api/site/visit`, {
       fingerprint,
     });

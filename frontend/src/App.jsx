@@ -22,6 +22,7 @@ import { trackVisitor } from "./utils/visitorTracker";
 function App() {
 
   useEffect(() => {
+    console.log("trackVisitor called");
     trackVisitor();
   }, []);
 
