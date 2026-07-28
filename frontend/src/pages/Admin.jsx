@@ -65,7 +65,6 @@ function Admin() {
       <div className="admin-dashboard-card">
 
         <div className="dashboard-top">
-
           <div>
             <h1 className="dashboard-title">
               🎬 Admin Dashboard
@@ -78,7 +77,6 @@ function Admin() {
           </div>
 
           <div className="dashboard-stats">
-
             <div className="stat-box">
               <span>🌍</span>
               <div>
@@ -102,7 +100,6 @@ function Admin() {
                 <strong>{stats.todayVisitors}</strong>
               </div>
             </div>
-
           </div>
 
           <button
@@ -111,8 +108,8 @@ function Admin() {
           >
             Logout
           </button>
+          
         </div>
-
         {/* TAB MENU */}
         <div className="dashboard-tabs">
 
