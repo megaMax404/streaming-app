@@ -47,17 +47,11 @@ router.post("/visit", async (req, res) => {
 
             visitor =
                 await Visitor.create({
-
                     fingerprint,
-
                     firstVisit: now,
-
                     lastVisit: now,
-
                     lastSeen: now,
-
                     visitCount: 1
-
                 });
 
             isUniqueToday = true;
@@ -74,14 +68,13 @@ router.post("/visit", async (req, res) => {
                 isUniqueToday = true;
 
             }
-
+            console.log("UPDATE VISITOR");
             visitor.lastVisit = now;
             visitor.lastSeen = now;
-            
             visitor.visitCount += 1;
 
             await visitor.save();
-
+            console.log(visitor);
         }
 
         //------------------------------------
