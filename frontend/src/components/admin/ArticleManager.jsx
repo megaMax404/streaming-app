@@ -4,18 +4,26 @@ import { API_URL } from "../../config";
 import "../../styles/Admin.css";
 
 function ArticleManager() {
+  const token = sessionStorage.getItem("adminToken");
+
+  const authHeader = {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  };
+
   const emptyForm = {
-  title: "",
-  intro: "",
-  section1Title: "",
-  section1Content: "",
-  section2Title: "",
-  section2Content: "",
-  section3Title: "",
-  section3Content: "",
-  section4Title: "",
-  section4Content: "",
-};
+    title: "",
+    intro: "",
+    section1Title: "",
+    section1Content: "",
+    section2Title: "",
+    section2Content: "",
+    section3Title: "",
+    section3Content: "",
+    section4Title: "",
+    section4Content: "",
+  };
 
   const [articles, setArticles] = useState([]);
   const [editingId, setEditingId] = useState(null);
@@ -51,12 +59,14 @@ function ArticleManager() {
       if (editingId) {
         await axios.put(
           `${API_URL}/api/articles/${editingId}`,
-          formData
+          formData,
+          authHeader
         );
       } else {
         await axios.post(
           `${API_URL}/api/articles`,
-          formData
+          formData,
+          authHeader
         );
       }
 
@@ -96,7 +106,8 @@ function ArticleManager() {
 
     try {
       await axios.delete(
-        `${API_URL}/api/articles/${id}`
+        `${API_URL}/api/articles/${id}`,
+        authHeader
       );
       fetchArticles();
     } catch (err) {

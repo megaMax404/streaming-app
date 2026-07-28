@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
+import { API_URL } from "../config";
 import ArticleManager from "../components/admin/ArticleManager";
 import MovieManager from "../components/admin/MovieManager";
 import BannerManager from "../components/admin/BannerManager";
@@ -17,6 +18,12 @@ function Admin() {
   const [adminTab, setAdminTab] =
     useState("movie");
 
+  const [stats, setStats] = useState({
+    pageViews: 0,
+    movieViews: 0,
+    todayVisitors: 0,
+  });
+
   useEffect(() => {
     const token =
       sessionStorage.getItem(
@@ -26,12 +33,29 @@ function Admin() {
     if (!token) {
       navigate("/9x9adm-login");
     }
+
+    fetchStats();
+
   }, [navigate]);
 
   const logout = () => {
     sessionStorage.clear();
 
     navigate("/9x9adm-login");
+  };
+
+
+  const fetchStats = async () => {
+    try {
+      const res = await axios.get(
+        `${API_URL}/api/site/stats`
+      );
+
+      setStats(res.data);
+
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -51,6 +75,34 @@ function Admin() {
               จัดการหนัง แบนเนอร์
               และตั้งค่าเว็บไซต์
             </p>
+          </div>
+
+          <div className="dashboard-stats">
+
+            <div className="stat-box">
+              <span>🌍</span>
+              <div>
+                <small>Page Views</small>
+                <strong>{stats.pageViews}</strong>
+              </div>
+            </div>
+
+            <div className="stat-box">
+              <span>🎬</span>
+              <div>
+                <small>Movie Views</small>
+                <strong>{stats.movieViews}</strong>
+              </div>
+            </div>
+
+            <div className="stat-box">
+              <span>👥</span>
+              <div>
+                <small>Visitors Today</small>
+                <strong>{stats.todayVisitors}</strong>
+              </div>
+            </div>
+
           </div>
 
           <button
@@ -101,8 +153,8 @@ function Admin() {
 
           <button
             className={`dashboard-tab ${adminTab === "article"
-                ? "active"
-                : ""
+              ? "active"
+              : ""
               }`}
             onClick={() =>
               setAdminTab("article")
@@ -113,8 +165,8 @@ function Admin() {
 
           <button
             className={`dashboard-tab ${adminTab === "setting"
-                ? "active"
-                : ""
+              ? "active"
+              : ""
               }`}
             onClick={() =>
               setAdminTab("setting")
