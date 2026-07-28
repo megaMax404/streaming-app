@@ -54,6 +54,8 @@ router.post("/visit", async (req, res) => {
 
                     lastVisit: now,
 
+                    lastSeen: now,
+
                     visitCount: 1
 
                 });
@@ -74,7 +76,8 @@ router.post("/visit", async (req, res) => {
             }
 
             visitor.lastVisit = now;
-
+            visitor.lastSeen = now;
+            
             visitor.visitCount += 1;
 
             await visitor.save();
