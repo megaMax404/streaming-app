@@ -4,7 +4,7 @@ const router = express.Router();
 
 const SiteStat = require("../models/SiteStat");
 const Visitor = require("../models/Visitor");
-
+console.log(Visitor.schema.obj);
 /*
 ==========================
 VISITOR
