@@ -13,9 +13,21 @@ export async function trackVisitor() {
 
     // Visit ครั้งแรก
     console.log("POST /visit", fingerprint);
-    await axios.post(`${API_URL}/api/site/visit`, {
-      fingerprint,
-    });
+    const VISIT_KEY = `visit_${fingerprint}`;
+
+    const lastVisit = localStorage.getItem(VISIT_KEY);
+
+    const now = Date.now();
+
+    // นับ Page View ใหม่ทุก 30 นาที
+    if (!lastVisit || now - Number(lastVisit) > 30 * 60 * 1000) {
+
+      await axios.post(`${API_URL}/api/site/visit`, {
+        fingerprint,
+      });
+
+      localStorage.setItem(VISIT_KEY, now);
+    }
 
     // Heartbeat ทันที
     await axios.post(`${API_URL}/api/site/heartbeat`, {
@@ -26,7 +38,7 @@ export async function trackVisitor() {
     heartbeat = setInterval(() => {
       axios.post(`${API_URL}/api/site/heartbeat`, {
         fingerprint,
-      }).catch(() => {});
+      }).catch(() => { });
     }, 30000);
 
   } catch (err) {

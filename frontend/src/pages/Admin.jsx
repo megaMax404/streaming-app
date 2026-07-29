@@ -22,6 +22,7 @@ function Admin() {
     pageViews: 0,
     movieViews: 0,
     todayVisitors: 0,
+    onlineNow: 0,
   });
 
   useEffect(() => {
@@ -36,6 +37,12 @@ function Admin() {
 
     fetchStats();
 
+    const interval = setInterval(() => {
+      fetchStats();
+    }, 30000);
+
+    return () => clearInterval(interval);
+    
   }, [navigate]);
 
   const logout = () => {
@@ -100,6 +107,14 @@ function Admin() {
                 <strong>{stats.todayVisitors}</strong>
               </div>
             </div>
+
+            <div className="stat-box">
+              <span>🟢</span>
+              <div>
+                <small>Online Now</small>
+                <strong>{stats.onlineNow}</strong>
+              </div>
+            </div>
           </div>
 
           <button
@@ -108,7 +123,7 @@ function Admin() {
           >
             Logout
           </button>
-          
+
         </div>
         {/* TAB MENU */}
         <div className="dashboard-tabs">

@@ -21,18 +21,24 @@ const visitorSchema = new mongoose.Schema(
             type: Date,
             default: Date.now,
         },
+        
+        lastPageView: {
+            type: Date,
+            default: null,
+        },
 
         visitCount: {
             type: Number,
             default: 1,
         },
+
     },
     {
         timestamps: true,
     });
 
 console.log(visitorSchema.obj);
-    
+
 module.exports = mongoose.model(
     "Visitor",
     visitorSchema

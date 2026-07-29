@@ -13,6 +13,7 @@ const AdminLogin = lazy(() => import("./pages/AdminLogin"));
 const CategoryPage = lazy(() => import("./pages/CategoryPage"));
 const CategoryList = lazy(() => import("./pages/CategoryList"));
 
+import PageTracker from "./components/PageTracker";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import LoadingPage from "./components/LoadingPage";
@@ -48,6 +49,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <PageTracker />
       <Suspense fallback={<LoadingPage />}>
         <Routes>
 
