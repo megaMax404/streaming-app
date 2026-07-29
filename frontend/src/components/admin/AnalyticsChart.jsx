@@ -1,143 +1,208 @@
+import { useMemo, useState } from "react";
+
 import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
 } from "chart.js";
 
 import { Line } from "react-chartjs-2";
 
 ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
 );
 
 function AnalyticsChart({ history }) {
 
-    const labels =
-        history.map(item => item.date);
+  const [range, setRange] = useState("7");
 
-    const pageViews =
-        history.map(item => item.pageViews);
+  const chartData = useMemo(() => {
 
-    const visitors =
-        history.map(item => item.uniqueVisitors);
+    let data = [...history];
 
-    const movieViews =
-        history.map(item => item.movieViews);
+    if (range === "7") {
+      data = data.slice(-7);
+    }
 
-    const data = {
+    if (range === "30") {
+      data = data.slice(-30);
+    }
 
-        labels,
+    return data;
 
-        datasets: [
+  }, [history, range]);
+
+  const labels = chartData.map(i => i.date);
+
+  return (
+
+    <div className="analytics-chart">
+
+      <div className="analytics-header">
+
+        <h2>📈 Website Analytics</h2>
+
+        <div className="analytics-filter">
+
+          <button
+            className={range === "7" ? "active" : ""}
+            onClick={() => setRange("7")}
+          >
+            7 Days
+          </button>
+
+          <button
+            className={range === "30" ? "active" : ""}
+            onClick={() => setRange("30")}
+          >
+            30 Days
+          </button>
+
+          <button
+            className={range === "all" ? "active" : ""}
+            onClick={() => setRange("all")}
+          >
+            All
+          </button>
+
+        </div>
+
+      </div>
+
+      <Line
+        data={{
+
+          labels,
+
+          datasets: [
 
             {
-                label: "Page Views",
-                data: pageViews,
-                borderColor: "#4FC3F7",
-                backgroundColor: "rgba(79,195,247,.2)",
-                tension: .35,
+              label: "Page Views",
+
+              data: chartData.map(i => i.pageViews),
+
+              borderColor: "#4FC3F7",
+
+              backgroundColor: "rgba(79,195,247,.18)",
+
+              fill: true,
+
+              tension: .35,
             },
 
             {
-                label: "Visitors",
-                data: visitors,
-                borderColor: "#AB47BC",
-                backgroundColor: "rgba(171,71,188,.2)",
-                tension: .35,
+              label: "Visitors",
+
+              data: chartData.map(i => i.uniqueVisitors),
+
+              borderColor: "#AB47BC",
+
+              backgroundColor: "rgba(171,71,188,.18)",
+
+              fill: true,
+
+              tension: .35,
             },
 
             {
-                label: "Movie Views",
-                data: movieViews,
-                borderColor: "#66BB6A",
-                backgroundColor: "rgba(102,187,106,.2)",
-                tension: .35,
+              label: "Movie Views",
+
+              data: chartData.map(i => i.movieViews),
+
+              borderColor: "#66BB6A",
+
+              backgroundColor: "rgba(102,187,106,.18)",
+
+              fill: true,
+
+              tension: .35,
             },
 
-        ],
-    };
+          ],
 
-    const options = {
+        }}
 
-        responsive: true,
+        options={{
 
-        plugins: {
+          responsive: true,
+
+          interaction: {
+            intersect: false,
+            mode: "index",
+          },
+
+          plugins: {
 
             legend: {
 
-                labels: {
+              labels: {
 
-                    color: "#fff"
+                color: "#fff",
 
+                font: {
+                  size: 13,
                 }
+
+              }
 
             }
 
-        },
+          },
 
-        scales: {
+          scales: {
 
             x: {
 
-                ticks: {
+              ticks: {
 
-                    color: "#aaa"
+                color: "#aaa",
 
-                },
+              },
 
-                grid: {
+              grid: {
 
-                    color: "#333"
+                color: "#2f2f2f",
 
-                }
+              }
 
             },
 
             y: {
 
-                ticks: {
+              ticks: {
 
-                    color: "#aaa"
+                color: "#aaa",
 
-                },
+              },
 
-                grid: {
+              grid: {
 
-                    color: "#333"
+                color: "#2f2f2f",
 
-                }
+              }
 
             }
 
-        }
+          }
 
-    };
+        }}
 
-    return (
+      />
 
-        <div className="analytics-chart">
+    </div>
 
-            <h3>📈 Website Analytics (7 Days)</h3>
-
-            <Line
-                data={data}
-                options={options}
-            />
-
-        </div>
-
-    );
+  );
 
 }
 

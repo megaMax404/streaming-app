@@ -1123,23 +1123,57 @@
 }
 
 .analytics-chart {
-
   margin-top: 30px;
-
   background: #1d2433;
-
   border-radius: 14px;
-
   padding: 25px;
-
   box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
-
 }
 
 .analytics-chart h3 {
-
   color: white;
-
   margin-bottom: 20px;
+}
+
+.analytics-chart {
+  margin-top: 30px;
+  background: #181818;
+  border-radius: 18px;
+  padding: 25px;
+}
+
+.analytics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.analytics-header h2 {
+  color: white;
+}
+
+.analytics-filter {
+  display: flex;
+  gap: 10px;
+}
+
+.analytics-filter button {
+  border: none;
+  background: #2b2b2b;
+  color: #bbb;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: .25s;
+}
+
+.analytics-filter button:hover {
+  background: #3d3d3d;
+}
+
+.analytics-filter button.active {
+  background: #2563eb;
+  color: white;
 
 }
