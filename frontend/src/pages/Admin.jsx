@@ -28,8 +28,6 @@ function Admin() {
     onlineNow: 0,
   });
 
-  const [history, setHistory] = useState([]);
-
   useEffect(() => {
     const token =
       sessionStorage.getItem(
@@ -59,12 +57,13 @@ function Admin() {
 
   const fetchStats = async () => {
     try {
-      const res = await axios.get(
-        `${API_URL}/api/site/stats`
-      );
 
-      setHistory(historyRes.data);
-      setStats(res.data);
+      const [statsRes, historyRes] = await Promise.all([
+        axios.get(`${API_URL}/api/site/stats`),
+        axios.get(`${API_URL}/api/site/history`)
+      ]);
+
+      setStats(statsRes.data);
 
     } catch (err) {
       console.error(err);

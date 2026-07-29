@@ -12,7 +12,7 @@ export async function trackVisitor() {
     const fingerprint = result.visitorId;
 
     // Visit ครั้งแรก
-    console.log("POST /visit", fingerprint);
+
     const VISIT_KEY = `visit_${fingerprint}`;
 
     const lastVisit = localStorage.getItem(VISIT_KEY);
