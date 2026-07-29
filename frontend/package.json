@@ -12,8 +12,10 @@
   "dependencies": {
     "@fingerprintjs/fingerprintjs": "^5.2.0",
     "axios": "^1.15.0",
+    "chart.js": "^4.5.1",
     "hls.js": "^1.6.16",
     "react": "^19.2.4",
+    "react-chartjs-2": "^5.3.1",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.14.1",
     "react-window": "^2.3.0",

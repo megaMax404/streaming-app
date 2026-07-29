@@ -1,62 +1,144 @@
 import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-} from "recharts";
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+} from "chart.js";
 
-function AnalyticsChart({ data }) {
-  return (
-    <div className="analytics-chart">
+import { Line } from "react-chartjs-2";
 
-      <h3>📈 Website Analytics</h3>
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+);
 
-      <ResponsiveContainer
-        width="100%"
-        height={320}
-      >
-        <LineChart data={data}>
+function AnalyticsChart({ history }) {
 
-          <CartesianGrid strokeDasharray="3 3" />
+    const labels =
+        history.map(item => item.date);
 
-          <XAxis dataKey="date" />
+    const pageViews =
+        history.map(item => item.pageViews);
 
-          <YAxis />
+    const visitors =
+        history.map(item => item.uniqueVisitors);
 
-          <Tooltip />
+    const movieViews =
+        history.map(item => item.movieViews);
 
-          <Line
-            type="monotone"
-            dataKey="pageViews"
-            stroke="#3b82f6"
-            strokeWidth={3}
-            name="Page Views"
-          />
+    const data = {
 
-          <Line
-            type="monotone"
-            dataKey="movieViews"
-            stroke="#ef4444"
-            strokeWidth={3}
-            name="Movie Views"
-          />
+        labels,
 
-          <Line
-            type="monotone"
-            dataKey="uniqueVisitors"
-            stroke="#10b981"
-            strokeWidth={3}
-            name="Visitors"
-          />
+        datasets: [
 
-        </LineChart>
-      </ResponsiveContainer>
+            {
+                label: "Page Views",
+                data: pageViews,
+                borderColor: "#4FC3F7",
+                backgroundColor: "rgba(79,195,247,.2)",
+                tension: .35,
+            },
 
-    </div>
-  );
+            {
+                label: "Visitors",
+                data: visitors,
+                borderColor: "#AB47BC",
+                backgroundColor: "rgba(171,71,188,.2)",
+                tension: .35,
+            },
+
+            {
+                label: "Movie Views",
+                data: movieViews,
+                borderColor: "#66BB6A",
+                backgroundColor: "rgba(102,187,106,.2)",
+                tension: .35,
+            },
+
+        ],
+    };
+
+    const options = {
+
+        responsive: true,
+
+        plugins: {
+
+            legend: {
+
+                labels: {
+
+                    color: "#fff"
+
+                }
+
+            }
+
+        },
+
+        scales: {
+
+            x: {
+
+                ticks: {
+
+                    color: "#aaa"
+
+                },
+
+                grid: {
+
+                    color: "#333"
+
+                }
+
+            },
+
+            y: {
+
+                ticks: {
+
+                    color: "#aaa"
+
+                },
+
+                grid: {
+
+                    color: "#333"
+
+                }
+
+            }
+
+        }
+
+    };
+
+    return (
+
+        <div className="analytics-chart">
+
+            <h3>📈 Website Analytics (7 Days)</h3>
+
+            <Line
+                data={data}
+                options={options}
+            />
+
+        </div>
+
+    );
+
 }
 
 export default AnalyticsChart;

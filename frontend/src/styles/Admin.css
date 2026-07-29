@@ -1121,3 +1121,25 @@
 .statistics-table th {
   background: #f4f4f4;
 }
+
+.analytics-chart {
+
+  margin-top: 30px;
+
+  background: #1d2433;
+
+  border-radius: 14px;
+
+  padding: 25px;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
+
+}
+
+.analytics-chart h3 {
+
+  color: white;
+
+  margin-bottom: 20px;
+
+}
