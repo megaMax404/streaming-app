@@ -75,6 +75,7 @@ router.post("/visit", async (req, res) => {
 
             await visitor.save();
             const check = await Visitor.findById(visitor._id);
+            console.log(check);
         }
 
         //------------------------------------
@@ -288,9 +289,11 @@ PAGE-VIEW
 */
 
 router.post("/page-view", async (req, res) => {
+    console.log("PAGE VIEW HIT");
+    console.log(req.body);
+
 
     try {
-
         const { fingerprint } = req.body;
 
         const now = new Date();
