@@ -216,6 +216,34 @@ router.get("/stats", async (req, res) => {
     }
 });
 
+
+/*
+==========================
+GET HISTORY
+==========================
+*/
+
+router.get("/history", async (req, res) => {
+    try {
+        const days = Number(req.query.days || 7);
+
+        const history = await SiteStat.find()
+            .sort({ date: -1 })
+            .limit(days);
+
+        res.json(history.reverse());
+
+    } catch (err) {
+        console.error(err);
+
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+    }
+});
+
+
 /*
 ==========================
 MOVIE VIEW
