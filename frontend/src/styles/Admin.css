@@ -1075,3 +1075,49 @@
   max-width: 1600px;
   margin: 0 auto;
 }
+
+.statistics-page {
+  padding: 20px;
+}
+
+.statistics-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.statistics-card {
+  background: #1f2937;
+  color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.statistics-card h3 {
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+.statistics-card span {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.statistics-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.statistics-table th,
+.statistics-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.statistics-table th {
+  background: #f4f4f4;
+}

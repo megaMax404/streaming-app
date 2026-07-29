@@ -7,6 +7,9 @@ import MovieManager from "../components/admin/MovieManager";
 import BannerManager from "../components/admin/BannerManager";
 import SettingManager from "../components/admin/SettingManager";
 import CheckMovieManager from "../components/admin/CheckMovieManager";
+import AnalyticsChart from "../components/admin/AnalyticsChart";
+import StatisticsManager from "../components/admin/StatisticsManager";
+
 
 import "../styles/Admin.css";
 
@@ -25,6 +28,8 @@ function Admin() {
     onlineNow: 0,
   });
 
+  const [history, setHistory] = useState([]);
+
   useEffect(() => {
     const token =
       sessionStorage.getItem(
@@ -42,7 +47,7 @@ function Admin() {
     }, 30000);
 
     return () => clearInterval(interval);
-    
+
   }, [navigate]);
 
   const logout = () => {
@@ -58,6 +63,7 @@ function Admin() {
         `${API_URL}/api/site/stats`
       );
 
+      setHistory(historyRes.data);
       setStats(res.data);
 
     } catch (err) {
@@ -176,6 +182,18 @@ function Admin() {
           </button>
 
           <button
+            className={`dashboard-tab ${adminTab === "stats"
+              ? "active"
+              : ""
+              }`}
+            onClick={() =>
+              setAdminTab("stats")
+            }
+          >
+            📊 สถิติ
+          </button>
+
+          <button
             className={`dashboard-tab ${adminTab === "setting"
               ? "active"
               : ""
@@ -189,9 +207,6 @@ function Admin() {
 
         </div>
       </div>
-
-
-
 
       {/* CONTENT */}
       <div className="admin-content">
@@ -222,6 +237,9 @@ function Admin() {
           <SettingManager />
         )}
 
+        {adminTab === "stats" && (
+          <StatisticsManager />
+        )}
       </div>
     </div>
   );
