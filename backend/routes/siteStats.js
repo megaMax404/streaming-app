@@ -32,7 +32,7 @@ router.post("/visit", async (req, res) => {
         const ip =
             req.headers["x-forwarded-for"]?.split(",")[0] ||
             req.socket.remoteAddress;
-
+            console.log("REAL IP =", ip);
         const location =
             await getLocation(ip);
         const today =
