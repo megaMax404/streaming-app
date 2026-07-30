@@ -3,7 +3,7 @@ const router = express.Router();
 
 const SiteStat = require("../models/SiteStat");
 const Visitor = require("../models/Visitor");
-
+const getLocation = require("../utils/getLocation");
 /*
 ==========================
 VISITOR
@@ -29,6 +29,12 @@ router.post("/visit", async (req, res) => {
 
         const now = new Date();
 
+        const ip =
+            req.headers["x-forwarded-for"]?.split(",")[0] ||
+            req.socket.remoteAddress;
+
+        const location =
+            await getLocation(ip);
         const today =
             now.toISOString().slice(0, 10);
 
@@ -47,10 +53,21 @@ router.post("/visit", async (req, res) => {
 
             visitor = await Visitor.create({
                 fingerprint,
+
+                ip,
+
+                country: location.country,
+
+                city: location.city,
+
                 firstVisit: now,
+
                 lastVisit: now,
+
                 lastSeen: now,
+
                 lastPageView: now,
+
                 visitCount: 1
             });
 
@@ -71,6 +88,18 @@ router.post("/visit", async (req, res) => {
 
             visitor.lastVisit = now;
             visitor.lastSeen = now;
+            visitor.ip = ip;
+
+            if (
+                visitor.country === "Unknown" ||
+                !visitor.country
+            ) {
+
+                visitor.country = location.country;
+
+                visitor.city = location.city;
+
+            }
             visitor.visitCount += 1;
 
             await visitor.save();

@@ -21,7 +21,7 @@ const visitorSchema = new mongoose.Schema(
             type: Date,
             default: Date.now,
         },
-        
+
         lastPageView: {
             type: Date,
             default: null,
@@ -30,6 +30,20 @@ const visitorSchema = new mongoose.Schema(
         visitCount: {
             type: Number,
             default: 1,
+        },
+        country: {
+            type: String,
+            default: "Unknown",
+        },
+
+        city: {
+            type: String,
+            default: "",
+        },
+
+        ip: {
+            type: String,
+            default: "",
         },
 
     },
