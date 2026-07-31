@@ -26,7 +26,7 @@ function MovieDetail() {
   const [startMovie, setStartMovie] = useState(false);
   const [countedView, setCountedView] = useState(false);
   const [loadingPlayer, setLoadingPlayer] = useState(false);
-  const [showTrailer, setShowTrailer] = useState(false);
+  const [showTrailer, setShowTrailer] = useState(true);
   const trailerRef = useRef(null);
   const videoRef = useRef(null);
   const [loading, setLoading] = useState(true);
