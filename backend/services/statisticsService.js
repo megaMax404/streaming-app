@@ -1,24 +1,59 @@
 const SiteStat = require("../models/SiteStat");
+const Visitor = require("../models/Visitor");
+
+/*
+==========================
+GET TODAY STAT
+==========================
+*/
 
 async function getTodayStat() {
-    const today = new Date().toISOString().slice(0, 10);
 
-    let stat = await SiteStat.findOne({ date: today });
+    const today = new Date()
+        .toISOString()
+        .slice(0, 10);
+
+    let stat = await SiteStat.findOne({
+        date: today
+    });
 
     if (!stat) {
-        stat = await SiteStat.create({ date: today });
+
+        stat = await SiteStat.create({
+            date: today
+        });
+
     }
 
     return stat;
 }
 
+/*
+==========================
+HISTORY
+==========================
+*/
+
 async function getHistory(days = 7) {
-    return await SiteStat.find()
-        .sort({ date: -1 })
+
+    const history = await SiteStat.find()
+        .sort({
+            date: -1
+        })
         .limit(days);
+
+    return history.reverse();
+
 }
 
+/*
+==========================
+MOVIE VIEW
+==========================
+*/
+
 async function addMovieView() {
+
     const stat = await getTodayStat();
 
     stat.movieViews++;
@@ -26,14 +61,41 @@ async function addMovieView() {
     await stat.save();
 
     return stat;
+
 }
 
-async function addPageView(visitor, now) {
+/*
+==========================
+UNIQUE VISITOR
+==========================
+*/
+
+async function addUniqueVisitor() {
+
     const stat = await getTodayStat();
 
-    stat.pageViews++;
+    stat.uniqueVisitors++;
+    stat.todayVisitors++;
 
-    visitor.lastPageView = now;
+    await stat.save();
+
+    return stat;
+
+}
+
+/*
+==========================
+PAGE VIEW
+==========================
+*/
+
+async function addPageView(visitor) {
+
+    const stat = await getTodayStat();
+
+    visitor.lastPageView = new Date();
+
+    stat.pageViews++;
 
     await Promise.all([
         visitor.save(),
@@ -41,21 +103,37 @@ async function addPageView(visitor, now) {
     ]);
 
     return stat;
+
 }
 
-async function addUniqueVisitor(stat) {
-    stat.uniqueVisitors++;
-    stat.todayVisitors++;
+/*
+==========================
+ONLINE NOW
+==========================
+*/
 
-    await stat.save();
+async function getOnlineNow() {
 
-    return stat;
+    const fiveMinutesAgo =
+        new Date(Date.now() - 5 * 60 * 1000);
+
+    return await Visitor.countDocuments({
+
+        lastSeen: {
+            $gte: fiveMinutesAgo
+        }
+
+    });
+
 }
 
 module.exports = {
+
     getTodayStat,
     getHistory,
     addMovieView,
+    addUniqueVisitor,
     addPageView,
-    addUniqueVisitor
+    getOnlineNow
+
 };

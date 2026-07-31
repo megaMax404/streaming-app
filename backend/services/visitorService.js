@@ -1,6 +1,18 @@
 const Visitor = require("../models/Visitor");
 const getLocation = require("../utils/getLocation");
 
+const {
+    getTodayStat,
+    addUniqueVisitor,
+    addPageView
+} = require("./statisticsService");
+
+/*
+==========================
+CREATE / FIND VISITOR
+==========================
+*/
+
 async function findOrCreateVisitor(fingerprint, req) {
 
     const now = new Date();
@@ -9,54 +21,35 @@ async function findOrCreateVisitor(fingerprint, req) {
         req.headers["x-forwarded-for"]?.split(",")[0] ||
         req.socket.remoteAddress;
 
-    const location =
-        await getLocation(ip);
+    const location = await getLocation(ip);
 
-    let visitor =
-        await Visitor.findOne({ fingerprint });
-
-    let isNew = false;
+    let visitor = await Visitor.findOne({ fingerprint });
 
     let isUniqueToday = false;
 
     if (!visitor) {
 
-        visitor = await Visitor.create({
-
+        visitor = new Visitor({
             fingerprint,
-
             ip,
-
             country: location.country,
-
             city: location.city,
-
             firstVisit: now,
-
             lastVisit: now,
-
             lastSeen: now,
-
             lastPageView: null,
-
             visitCount: 1
-
         });
 
-        isNew = true;
         isUniqueToday = true;
 
     } else {
 
-        const lastVisitDay =
-            visitor.lastVisit
-                .toISOString()
-                .slice(0, 10);
+        const today = now.toISOString().slice(0, 10);
+        const lastVisit =
+            visitor.lastVisit.toISOString().slice(0, 10);
 
-        const today =
-            now.toISOString().slice(0, 10);
-
-        if (lastVisitDay !== today) {
+        if (today !== lastVisit) {
             isUniqueToday = true;
         }
 
@@ -70,26 +63,117 @@ async function findOrCreateVisitor(fingerprint, req) {
         }
 
         visitor.visitCount++;
-        await visitor.save();
     }
 
     return {
         visitor,
-        isNew,
         isUniqueToday
     };
 }
 
-async function heartbeat(fingerprint){
-    return await Visitor.findOneAndUpdate(
+/*
+==========================
+VISIT
+==========================
+*/
+
+async function visit(fingerprint, req) {
+
+    if (!fingerprint)
+        throw new Error("fingerprint missing");
+
+    const {
+        visitor,
+        isUniqueToday
+    } = await findOrCreateVisitor(
+        fingerprint,
+        req
+    );
+
+    if (isUniqueToday) {
+        await addUniqueVisitor();
+    }
+
+    const now = new Date();
+
+    const PAGEVIEW_TIMEOUT = 30000;
+
+    let stat;
+
+    if (
+        !visitor.lastPageView ||
+        now - visitor.lastPageView > PAGEVIEW_TIMEOUT
+    ) {
+
+        stat = await addPageView(visitor);
+
+    } else {
+
+        stat = await getTodayStat();
+
+        await visitor.save();
+    }
+
+    return stat;
+}
+
+/*
+==========================
+PAGE VIEW
+==========================
+*/
+
+async function pageView(fingerprint, req) {
+
+    if (!fingerprint)
+        throw new Error("fingerprint missing");
+
+    const {
+        visitor
+    } = await findOrCreateVisitor(
+        fingerprint,
+        req
+    );
+
+    const now = new Date();
+
+    const PAGE_TIMEOUT = 30000;
+
+    if (
+        !visitor.lastPageView ||
+        now - visitor.lastPageView > PAGE_TIMEOUT
+    ) {
+
+        await addPageView(visitor);
+
+    } else {
+
+        await visitor.save();
+
+    }
+
+    return true;
+}
+
+/*
+==========================
+HEARTBEAT
+==========================
+*/
+
+async function heartbeat(fingerprint) {
+
+    return Visitor.findOneAndUpdate(
         { fingerprint },
         {
-            lastSeen:new Date()
+            lastSeen: new Date()
         }
     );
 }
 
 module.exports = {
-    findOrCreateVisitor,
-    heartbeat
+    visit,
+    pageView,
+    heartbeat,
+    findOrCreateVisitor
 };
