@@ -45,6 +45,9 @@ function MovieDetail() {
     axios
       .get(`${API_URL}/api/movies/slug/${slug}`)
       .then(async (res) => {
+
+        console.log("MOVIE DATA :", res.data);
+        console.log("TRAILER :", res.data.trailer);
         setMovie(res.data);
       })
       .catch((err) => {
@@ -349,7 +352,8 @@ function MovieDetail() {
       (b) =>
         b.type === "right"
     );
-
+  
+    console.log("showTrailer =", showTrailer);
   return (
     <div>
       <PlayerNavbar />
