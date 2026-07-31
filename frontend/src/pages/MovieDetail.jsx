@@ -46,13 +46,6 @@ function MovieDetail() {
       .get(`${API_URL}/api/movies/slug/${slug}`)
       .then(async (res) => {
         setMovie(res.data);
-
-        // เพิ่มการนับ Movie View
-        try {
-          await axios.post(`${API_URL}/api/site/movie-view`);
-        } catch (err) {
-          console.error("Movie view error", err);
-        }
       })
       .catch((err) => {
         console.error(err);
