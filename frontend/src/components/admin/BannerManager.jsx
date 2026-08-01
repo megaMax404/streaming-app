@@ -10,7 +10,9 @@ function BannerManager() {
   const [editingId, setEditingId] = useState(null);
   const [image, setImage] = useState("");
   const [link, setLink] = useState("");
-  const [type, setType] = useState("top");
+  const [placement, setPlacement] = useState("top");
+  const [position, setPosition] = useState("movie");
+  const [active, setActive] = useState(true);
 
   const fetchBanners = async () => {
     try {
@@ -34,7 +36,9 @@ function BannerManager() {
       const payload = {
         image,
         link,
-        type,
+        placement,
+        position,
+        active,
       };
 
       if (editingId) {
@@ -61,7 +65,9 @@ function BannerManager() {
 
       setImage("");
       setLink("");
-      setType("top");
+      setPlacement("top");
+      setPosition("movie");
+      setActive(true);
       setEditingId(null);
 
       fetchBanners();
@@ -74,7 +80,11 @@ function BannerManager() {
     setEditingId(banner._id);
     setImage(banner.image || "");
     setLink(banner.link || "");
-    setType(banner.type || "top");
+    setPlacement(banner.placement || "top");
+    setPosition(banner.position || "movie");
+    setActive(
+      banner.active ?? true
+    );
 
     window.scrollTo({
       top: 0,
@@ -106,159 +116,221 @@ function BannerManager() {
 
   return (
     <div className="movie-dashboard-grid">
-        {/* LEFT */}
-        <div className="admin-card">
-          <h2>
-            {editingId
-              ? "แก้ไขแบนเนอร์"
-              : "เพิ่มแบนเนอร์"}
-          </h2>
-          <form
-            onSubmit={
-              handleSubmit
-            }
-            className="admin-form"
-          >
-            <div className="banner-select-box">
-              <label>
-                ประเภทแบนเนอร์
-              </label>
-              <select
-                className="banner-select"
-                value={type}
-                onChange={(e) =>
-                  setType(
-                    e.target.value
-                  )
-                }
-              >
-                <option value="top">
-                  Top Banner
-                </option>
-                <option value="left">
-                  Left Ads
-                </option>
-                <option value="right">
-                  Right Ads
-                </option>
-              </select>
-              <p className="banner-size-text">
-                {type === "top" &&
-                  "ขนาดแนะนำ 722 × 200 px"}
-                {type === "left" &&
-                  "ขนาดแนะนำ 200 × 270 px"}
-                {type === "right" &&
-                  "ขนาดแนะนำ 200 × 270 px"}
-              </p>
-            </div>
-            <input
-              placeholder="Banner URL"
-              value={image}
+      {/* LEFT */}
+      <div className="admin-card">
+        <h2>
+          {editingId
+            ? "แก้ไขแบนเนอร์"
+            : "เพิ่มแบนเนอร์"}
+        </h2>
+        <form
+          onSubmit={
+            handleSubmit
+          }
+          className="admin-form"
+        >
+          <div className="banner-select-box">
+            <label>ตำแหน่ง Banner</label>
+
+            <select
+              className="banner-select"
+              value={placement}
               onChange={(e) =>
-                setImage(
-                  e.target.value
-                )
+                setPlacement(e.target.value)
               }
-            />
-            <input
-              placeholder="Link URL"
-              value={link}
-              onChange={(e) =>
-                setLink(
-                  e.target.value
-                )
-              }
-            />
-            <button
-              className="submit-btn"
-              type="submit"
             >
-              {editingId
-                ? "บันทึกการแก้ไข"
-                : "เพิ่มแบนเนอร์"}
-            </button>
-          </form>
-        </div>
-        {/* CENTER */}
-        <div className="admin-card preview-card">
-          <h2>
-            Preview Banner
-          </h2>
-          {image ? (
+              <option value="top">
+                Top Banner
+              </option>
+
+              <option value="left">
+                Left Ads
+              </option>
+
+              <option value="right">
+                Right Ads
+              </option>
+            </select>
+
+            <label>ตำแหน่งแสดงผล</label>
+
+            <select
+              className="banner-select"
+              value={position}
+              onChange={(e) =>
+                setPosition(e.target.value)
+              }
+            >
+              <option value="movie">
+                Movie Detail
+              </option>
+
+              <option value="home">
+                Home
+              </option>
+            </select>
+
+            <label
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                marginTop: "10px",
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={active}
+                onChange={(e) =>
+                  setActive(e.target.checked)
+                }
+              />
+
+              เปิดใช้งาน
+            </label>
+
+
+            <p className="banner-size-text">
+              {placement === "top" &&
+                "ขนาดแนะนำ 722 × 200 px"}
+              {placement === "left" &&
+                "ขนาดแนะนำ 200 × 270 px"}
+              {placement === "right" &&
+                "ขนาดแนะนำ 200 × 270 px"}
+            </p>
+          </div>
+          <input
+            placeholder="Banner URL"
+            value={image}
+            onChange={(e) =>
+              setImage(
+                e.target.value
+              )
+            }
+          />
+          <input
+            placeholder="Link URL"
+            value={link}
+            onChange={(e) =>
+              setLink(
+                e.target.value
+              )
+            }
+          />
+          <button
+            className="submit-btn"
+            type="submit"
+          >
+            {editingId
+              ? "บันทึกการแก้ไข"
+              : "เพิ่มแบนเนอร์"}
+          </button>
+        </form>
+      </div >
+      {/* CENTER */}
+      <div className="admin-card preview-card" >
+        <h2>
+          Preview Banner
+        </h2>
+        {
+          image ? (
             <img src={image} alt="preview" className="preview-banner" />
           ) : (
             <div className="banner-preview">
               ยังไม่มีรูป
             </div>
+          )
+        }
+      </div >
+      {/* RIGHT */}
+      < div className="admin-card movie-list-card" >
+        <h2>
+          รายการแบนเนอร์
+        </h2>
+        <p className="movie-count">
+          แบนเนอร์ทั้งหมด{" "}
+          {banners.length}
+        </p>
+        <div className="movie-scroll">
+          {banners.map(
+            (banner) => (
+              <div
+                className="movie-row"
+                key={
+                  banner._id
+                }
+              >
+                <img
+                  className="banner-thumb"
+                  src={banner.image || "/no-image.jpg"}
+                  alt="banner"
+                />
+                <div className="movie-info">
+                  <h3>
+                    {
+                      banner.placement === "top"
+                        ? "Top Banner"
+                        : banner.placement === "left"
+                          ? "Left Ads"
+                          : "Right Ads"
+                    }
+                  </h3>
+
+                  <p>
+                    หน้า : {banner.position}
+                  </p>
+
+                  <p>
+                    {banner.active
+                      ? "🟢 เปิดใช้งาน"
+                      : "🔴 ปิดใช้งาน"}
+                  </p>
+
+                  <p
+                    style={{
+                      fontSize: "12px",
+                      color: "#888",
+                    }}
+                  >
+                    ID : {banner._id}
+                  </p>
+
+                  <p
+                    style={{
+                      fontSize: "12px",
+                      color: "#999",
+                      wordBreak: "break-all",
+                    }}
+                  >
+                    {banner.link}
+                  </p>
+                </div>
+                <div className="action-buttons">
+                  <button
+                    onClick={() =>
+                      editBanner(
+                        banner
+                      )
+                    }
+                  >
+                    แก้ไข
+                  </button>
+                  <button
+                    onClick={() =>
+                      deleteBanner(
+                        banner._id
+                      )
+                    }
+                  >
+                    ลบ
+                  </button>
+                </div>
+              </div>
+            )
           )}
         </div>
-        {/* RIGHT */}
-        <div className="admin-card movie-list-card">
-          <h2>
-            รายการแบนเนอร์
-          </h2>
-          <p className="movie-count">
-            แบนเนอร์ทั้งหมด{" "}
-            {banners.length}
-          </p>
-          <div className="movie-scroll">
-            {banners.map(
-              (banner) => (
-                <div
-                  className="movie-row"
-                  key={
-                    banner._id
-                  }
-                >
-                  <img
-                    className="banner-thumb"
-                    src={banner.image || "/no-image.jpg"}
-                    alt="banner"
-                  />
-                  <div className="movie-info">
-                    <h3>
-                      {banner.type}
-                    </h3>
-                    <p>
-                      ID :
-                      {banner._id}
-                    </p>
-                    <p
-                      style={{
-                        fontSize: "12px",
-                        color: "#999",
-                        wordBreak: "break-all"
-                      }}
-                    >
-                      {banner.link}
-                    </p>
-                  </div>
-                  <div className="action-buttons">
-                    <button
-                      onClick={() =>
-                        editBanner(
-                          banner
-                        )
-                      }
-                    >
-                      แก้ไข
-                    </button>
-                    <button
-                      onClick={() =>
-                        deleteBanner(
-                          banner._id
-                        )
-                      }
-                    >
-                      ลบ
-                    </button>
-                  </div>
-                </div>
-              )
-            )}
-          </div>
-        </div>
-      </div>
+      </div >
+    </div >
   );
 }
 

@@ -13,11 +13,12 @@ const bannerSchema = new mongoose.Schema({
     default: ""
   },
 
-  type: {
+  placement: {
     type: String,
-    enum: ["image", "video"],
-    default: "image"
+    enum: ["top", "left", "right"],
+    default: "top"
   },
+
   position: {
     type: String,
     enum: ["home", "movie"],
@@ -32,10 +33,10 @@ const bannerSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   }
-}, 
-{
-  timestamps: true
-});
+},
+  {
+    timestamps: true
+  });
 
 module.exports = mongoose.model(
   "Banner",

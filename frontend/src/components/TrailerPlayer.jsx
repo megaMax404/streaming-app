@@ -1,7 +1,5 @@
 function TrailerPlayer({ trailer }) {
 
-  console.log("TrailerPlayer :", trailer);
-
   return (
     <iframe
       src={trailer}

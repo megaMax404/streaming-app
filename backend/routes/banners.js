@@ -28,10 +28,9 @@ router.get("/", async (req, res) => {
 router.post("/", auth, async (req, res) => {
   try {
     const allowedFields = [
-      "title",
       "image",
       "link",
-      "type",
+      "placement",
       "position",
       "order",
       "active"
@@ -73,10 +72,9 @@ router.put("/:id", auth, async (req, res) => {
   }
   try {
     const allowedFields = [
-      "title",
       "image",
       "link",
-      "type",
+      "placement",
       "position",
       "order",
       "active"

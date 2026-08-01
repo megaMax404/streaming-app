@@ -5,11 +5,9 @@ import {
   useEffect,
   useRef,
   useState,
-  lazy,
-  Suspense,
 } from "react";
 import axios from "axios";
-const TrailerPlayer = lazy(() => import("../components/TrailerPlayer"));
+import TrailerPlayer from "../components/TrailerPlayer";
 import "../styles/MovieDetailStyle.css";
 import PlayerNavbar from "../components/PlayerNavbar";
 import {
@@ -26,7 +24,6 @@ function MovieDetail() {
   const [startMovie, setStartMovie] = useState(false);
   const [countedView, setCountedView] = useState(false);
   const [loadingPlayer, setLoadingPlayer] = useState(false);
-  const [showTrailer, setShowTrailer] = useState(true);
   const trailerRef = useRef(null);
   const videoRef = useRef(null);
   const [loading, setLoading] = useState(true);
@@ -86,27 +83,6 @@ function MovieDetail() {
       videoRef.current.currentTime = 0;
     }
   }, [slug]);
-
-
-  useEffect(() => {
-    if (!trailerRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setShowTrailer(true);
-          observer.disconnect();
-        }
-      },
-      {
-        rootMargin: "200px",
-      }
-    );
-
-    observer.observe(trailerRef.current);
-
-    return () => observer.disconnect();
-  }, []);
 
 
   useEffect(() => {
@@ -338,22 +314,21 @@ function MovieDetail() {
   const topBanners =
     banners.filter(
       (b) =>
-        b.type === "top"
+        b.placement === "top"
     );
 
   const leftAds =
     banners.filter(
       (b) =>
-        b.type === "left"
+        b.placement === "left"
     );
 
   const rightAds =
     banners.filter(
       (b) =>
-        b.type === "right"
+        b.placement === "right"
     );
-  
-    console.log("showTrailer =", showTrailer);
+
   return (
     <div>
       <PlayerNavbar />
@@ -455,30 +430,10 @@ function MovieDetail() {
 
                 {/* TRAILER */}
                 <div
-                  className="movie-info"
-                  ref={trailerRef}
-                >
-                  <Suspense
-                    fallback={
-                      <div className="movie-trailer-placeholder">
-                        <img
-                          src={movie.image}
-                          alt={movie.title}
-                          className="movie-trailer"
-                        />
-
-                        <div className="movie-trailer-loading">
-                          ▶ กำลังโหลด Trailer...
-                        </div>
-                      </div>
-                    }
-                  >
-                    {showTrailer && movie.trailer && (
-                      <TrailerPlayer
-                        trailer={movie.trailer}
-                      />
+                  className="movie-info" ref={trailerRef}>
+                    {movie.trailer && (
+                      <TrailerPlayer trailer={movie.trailer} />
                     )}
-                  </Suspense>
                 </div>
 
               </div>
