@@ -9,7 +9,7 @@ import SettingManager from "../components/admin/SettingManager";
 import CheckMovieManager from "../components/admin/CheckMovieManager";
 import AnalyticsChart from "../components/admin/AnalyticsChart";
 import StatisticsManager from "../components/admin/StatisticsManager";
-
+import Visitors from "./Visitors";
 
 import "../styles/Admin.css";
 
@@ -193,6 +193,14 @@ function Admin() {
           </button>
 
           <button
+            className={`dashboard-tab ${adminTab === "visitors" ? "active" : ""
+              }`}
+            onClick={() => setAdminTab("visitors")}
+          >
+            👥 ดูIPและอุปกรณ์ผู้เข้าชม
+          </button>
+
+          <button
             className={`dashboard-tab ${adminTab === "setting"
               ? "active"
               : ""
@@ -239,6 +247,11 @@ function Admin() {
         {adminTab === "stats" && (
           <StatisticsManager />
         )}
+
+        {adminTab === "visitors" && (
+          <Visitors />
+        )}
+        
       </div>
     </div>
   );
