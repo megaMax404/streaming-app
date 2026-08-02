@@ -31,6 +31,8 @@ async function findOrCreateVisitor(fingerprint, req) {
         referrer
     } = req.body;
 
+    console.log(req.body);
+
     let visitor = await Visitor.findOne({ fingerprint });
 
     let isUniqueToday = false;
