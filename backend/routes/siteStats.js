@@ -6,7 +6,8 @@ const {
     getTodayStat,
     getHistory,
     getOnlineNow,
-    addMovieView
+    addMovieView,
+    getVisitors
 } = require("../services/statisticsService");
 
 const {
@@ -200,6 +201,36 @@ router.post("/page-view", async (req, res) => {
         res.json({
             success: true
         });
+
+    } catch (err) {
+
+        console.error(err);
+
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+
+    }
+
+});
+
+/*
+==========================
+VISITOR LIST
+==========================
+*/
+
+router.get("/visitors", async (req, res) => {
+
+    try {
+
+        const page = Number(req.query.page || 1);
+        const limit = Number(req.query.limit || 20);
+
+        const data = await getVisitors(page, limit);
+
+        res.json(data);
 
     } catch (err) {
 

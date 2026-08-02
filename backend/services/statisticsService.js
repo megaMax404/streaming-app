@@ -127,13 +127,39 @@ async function getOnlineNow() {
 
 }
 
-module.exports = {
+/*
+==========================
+VISITOR LIST
+==========================
+*/
 
+async function getVisitors(page = 1, limit = 20) {
+
+    const skip = (page - 1) * limit;
+
+    const total = await Visitor.countDocuments();
+
+    const visitors = await Visitor.find()
+        .sort({ lastSeen: -1 })
+        .skip(skip)
+        .limit(limit);
+
+    return {
+        total,
+        page,
+        limit,
+        visitors
+    };
+
+}
+
+module.exports = {
     getTodayStat,
     getHistory,
     addMovieView,
     addUniqueVisitor,
     addPageView,
-    getOnlineNow
+    getOnlineNow,
+    getVisitors
 
 };
