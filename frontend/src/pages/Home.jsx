@@ -13,7 +13,6 @@ import MovieCard from "../components/MovieCard";
 import Carousel from "../components/Carousel";
 import Pagination from "../components/Pagination";
 import ContinueWatching from "../components/ContinueWatching";
-import { trackVisitor } from "../utils/visitorTracker";
 import { getContinueWatching } from "../utils/continueWatching";
 
 const MOVIES_PER_PAGE = 36;
@@ -57,9 +56,6 @@ function Home({ search }) {
     loadData();
   }, []);
 
-  useEffect(() => {
-    trackVisitor();
-  }, []);
 
   /* ======================
      CATEGORY FROM URL
