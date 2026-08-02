@@ -82,12 +82,15 @@ async function findOrCreateVisitor(fingerprint, req) {
         visitor.lastSeen = now;
         visitor.ip = ip;
 
-        visitor.browser = browser;
-        visitor.language = language;
-        visitor.platform = platform;
-        visitor.screen = screen;
-        visitor.timezone = timezone;
-        visitor.referrer = referrer;
+        visitor.browser = browser || visitor.browser;
+        visitor.language = language || visitor.language;
+        visitor.platform = platform || visitor.platform;
+        visitor.screen = screen || visitor.screen;
+        visitor.timezone = timezone || visitor.timezone;
+
+        if (referrer !== undefined) {
+            visitor.referrer = referrer;
+        }
 
         if (!visitor.country || visitor.country === "Unknown") {
             visitor.country = location.country;
@@ -99,7 +102,7 @@ async function findOrCreateVisitor(fingerprint, req) {
 
     console.log("VISITOR BEFORE SAVE");
     console.log(visitor);
-    
+
     return {
         visitor,
         isUniqueToday
