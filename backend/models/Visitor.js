@@ -79,6 +79,9 @@ const visitorSchema = new mongoose.Schema(
         timestamps: true,
     });
 
+console.log("VISITOR MODEL LOADED");
+console.log(visitorSchema.obj);
+
 module.exports = mongoose.model(
     "Visitor",
     visitorSchema

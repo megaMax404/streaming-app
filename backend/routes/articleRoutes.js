@@ -81,7 +81,7 @@ router.put("/:id", auth, async (req, res) => {
     const article = await Article.findByIdAndUpdate(
       req.params.id,
       cleanData,
-      { new: true }
+      { returnDocument: "after" }
     );
 
     res.json(article); // <-- ขาดตรงนี้

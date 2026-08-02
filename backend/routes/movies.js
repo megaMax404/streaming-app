@@ -314,7 +314,7 @@ router.put("/:id", auth, async (req, res) => {
     const updatedMovie = await Movie.findByIdAndUpdate(
       req.params.id,
       cleanData,
-      { new: true }
+      { returnDocument: "after" }
     );
 
     cache.flushAll();

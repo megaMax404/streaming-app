@@ -203,7 +203,7 @@ async function heartbeat(fingerprint) {
             }
         },
         {
-            new: true
+            returnDocument: "after"
         }
     );
 
