@@ -1,3 +1,4 @@
+console.log("ROUTE siteStats.js LOADED");
 const express = require("express");
 const router = express.Router();
 
