@@ -43,8 +43,6 @@ function MovieDetail() {
       .get(`${API_URL}/api/movies/slug/${slug}`)
       .then(async (res) => {
 
-        console.log("MOVIE DATA :", res.data);
-        console.log("TRAILER :", res.data.trailer);
         setMovie(res.data);
       })
       .catch((err) => {

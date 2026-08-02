@@ -1,4 +1,3 @@
-console.log("Visitor.js loaded");
 const mongoose = require("mongoose");
 
 const visitorSchema = new mongoose.Schema(
@@ -45,13 +44,40 @@ const visitorSchema = new mongoose.Schema(
             type: String,
             default: "",
         },
+        browser: {
+            type: String,
+            default: "",
+        },
+
+        language: {
+            type: String,
+            default: "",
+        },
+
+        platform: {
+            type: String,
+            default: "",
+        },
+
+        screen: {
+            width: Number,
+            height: Number,
+        },
+
+        timezone: {
+            type: String,
+            default: "",
+        },
+
+        referrer: {
+            type: String,
+            default: "",
+        },
 
     },
     {
         timestamps: true,
     });
-
-console.log(visitorSchema.obj);
 
 module.exports = mongoose.model(
     "Visitor",

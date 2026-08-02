@@ -22,6 +22,14 @@ async function findOrCreateVisitor(fingerprint, req) {
         req.socket.remoteAddress;
 
     const location = await getLocation(ip);
+    const {
+        browser,
+        language,
+        platform,
+        screen,
+        timezone,
+        referrer
+    } = req.body;
 
     let visitor = await Visitor.findOne({ fingerprint });
 
@@ -31,13 +39,28 @@ async function findOrCreateVisitor(fingerprint, req) {
 
         visitor = new Visitor({
             fingerprint,
+
             ip,
+
             country: location.country,
             city: location.city,
+
+            browser,
+            language,
+            platform,
+
+            screen,
+
+            timezone,
+
+            referrer,
+
             firstVisit: now,
             lastVisit: now,
             lastSeen: now,
+
             lastPageView: null,
+
             visitCount: 1
         });
 
@@ -56,6 +79,13 @@ async function findOrCreateVisitor(fingerprint, req) {
         visitor.lastVisit = now;
         visitor.lastSeen = now;
         visitor.ip = ip;
+
+        visitor.browser = browser;
+        visitor.language = language;
+        visitor.platform = platform;
+        visitor.screen = screen;
+        visitor.timezone = timezone;
+        visitor.referrer = referrer;
 
         if (!visitor.country || visitor.country === "Unknown") {
             visitor.country = location.country;
@@ -163,12 +193,18 @@ HEARTBEAT
 
 async function heartbeat(fingerprint) {
 
-    return Visitor.findOneAndUpdate(
+    return await Visitor.findOneAndUpdate(
         { fingerprint },
         {
-            lastSeen: new Date()
+            $set: {
+                lastSeen: new Date()
+            }
+        },
+        {
+            new: true
         }
     );
+
 }
 
 module.exports = {

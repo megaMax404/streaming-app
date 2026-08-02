@@ -24,6 +24,22 @@ export async function trackVisitor() {
 
       await axios.post(`${API_URL}/api/site/visit`, {
         fingerprint,
+
+        browser: navigator.userAgent,
+
+        language: navigator.language,
+
+        platform: navigator.platform,
+
+        screen: {
+          width: window.screen.width,
+          height: window.screen.height,
+        },
+
+        referrer: document.referrer,
+
+        timezone:
+          Intl.DateTimeFormat().resolvedOptions().timeZone,
       });
 
       localStorage.setItem(VISIT_KEY, now);
@@ -35,7 +51,7 @@ export async function trackVisitor() {
     });
 
     // ส่งทุก 30 วินาที
-    heartbeat = setInterval(() => {
+    heartbeat = setInterval(() => { 
       axios.post(`${API_URL}/api/site/heartbeat`, {
         fingerprint,
       }).catch(() => { });
