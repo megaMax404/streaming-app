@@ -23,7 +23,7 @@ VISITOR
 router.post("/visit", async (req, res) => {
 
     try {
-
+         console.log(req.body);
         const stat = await visit(
             req.body.fingerprint,
             req
