@@ -22,9 +22,10 @@ VISITOR
 */
 
 router.post("/visit", async (req, res) => {
+    console.log("VISIT ROUTE HIT");
+    console.log(req.body);
 
     try {
-         console.log(req.body);
         const stat = await visit(
             req.body.fingerprint,
             req
@@ -36,9 +37,7 @@ router.post("/visit", async (req, res) => {
         });
 
     } catch (err) {
-
         console.error(err);
-
         res.status(500).json({
             success: false,
             message: err.message

@@ -97,6 +97,9 @@ async function findOrCreateVisitor(fingerprint, req) {
         visitor.visitCount++;
     }
 
+    console.log("VISITOR BEFORE SAVE");
+    console.log(visitor);
+    
     return {
         visitor,
         isUniqueToday
