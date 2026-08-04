@@ -190,7 +190,7 @@ async function getVisitors(
         const end = new Date(date);
         end.setHours(23, 59, 59, 999);
 
-        query.firstVisit = {
+        query.lastSeen = {
 
             $gte: start,
             $lte: end
