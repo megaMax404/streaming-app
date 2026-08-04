@@ -64,32 +64,6 @@ function StatisticsManager() {
 
             <hr />
             
-            <h3>ย้อนหลัง</h3>
-
-            <table className="statistics-table">
-                <thead>
-                    <tr>
-                        <th>วันที่</th>
-                        <th>Page Views</th>
-                        <th>Visitors</th>
-                        <th>Movie Views</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    {history.map((item) => (
-
-                        <tr key={item._id}>
-                            <td>{item.date}</td>
-                            <td>{item.pageViews}</td>
-                            <td>{item.uniqueVisitors}</td>
-                            <td>{item.movieViews}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-
         </div>
 
 

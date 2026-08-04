@@ -246,3 +246,99 @@
     transform: translateY(-2px);
 
 }
+
+/* ===== Toolbar ===== */
+
+.visitor-toolbar{
+    display:flex;
+    justify-content:flex-start;
+    align-items:flex-end;
+    margin:20px 0 25px;
+}
+
+.visitor-date-box{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.visitor-date-box label{
+    color:#ffd000;
+    font-weight:700;
+    font-size:15px;
+}
+
+.visitor-date-group{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+/* Date */
+
+.visitor-date-group input{
+    width:190px;
+    height:42px;
+
+    background:#181818;
+    border:1px solid #333;
+    border-radius:10px;
+
+    color:white;
+    padding:0 12px;
+
+    font-size:14px;
+
+    transition:.25s;
+}
+
+.visitor-date-group input:hover{
+    border-color:#ffd000;
+}
+
+.visitor-date-group input:focus{
+    outline:none;
+    border-color:#ffd000;
+    box-shadow:0 0 10px rgba(255,208,0,.25);
+}
+
+/* Reset */
+
+.visitor-reset-btn{
+
+    height:42px;
+    padding:0 18px;
+
+    border:none;
+    border-radius:10px;
+
+    background:linear-gradient(
+        180deg,
+        #2d2d2d,
+        #1b1b1b
+    );
+
+    color:#eee;
+
+    cursor:pointer;
+
+    font-weight:700;
+
+    transition:.25s;
+}
+
+.visitor-reset-btn:hover{
+
+    background:linear-gradient(
+        180deg,
+        #ffd000,
+        #e0b500
+    );
+
+    color:black;
+
+    transform:translateY(-2px);
+
+    box-shadow:0 0 18px rgba(255,208,0,.35);
+
+}

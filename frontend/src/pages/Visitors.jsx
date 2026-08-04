@@ -94,17 +94,15 @@ function Visitors() {
                         }}
                     />
 
+                    <button
+                        onClick={() => {
+                            setSelectedDate("");
+                            setPage(1);
+                        }}
+                    >
+                        ↺ รีเซ็ต
+                    </button>
                 </div>
-
-                <button
-                    onClick={() => {
-                        setSelectedDate("");
-                        setPage(1);
-                    }}
-                >
-                    รีเซ็ต
-                </button>
-
             </div>
 
             {
