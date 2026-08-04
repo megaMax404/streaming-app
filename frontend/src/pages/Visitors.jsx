@@ -3,13 +3,9 @@ import "../styles/Visitors.css";
 import { getVisitors } from "../services/siteService";
 
 function Visitors() {
-
     const [loading, setLoading] = useState(true);
-
     const [page, setPage] = useState(1);
-
-    const [search, setSearch] = useState("");
-
+    const [selectedDate, setSelectedDate] = useState("");
     const [data, setData] = useState({
         visitors: [],
         total: 0,
@@ -17,45 +13,37 @@ function Visitors() {
         limit: 20
     });
 
-    async function load(currentPage = page) {
+    const fetchVisitors = async (
+        currentPage = 1,
+        date = selectedDate
+    ) => {
 
         setLoading(true);
 
         try {
-
             const res = await getVisitors(
                 currentPage,
                 20,
-                search
+                date
             );
-
             setData(res);
-
         } catch (err) {
-
             console.error(err);
-
         }
-
         setLoading(false);
+    };
 
-    }
 
     useEffect(() => {
 
-        load(page);
+        fetchVisitors(
+            page,
+            selectedDate
+        );
 
-    }, [page]);
+    }, [page, selectedDate]);
 
-    function handleSearch(e) {
 
-        e.preventDefault();
-
-        setPage(1);
-
-        load(1);
-
-    }
 
     const totalPages = Math.ceil(
         data.total / data.limit
@@ -127,21 +115,34 @@ function Visitors() {
 
             </div>
 
-            <form
-                className="visitor-search"
-                onSubmit={handleSearch}
-            >
-                <input
-                    placeholder="Search..."
-                    value={search}
-                    onChange={(e) =>
-                        setSearch(e.target.value)
-                    }
-                />
-                <button>
-                    Search
+            <div className="visitor-toolbar">
+
+                <div className="visitor-date-box">
+
+                    <label>📅 วันที่</label>
+
+                    <input
+                        type="date"
+                        value={selectedDate}
+                        onChange={(e) => {
+                            setSelectedDate(e.target.value);
+                            setPage(1);
+                        }}
+                    />
+
+                </div>
+
+                <button
+                    onClick={() => {
+                        setSelectedDate("");
+                        setPage(1);
+                    }}
+                >
+                    รีเซ็ต
                 </button>
-            </form>
+
+            </div>
+
             {
                 loading ?
                     <h3>
@@ -152,13 +153,13 @@ function Visitors() {
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Country</th>
-                                <th>City</th>
-                                <th>Browser</th>
-                                <th>Platform</th>
-                                <th>Language</th>
-                                <th>Visit</th>
-                                <th>Last Seen</th>
+                                <th>ประเทศ</th>
+                                <th>เมือง</th>
+                                <th>เว็บ</th>
+                                <th>อุปกรณ์</th>
+                                <th>ภาษา</th>
+                                <th>เยี่ยมชม</th>
+                                <th>วันที่</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -224,9 +225,14 @@ function Visitors() {
                                             </td>
                                             <td>
                                                 {
-                                                    new Date(
-                                                        v.lastSeen
-                                                    ).toLocaleString()
+                                                    new Date(v.lastSeen).toLocaleString("th-TH", {
+                                                        day: "2-digit",
+                                                        month: "2-digit",
+                                                        year: "numeric",
+                                                        hour: "2-digit",
+                                                        minute: "2-digit",
+                                                        second: "2-digit",
+                                                    })
                                                 }
                                             </td>
                                         </tr>

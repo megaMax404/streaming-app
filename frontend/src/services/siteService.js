@@ -4,7 +4,7 @@ import { API_URL } from "../config";
 export async function getVisitors(
     page = 1,
     limit = 20,
-    search = ""
+    date = ""
 ) {
 
     const res = await axios.get(
@@ -13,7 +13,7 @@ export async function getVisitors(
             params: {
                 page,
                 limit,
-                search
+                date
             }
         }
     );
