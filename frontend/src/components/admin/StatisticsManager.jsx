@@ -37,22 +37,22 @@ function StatisticsManager() {
             <div className="statistics-cards">
 
                 <div className="statistics-card">
-                    <h3>🌍 Page Views</h3>
+                    <h3>🌍 จำนวนการเข้าชมหน้าเว็บ</h3>
                     <span>{today?.pageViews || 0}</span>
                 </div>
 
                 <div className="statistics-card">
-                    <h3>👥 Visitors Today</h3>
+                    <h3>👥 เยี่ยมชม วันนี้</h3>
                     <span>{today?.todayVisitors || 0}</span>
                 </div>
 
                 <div className="statistics-card">
-                    <h3>🟢 Online Now</h3>
+                    <h3>🟢 ออนไลน์ตอนนี้</h3>
                     <span>{today?.onlineNow || 0}</span>
                 </div>
 
                 <div className="statistics-card">
-                    <h3>🎬 Movie Views</h3>
+                    <h3>🎬 ยอดเข้าชมหนัง</h3>
                     <span>{today?.movieViews || 0}</span>
                 </div>
 

@@ -57,7 +57,7 @@ function Visitors() {
 
                 <div className="visitor-title">
 
-                    👥 Visitor Analytics
+                    👥 วิเคาห์ข้อมูลผู้เข้าชม
 
                 </div>
 
@@ -67,47 +67,11 @@ function Visitors() {
 
                 <div className="visitor-card">
 
-                    <small>Total Visitors</small>
+                    <small>จำนวนผู้เข้าชมทั้งหมด</small>
 
                     <strong>
 
                         {data.total}
-
-                    </strong>
-
-                </div>
-
-                <div className="visitor-card">
-
-                    <small>Current Page</small>
-
-                    <strong>
-
-                        {page}
-
-                    </strong>
-
-                </div>
-
-                <div className="visitor-card">
-
-                    <small>Visitors Loaded</small>
-
-                    <strong>
-
-                        {data.visitors.length}
-
-                    </strong>
-
-                </div>
-
-                <div className="visitor-card">
-
-                    <small>Pages</small>
-
-                    <strong>
-
-                        {totalPages}
 
                     </strong>
 
