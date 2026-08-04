@@ -222,15 +222,30 @@ VISITOR LIST
 */
 
 router.get("/visitors", async (req, res) => {
-
     try {
 
-        const page = Number(req.query.page || 1);
-        const limit = Number(req.query.limit || 20);
+        const page =
+            Number(req.query.page || 1);
 
-        const data = await getVisitors(page, limit);
+        const limit =
+            Number(req.query.limit || 20);
 
-        res.json(data);
+        const search =
+            req.query.search || "";
+
+        const date =
+            req.query.date || "";
+
+        const result = await getVisitors(
+
+            page,
+            limit,
+            search,
+            date
+
+        );
+
+        res.json(result);
 
     } catch (err) {
 

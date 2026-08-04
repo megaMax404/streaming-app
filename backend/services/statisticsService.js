@@ -133,22 +133,90 @@ VISITOR LIST
 ==========================
 */
 
-async function getVisitors(page = 1, limit = 20) {
+async function getVisitors(
+    page = 1,
+    limit = 20,
+    search = "",
+    date = ""
+) {
 
     const skip = (page - 1) * limit;
 
-    const total = await Visitor.countDocuments();
+    let query = {};
 
-    const visitors = await Visitor.find()
-        .sort({ lastSeen: -1 })
-        .skip(skip)
-        .limit(limit);
+    // Search
+    if (search) {
+
+        query.$or = [
+
+            {
+                country: {
+                    $regex: search,
+                    $options: "i"
+                }
+            },
+
+            {
+                city: {
+                    $regex: search,
+                    $options: "i"
+                }
+            },
+
+            {
+                browser: {
+                    $regex: search,
+                    $options: "i"
+                }
+            },
+
+            {
+                platform: {
+                    $regex: search,
+                    $options: "i"
+                }
+            }
+
+        ];
+
+    }
+
+    // Filter Date
+    if (date) {
+
+        const start = new Date(date);
+        start.setHours(0, 0, 0, 0);
+
+        const end = new Date(date);
+        end.setHours(23, 59, 59, 999);
+
+        query.firstVisit = {
+
+            $gte: start,
+            $lte: end
+
+        };
+
+    }
+
+    const total =
+        await Visitor.countDocuments(query);
+
+    const visitors =
+        await Visitor.find(query)
+            .sort({
+                lastSeen: -1
+            })
+            .skip(skip)
+            .limit(limit);
 
     return {
+
         total,
         page,
         limit,
         visitors
+
     };
 
 }
