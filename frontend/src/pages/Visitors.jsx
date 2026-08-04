@@ -1,99 +1,266 @@
 import { useEffect, useState } from "react";
+import "../styles/Visitors.css";
 import { getVisitors } from "../services/siteService";
 
 function Visitors() {
 
-    const [visitors, setVisitors] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
+    const [page, setPage] = useState(1);
 
-        async function loadVisitors() {
+    const [search, setSearch] = useState("");
 
-            try {
+    const [data, setData] = useState({
+        visitors: [],
+        total: 0,
+        page: 1,
+        limit: 20
+    });
 
-                const data = await getVisitors();
+    async function load(currentPage = page) {
 
-                setVisitors(data.visitors);
+        setLoading(true);
 
-            } catch (err) {
+        try {
 
-                console.error(err);
+            const res = await getVisitors(
+                currentPage,
+                20,
+                search
+            );
 
-            } finally {
+            setData(res);
 
-                setLoading(false);
+        } catch (err) {
 
-            }
+            console.error(err);
 
         }
 
-        loadVisitors();
+        setLoading(false);
 
-    }, []);
-
-    if (loading) {
-        return <h2>Loading...</h2>;
     }
+
+    useEffect(() => {
+
+        load(page);
+
+    }, [page]);
+
+    function handleSearch(e) {
+
+        e.preventDefault();
+
+        setPage(1);
+
+        load(1);
+
+    }
+
+    const totalPages = Math.ceil(
+        data.total / data.limit
+    );
 
     return (
 
-        <div className="container py-4">
+        <div className="visitor-page">
 
-            <h2 className="mb-4">
-                Visitor List
-            </h2>
+            <div className="visitor-header">
 
-            <table className="table table-bordered table-striped">
+                <div className="visitor-title">
 
-                <thead>
+                    👥 Visitor Analytics
 
-                    <tr>
+                </div>
 
-                        <th>Country</th>
-                        <th>City</th>
-                        <th>Browser</th>
-                        <th>Platform</th>
-                        <th>Language</th>
-                        <th>Visit</th>
-                        <th>Last Seen</th>
+            </div>
 
-                    </tr>
+            <div className="visitor-summary">
 
-                </thead>
+                <div className="visitor-card">
 
-                <tbody>
+                    <small>Total Visitors</small>
 
-                    {visitors.map((v) => (
+                    <strong>
 
-                        <tr key={v._id}>
+                        {data.total}
 
-                            <td>{v.country}</td>
+                    </strong>
 
-                            <td>{v.city}</td>
+                </div>
 
-                            <td>{v.browser || "-"}</td>
+                <div className="visitor-card">
 
-                            <td>{v.platform || "-"}</td>
+                    <small>Current Page</small>
 
-                            <td>{v.language || "-"}</td>
+                    <strong>
 
-                            <td>{v.visitCount}</td>
+                        {page}
 
-                            <td>
-                                {new Date(v.lastSeen).toLocaleString()}
-                            </td>
+                    </strong>
 
-                        </tr>
+                </div>
 
-                    ))}
+                <div className="visitor-card">
 
-                </tbody>
+                    <small>Visitors Loaded</small>
 
-            </table>
+                    <strong>
 
+                        {data.visitors.length}
+
+                    </strong>
+
+                </div>
+
+                <div className="visitor-card">
+
+                    <small>Pages</small>
+
+                    <strong>
+
+                        {totalPages}
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <form
+                className="visitor-search"
+                onSubmit={handleSearch}
+            >
+                <input
+                    placeholder="Search..."
+                    value={search}
+                    onChange={(e) =>
+                        setSearch(e.target.value)
+                    }
+                />
+                <button>
+                    Search
+                </button>
+            </form>
+            {
+                loading ?
+                    <h3>
+                        Loading...
+                    </h3>
+                    :
+                    <table className="visitor-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Country</th>
+                                <th>City</th>
+                                <th>Browser</th>
+                                <th>Platform</th>
+                                <th>Language</th>
+                                <th>Visit</th>
+                                <th>Last Seen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                data.visitors.map(
+                                    (v, index) => (
+                                        <tr
+                                            key={v._id}
+                                        >
+                                            <td>
+                                                {
+                                                    (page - 1) *
+                                                    data.limit +
+                                                    index +
+                                                    1
+                                                }
+                                            </td>
+                                            <td>
+                                                <span
+                                                    className="country-badge"
+                                                >
+                                                    {
+                                                        v.country ||
+                                                        "-"
+                                                    }
+                                                </span>
+                                            </td>
+                                            <td>
+                                                {
+                                                    v.city ||
+                                                    "-"
+                                                }
+                                            </td>
+                                            <td>
+                                                {
+                                                    v.browser
+                                                        ?
+                                                        v.browser.split(" ")[0]
+                                                        :
+                                                        "-"
+                                                }
+                                            </td>
+                                            <td>
+                                                {
+                                                    v.platform ||
+                                                    "-"
+                                                }
+                                            </td>
+                                            <td>
+                                                {
+                                                    v.language ||
+                                                    "-"
+                                                }
+                                            </td>
+                                            <td>
+                                                <span
+                                                    className="visit-badge"
+                                                >
+                                                    {
+                                                        v.visitCount
+                                                    }
+                                                </span>
+                                            </td>
+                                            <td>
+                                                {
+                                                    new Date(
+                                                        v.lastSeen
+                                                    ).toLocaleString()
+                                                }
+                                            </td>
+                                        </tr>
+                                    )
+                                )
+                            }
+                        </tbody>
+                    </table>
+            }
+
+            <div className="pagination-box">
+                <button
+                    disabled={page <= 1}
+                    onClick={() =>
+                        setPage(page - 1)
+                    }
+                >
+                    ◀ Previous
+                </button>
+                <button>
+                    {page} / {totalPages}
+                </button>
+                <button
+                    disabled={
+                        page >= totalPages
+                    }
+                    onClick={() =>
+                        setPage(page + 1)
+                    }
+                >
+                    Next ▶
+                </button>
+            </div>
         </div>
-
     );
 
 }

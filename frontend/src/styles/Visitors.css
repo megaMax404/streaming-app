@@ -1,0 +1,202 @@
+.visitor-page {
+    color: white;
+}
+
+.visitor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.visitor-title {
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.visitor-summary {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.visitor-card{
+    background:#171717;
+    border:1px solid #2f2f2f;
+    border-radius:16px;
+    padding:20px;
+    transition:.25s;
+}
+
+.visitor-card:hover{
+    border-color:#ffd000;
+    transform:translateY(-2px);
+}
+
+.visitor-card small{
+    color:#999;
+}
+
+.visitor-card strong{
+    display:block;
+    margin-top:10px;
+    font-size:30px;
+    color:#ffd000;
+}
+
+.visitor-search{
+    display:flex;
+    gap:12px;
+    margin-bottom:25px;
+}
+
+.visitor-search input{
+
+    flex:1;
+
+    background:#111;
+
+    color:white;
+
+    border:1px solid #333;
+
+    border-radius:12px;
+
+    padding:12px 15px;
+}
+
+.visitor-search button{
+
+    border:none;
+
+    background:#ffd000;
+
+    color:black;
+
+    border-radius:12px;
+
+    padding:0 25px;
+
+    font-weight:bold;
+}
+
+.visitor-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    background:#151515;
+
+    border-radius:16px;
+
+    overflow:hidden;
+}
+
+.visitor-table thead{
+
+    background:#222;
+}
+
+.visitor-table th{
+
+    padding:16px;
+
+    text-align:left;
+
+    color:#ffd000;
+}
+
+.visitor-table td{
+
+    padding:14px 16px;
+
+    border-bottom:1px solid #252525;
+}
+
+.visitor-table tbody tr:hover{
+
+    background:#1f1f1f;
+}
+
+.country-badge{
+
+    background:#1d6f3b;
+
+    color:white;
+
+    padding:4px 12px;
+
+    border-radius:50px;
+
+    font-size:13px;
+}
+
+.visit-badge{
+
+    background:#0d6efd;
+
+    padding:5px 12px;
+
+    border-radius:50px;
+
+    font-size:13px;
+}
+
+.pagination-box{
+
+    margin-top:25px;
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:15px;
+}
+
+.pagination-box button{
+
+    background:#222;
+
+    border:none;
+
+    color:white;
+
+    padding:10px 18px;
+
+    border-radius:10px;
+}
+
+.pagination-box button:hover{
+
+    background:#ffd000;
+
+    color:black;
+}
+
+@media(max-width:900px){
+
+.visitor-summary{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+@media(max-width:600px){
+
+.visitor-summary{
+
+grid-template-columns:1fr;
+
+}
+
+.visitor-table{
+
+font-size:13px;
+
+}
+
+}
