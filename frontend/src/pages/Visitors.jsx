@@ -85,23 +85,26 @@ function Visitors() {
 
                     <label>📅 วันที่</label>
 
-                    <input
-                        type="date"
-                        value={selectedDate}
-                        onChange={(e) => {
-                            setSelectedDate(e.target.value);
-                            setPage(1);
-                        }}
-                    />
+                    <div className="visitor-date-group">
+                        <input
+                            type="date"
+                            value={selectedDate}
+                            onChange={(e) => {
+                                setSelectedDate(e.target.value);
+                                setPage(1);
+                            }}
+                        />
 
-                    <button
-                        onClick={() => {
-                            setSelectedDate("");
-                            setPage(1);
-                        }}
-                    >
-                        ↺ รีเซ็ต
-                    </button>
+                        <button
+                            className="visitor-reset-btn"
+                            onClick={() => {
+                                setSelectedDate("");
+                                setPage(1);
+                            }}
+                        >
+                            ↺ รีเซ็ต
+                        </button>
+                    </div>
                 </div>
             </div>
 
