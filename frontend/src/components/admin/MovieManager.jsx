@@ -30,6 +30,9 @@ function MovieManager({
   const [deleteMovieTitle, setDeleteMovieTitle] =
     useState("");
 
+  const [searchInput, setSearchInput] = useState("");
+  const [loading, setLoading] = useState(false);
+
   //เช็คLogin
   useEffect(() => {
     if (!sessionStorage.getItem("adminToken")) {
@@ -313,6 +316,7 @@ function MovieManager({
     title: "",
     image: "",
     video: "",
+    videoType: "hls",
     trailer: "",
     description: "",
     content: "",
@@ -335,7 +339,11 @@ function MovieManager({
   const [currentPage, setCurrentPage] = useState(1);
   const [formData, setFormData] = useState(emptyForm);
   const formRef = useRef(null);
+
   const fetchMovies = async () => {
+
+    setLoading(true);
+
     try {
       const res = await axios.get(MOVIE_API, {
         params: {
@@ -355,10 +363,15 @@ function MovieManager({
 
     } catch (err) {
       console.error(err);
+    } finally {
+
+      setLoading(false);
+
     }
   };
 
   const fetchTrashMovies = async () => {
+    setLoading(true);
     try {
       const res = await axios.get(
         `${MOVIE_API}/trash/list`,
@@ -368,6 +381,8 @@ function MovieManager({
       setTrashMovies(res.data);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -408,6 +423,13 @@ function MovieManager({
     setCurrentPage(1);
   }, [search, selectedCategory]);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearch(searchInput);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value, });
   };
@@ -418,7 +440,9 @@ function MovieManager({
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); try {
+    e.preventDefault();
+    try {
+
       if (
         !isUrl(formData.image) ||
         !isUrl(formData.video) ||
@@ -427,33 +451,28 @@ function MovieManager({
         alert("URL ไม่ถูกต้อง");
         return;
       }
+      if (!formData.title.trim()) {
+        alert("กรุณากรอกชื่อหนัง");
+        return;
+      }
+
+      if (!formData.video.trim()) {
+        alert("กรุณากรอก URL หนัง");
+        return;
+      }
 
       const payload = {
         ...formData,
-
-        trailer:
-          convertYoutubeToEmbed(
-            formData.trailer
-          ),
-
-        highlights:
-          formData.highlights
-            .split("\n")
-            .filter(Boolean),
-
-        rating: Number(
-          formData.rating || 0
-        ),
-
-        year: Number(
-          formData.year || 0
-        ),
-
-        views: Number(
-          formData.views || 0
-        ),
+        videoType: formData.videoType,
+        trailer: convertYoutubeToEmbed(formData.trailer),
+        highlights: formData.highlights.split("\n").filter(Boolean),
+        rating: Number(formData.rating) || 0,
+        year: Number(formData.year) || 0,
+        views: Number(formData.views) || 0,
       };
-   
+
+      setLoading(true);
+
       if (editingId) {
         await axios.put(
           `${MOVIE_API}/${editingId}`,
@@ -470,72 +489,82 @@ function MovieManager({
       setEditingId(null);
       setFormData({
         ...emptyForm,
-        category: ["หนังทั้งหมด"],
+        category: ["หนังทั้งหมด"]
       });
-
       fetchMovies();
       fetchTrashMovies();
-    } catch (err) { console.error(err); }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const editMovie = async (movie) => {
+    setLoading(true);
 
-    const res = await axios.get(
-      `${MOVIE_API}/${movie._id}`
-    );
+    try {
+      const res = await axios.get(
+        `${MOVIE_API}/${movie._id}`,
+        authHeader
+      );
 
-    const fullMovie = res.data;
-   
+      const fullMovie = res.data;
 
-    setEditingId(fullMovie._id);
+      setEditingId(fullMovie._id);
 
-    setFormData({
-      title: fullMovie.title ?? "",
-      image: fullMovie.image ?? "",
-      video: fullMovie.video ?? "",
-      trailer: fullMovie.trailer ?? "",
-      description: fullMovie.description ?? "",
-      content: fullMovie.content ?? "",
-      highlights: Array.isArray(fullMovie.highlights)
-        ? fullMovie.highlights.join("\n")
-        : "",
-      summary: fullMovie.summary ?? "",
-      rating: fullMovie.rating ?? "",
-      year: fullMovie.year ?? "",
-      views: fullMovie.views ?? "",
-      language: fullMovie.language ?? "",
-      subtitle: fullMovie.subtitle ?? "",
-      category: fullMovie.category ?? [],
+      setFormData({
+        title: fullMovie.title ?? "",
+        image: fullMovie.image ?? "",
+        video: fullMovie.video ?? "",
+        videoType: fullMovie.videoType ?? "hls",
+        trailer: fullMovie.trailer ?? "",
+        description: fullMovie.description ?? "",
+        content: fullMovie.content ?? "",
+        highlights: Array.isArray(fullMovie.highlights)
+          ? fullMovie.highlights.join("\n")
+          : "",
+        summary: fullMovie.summary ?? "",
+        rating: fullMovie.rating ?? "",
+        year: fullMovie.year ?? "",
+        views: fullMovie.views ?? "",
+        language: fullMovie.language ?? "",
+        subtitle: fullMovie.subtitle ?? "",
+        category: fullMovie.category ?? [],
+      });
 
+      formRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
 
-    });
-
-    formRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const confirmDeleteMovie =
-    async () => {
-      try {
-        await axios.delete(
-          `${MOVIE_API}/${deleteMovieId}`,
-          authHeader
-        );
+  const confirmDeleteMovie = async () => {
 
-        fetchMovies();
-        fetchTrashMovies();
+    setLoading(true);
 
-        setDeleteMovieId(null);
-        setDeleteMovieTitle("");
+    try {
+      await axios.delete(
+        `${MOVIE_API}/${deleteMovieId}`,
+        authHeader
+      );
+      fetchMovies();
+      fetchTrashMovies();
+      setDeleteMovieId(null);
+      setDeleteMovieTitle("");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }
 
-      } catch (err) {
-
-        console.error(err);
-
-      }
-    };
   ////////////////////////////////////////////
   const categories = useMemo(() => {
     const all = movies.flatMap((movie) => movie.category || []);
@@ -583,6 +612,7 @@ function MovieManager({
   };
 
   const restoreMovie = async (id) => {
+    setLoading(true);
     try {
 
       await axios.put(
@@ -596,6 +626,10 @@ function MovieManager({
 
     } catch (err) {
       console.error(err);
+    } finally {
+
+      setLoading(false);
+
     }
   };
 
@@ -607,6 +641,8 @@ function MovieManager({
       );
 
     if (!ok) return;
+
+    setLoading(true);
 
     try {
 
@@ -620,6 +656,10 @@ function MovieManager({
     } catch (err) {
 
       console.error(err);
+
+    } finally {
+
+      setLoading(false);
 
     }
   };
@@ -638,6 +678,15 @@ function MovieManager({
             <input name="image" placeholder="Poster URL" value={formData.image} onChange={handleChange} />
 
             <input name="video" placeholder="Video URL" value={formData.video} onChange={handleChange} />
+
+            <select
+              name="videoType"
+              value={formData.videoType}
+              onChange={handleChange}
+            >
+              <option value="hls">HLS (.m3u8)</option>
+              <option value="mp4">MP4</option>
+            </select>
 
             <input
               name="trailer"
@@ -669,7 +718,7 @@ function MovieManager({
 
             <div className="category-wrap"> {categoryOptions.map((cat) => (<button type="button" key={cat} onClick={() => toggleCategory(cat)} className={`category-chip ${formData.category.includes(cat) ? "active" : ""}`} > {cat} </button>))}
 
-            </div> <button className="submit-btn" type="submit" > {editingId ? "บันทึกการแก้ไข" : "เพิ่มหนัง"} </button>
+            </div> <button className="submit-btn" disabled={loading} type="submit" > {editingId ? "บันทึกการแก้ไข" : "เพิ่มหนัง"} </button>
 
           </form>
         </div>
@@ -737,15 +786,20 @@ function MovieManager({
 
 
           <div className="search-row">
-            <input placeholder="ค้นหาหนัง..." value={search} onChange={(e) => setSearch(e.target.value)} />
+            <input placeholder="ค้นหาหนัง..." value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
             <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} > {categories.map((cat) => (
               <option key={cat} > {cat} </option>))}
             </select>
           </div>
 
           <div className="movie-scroll">
+            {loading ? (
 
-            {showTrash ? (
+              <div className="loading">
+                กำลังโหลด...
+              </div>
+
+            ) : showTrash ? (
 
               trashMovies.map((movie) => (
 
@@ -845,7 +899,9 @@ function MovieManager({
               </button>
 
               <span>
-                {currentPage} / {totalPages}
+                หน้า {currentPage}/{totalPages}
+                <br />
+                ทั้งหมด {totalMovies} เรื่อง
               </span>
 
               <button

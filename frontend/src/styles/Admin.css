@@ -1177,3 +1177,10 @@
   color: white;
 
 }
+
+.loading {
+  text-align: center;
+  padding: 30px;
+  font-size: 18px;
+  color: #fff;
+}

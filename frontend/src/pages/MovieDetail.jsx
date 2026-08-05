@@ -101,9 +101,55 @@ function MovieDetail() {
     if (!videoRef.current) return;
     let hls;
     const loadPlayer = async () => {
-      const { default: Hls } = await import("hls.js");
-      setVideoError(false);
+      // ==========================
+      // MP4
+      // ==========================
       setLoadingPlayer(true);
+
+      if (movie.videoType === "mp4") {
+
+        videoRef.current.src = movie.video;
+
+        videoRef.current.onloadedmetadata = () => {
+
+          setLoadingPlayer(false);
+
+          if (forceRestart) {
+
+            videoRef.current.currentTime = 0;
+
+            setForceRestart(false);
+
+          }
+
+          else if (allowResume && resumeTime > 0) {
+
+            videoRef.current.currentTime = resumeTime;
+
+          }
+
+          videoRef.current.play().catch(() => { });
+
+        };
+
+        videoRef.current.onerror = () => {
+
+          setLoadingPlayer(false);
+
+          setVideoError(true);
+
+        };
+
+        return;
+
+      }
+
+      // ==========================
+      // HLS
+      // ==========================
+      const { default: Hls } = await import("hls.js");
+
+      setVideoError(false);
       if (Hls.isSupported()) {
         hls = new Hls({
           maxLoadingDelay: 4,
@@ -429,9 +475,9 @@ function MovieDetail() {
                 {/* TRAILER */}
                 <div
                   className="movie-info" ref={trailerRef}>
-                    {movie.trailer && (
-                      <TrailerPlayer trailer={movie.trailer} />
-                    )}
+                  {movie.trailer && (
+                    <TrailerPlayer trailer={movie.trailer} />
+                  )}
                 </div>
 
               </div>

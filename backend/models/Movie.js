@@ -19,6 +19,12 @@ const movieSchema = new mongoose.Schema({
     maxlength: 500
   },
 
+  videoType: {
+    type: String,
+    enum: ["hls", "mp4"],
+    default: "hls"
+  },
+
   trailer: {
     type: String,
     maxlength: 500
@@ -90,18 +96,18 @@ const movieSchema = new mongoose.Schema({
 }, {
   timestamps: true
 });
-movieSchema.index({ 
+movieSchema.index({
   deleted: 1,
   slug: 1
 });
 
-movieSchema.index({ 
+movieSchema.index({
   createdAt: -1,
-  deleted: 1 
+  deleted: 1
 });
 
-movieSchema.index({ 
-  category: 1 
+movieSchema.index({
+  category: 1
 });
 
 module.exports = mongoose.model("Movie", movieSchema);
