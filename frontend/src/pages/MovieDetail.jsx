@@ -106,6 +106,7 @@ function MovieDetail() {
       // ==========================
       setLoadingPlayer(true);
 
+      console.log("VIDEO URL =", movie.video);
       if (movie.videoType === "mp4") {
 
         videoRef.current.src = movie.video;

@@ -15,7 +15,7 @@ const bannerRoutes = require("./routes/banners");
 const adminRoutes = require("./routes/admin");
 const articleRoutes = require("./routes/articleRoutes");
 const uploadRoute = require("./routes/upload");
-
+const streamRoutes = require("./routes/stream");
 //
 // ENV CHECK
 //
@@ -125,6 +125,7 @@ app.use("/api/site", siteStatsRoutes);
 app.use("/api/admin/login", loginLimiter);
 app.use("/api/admin", adminRoutes);
 app.use("/api/upload",uploadRoute);
+app.use("/api/stream", streamRoutes);
 
 app.use("/api/movies", movieRoutes);
 app.use("/api/banners", bannerRoutes);

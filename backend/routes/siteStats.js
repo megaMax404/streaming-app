@@ -1,4 +1,3 @@
-console.log("ROUTE siteStats.js LOADED");
 const express = require("express");
 const router = express.Router();
 
@@ -23,8 +22,6 @@ VISITOR
 */
 
 router.post("/visit", async (req, res) => {
-    console.log("VISIT ROUTE HIT");
-    console.log(req.body);
 
     try {
         const stat = await visit(
