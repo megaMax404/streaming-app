@@ -82,11 +82,25 @@ async function findOrCreateVisitor(fingerprint, req) {
         visitor.lastSeen = now;
         visitor.ip = ip;
 
-        visitor.browser = browser || visitor.browser;
-        visitor.language = language || visitor.language;
-        visitor.platform = platform || visitor.platform;
-        visitor.screen = screen || visitor.screen;
-        visitor.timezone = timezone || visitor.timezone;
+        if (browser) {
+            visitor.browser = browser;
+        }
+
+        if (language) {
+            visitor.language = language;
+        }
+
+        if (platform) {
+            visitor.platform = platform;
+        }
+
+        if (screen) {
+            visitor.screen = screen;
+        }
+
+        if (timezone) {
+            visitor.timezone = timezone;
+        }
 
         if (referrer !== undefined) {
             visitor.referrer = referrer;
