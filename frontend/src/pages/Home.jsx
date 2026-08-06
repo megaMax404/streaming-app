@@ -78,6 +78,7 @@ function Home({ search }) {
   /* ======================
      FILTER MOVIES
   ====================== */
+  console.log("category =", category);
   const filteredMovies = useMemo(() => {
     return movies.filter((movie) => {
       const title = movie.title?.toLowerCase() || "";
@@ -88,7 +89,6 @@ function Home({ search }) {
       const matchCategory =
         category === "หนังทั้งหมด" ||
         movie.category?.includes(category);
-        console.log(category);
       return matchSearch && matchCategory;
     });
   }, [movies, category, search]);
@@ -102,7 +102,6 @@ function Home({ search }) {
     filteredMovies.length / MOVIES_PER_PAGE
   );
 
-  console.log("current =", currentMovies.length);
   const currentMovies = useMemo(() => {
     const start =
       (currentPage - 1) * MOVIES_PER_PAGE;
@@ -110,6 +109,7 @@ function Home({ search }) {
 
     return filteredMovies.slice(start, end);
   }, [filteredMovies, currentPage]);
+  console.log("current =", currentMovies.length);
 
   const latestMovies = useMemo(() => {
     return movies.filter((movie) =>
