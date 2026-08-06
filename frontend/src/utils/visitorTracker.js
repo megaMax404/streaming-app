@@ -42,20 +42,6 @@ export async function trackVisitor() {
           Intl.DateTimeFormat().resolvedOptions().timeZone,
       });
 
-      console.log("SEND VISIT", {
-        fingerprint,
-        browser: navigator.userAgent,
-        language: navigator.language,
-        platform: navigator.platform,
-        screen: {
-          width: window.screen.width,
-          height: window.screen.height,
-        },
-        timezone:
-          Intl.DateTimeFormat().resolvedOptions().timeZone,
-        referrer: document.referrer,
-      });
-
       localStorage.setItem(VISIT_KEY, now);
     }
 
@@ -81,3 +67,4 @@ export function stopTracking() {
     clearInterval(heartbeat);
   }
 }
+

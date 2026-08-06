@@ -114,6 +114,10 @@ function Home({ search }) {
 
   useEffect(() => {
   }, [movies, latestMovies]);
+
+  console.log("จำนวนหนังทั้งหมด =", filteredMovies.length);
+  console.log("จำนวนหน้า =", totalPages);
+  console.log("Current =", currentMovies.length);
   return (
     <div>
       {/* CAROUSEL */}
