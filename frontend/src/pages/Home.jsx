@@ -48,6 +48,8 @@ function Home({ search }) {
 
         setMovies(sortedMovies);
         setArticles(articleRes.data);
+        console.log("API =", movieRes.data.movies.length);
+        console.log("SORT =", sortedMovies.length);
       } catch (err) {
         console.error("Failed loading home data:", err);
       }
@@ -86,7 +88,7 @@ function Home({ search }) {
       const matchCategory =
         category === "หนังทั้งหมด" ||
         movie.category?.includes(category);
-
+        console.log(category);
       return matchSearch && matchCategory;
     });
   }, [movies, category, search]);
@@ -94,10 +96,13 @@ function Home({ search }) {
   /* ======================
      PAGINATION
   ====================== */
+  console.log("movies =", movies.length);
+  console.log("filtered =", filteredMovies.length);
   const totalPages = Math.ceil(
     filteredMovies.length / MOVIES_PER_PAGE
   );
 
+  console.log("current =", currentMovies.length);
   const currentMovies = useMemo(() => {
     const start =
       (currentPage - 1) * MOVIES_PER_PAGE;
@@ -115,9 +120,6 @@ function Home({ search }) {
   useEffect(() => {
   }, [movies, latestMovies]);
 
-  console.log("จำนวนหนังทั้งหมด =", filteredMovies.length);
-  console.log("จำนวนหน้า =", totalPages);
-  console.log("Current =", currentMovies.length);
   return (
     <div>
       {/* CAROUSEL */}
