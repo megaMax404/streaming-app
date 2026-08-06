@@ -101,6 +101,7 @@ function Home({ search }) {
   const totalPages = Math.ceil(
     filteredMovies.length / MOVIES_PER_PAGE
   );
+  console.log("totalPages =", totalPages);
 
   const currentMovies = useMemo(() => {
     const start =
