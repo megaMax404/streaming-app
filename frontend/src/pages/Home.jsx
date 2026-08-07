@@ -42,7 +42,6 @@ function Home({ search }) {
           ),
           axios.get(`${API_URL}/api/articles`),
         ]);
-        console.log(movieRes.data);
         setMovies(movieRes.data.movies);
         setTotalPages(movieRes.data.totalPages);
         setArticles(articleRes.data);

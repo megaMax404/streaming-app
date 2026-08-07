@@ -11,12 +11,12 @@ const movieSchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    maxlength: 500
+    maxlength: 2000
   },
 
   video: {
     type: String,
-    maxlength: 500
+    maxlength: 2000
   },
 
   videoType: {
@@ -27,7 +27,7 @@ const movieSchema = new mongoose.Schema({
 
   trailer: {
     type: String,
-    maxlength: 500
+    maxlength: 2000
   },
 
   description: {
