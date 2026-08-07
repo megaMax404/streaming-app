@@ -22,6 +22,7 @@ function Home({ search }) {
   const navigate = useNavigate();
 
   const [movies, setMovies] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
   const [articles, setArticles] = useState([]);
 
   const category = slug
@@ -36,27 +37,23 @@ function Home({ search }) {
     const loadData = async () => {
       try {
         const [movieRes, articleRes] = await Promise.all([
-          axios.get(`${API_URL}/api/movies`),
+          axios.get(
+            `${API_URL}/api/movies?page=${currentPage}&limit=${MOVIES_PER_PAGE}`
+          ),
           axios.get(`${API_URL}/api/articles`),
         ]);
-
-        const sortedMovies = [...movieRes.data.movies].sort(
-          (a, b) =>
-            new Date(b.createdAt || 0) -
-            new Date(a.createdAt || 0)
-        );
-
-        setMovies(sortedMovies);
+        console.log(movieRes.data);
+        setMovies(movieRes.data.movies);
+        setTotalPages(movieRes.data.totalPages);
         setArticles(articleRes.data);
-        console.log("API =", movieRes.data.movies.length);
-        console.log("SORT =", sortedMovies.length);
+
       } catch (err) {
         console.error("Failed loading home data:", err);
       }
     };
 
     loadData();
-  }, []);
+  }, [currentPage]);
 
 
   /* ======================
@@ -78,45 +75,39 @@ function Home({ search }) {
   /* ======================
      FILTER MOVIES
   ====================== */
-  console.log("category =", category);
-  const filteredMovies = useMemo(() => {
-    return movies.filter((movie) => {
-      const title = movie.title?.toLowerCase() || "";
-      const keyword = (search || "").toLowerCase();
 
-      const matchSearch = title.includes(keyword);
-
-      const matchCategory =
-        category === "หนังทั้งหมด" ||
-        movie.category?.includes(category);
-      return matchSearch && matchCategory;
-    });
-  }, [movies, category, search]);
 
   /* ======================
      PAGINATION
   ====================== */
-  console.log("movies =", movies.length);
-  console.log("filtered =", filteredMovies.length);
-  const totalPages = Math.ceil(
-    filteredMovies.length / MOVIES_PER_PAGE
-  );
-  console.log("totalPages =", totalPages);
-
   const currentMovies = useMemo(() => {
-    const start =
-      (currentPage - 1) * MOVIES_PER_PAGE;
-    const end = start + MOVIES_PER_PAGE;
 
-    return filteredMovies.slice(start, end);
-  }, [filteredMovies, currentPage]);
-  console.log("current =", currentMovies.length);
+    return movies.filter(movie => {
 
-  const latestMovies = useMemo(() => {
-    return movies.filter((movie) =>
-      movie.category?.includes("หนังใหม่ล่าสุด")
-    );
-  }, [movies]);
+      const title =
+        movie.title?.toLowerCase() || "";
+
+      const keyword =
+        (search || "").toLowerCase();
+
+      const matchSearch =
+        title.includes(keyword);
+
+      const matchCategory =
+
+        category === "หนังทั้งหมด" ||
+
+        movie.category?.includes(category);
+
+      return matchSearch && matchCategory;
+
+    });
+
+  }, [movies, category, search]);
+
+  const latestMovies = currentMovies.filter((movie) =>
+    movie.category?.includes("หนังใหม่ล่าสุด")
+  );
 
   useEffect(() => {
   }, [movies, latestMovies]);
@@ -207,7 +198,6 @@ function Home({ search }) {
                 onPageChange={setCurrentPage}
               />
             )}
-
           </main>
         </div>
       </div>
