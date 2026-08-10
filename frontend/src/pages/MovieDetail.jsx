@@ -101,47 +101,41 @@ function MovieDetail() {
     if (!videoRef.current) return;
     let hls;
     const loadPlayer = async () => {
+
+      // ==========================
+      // IFRAME
+      // ==========================
+      setLoadingPlayer(true);
+
+      if (movie.videoType === "iframe") {
+        setLoadingPlayer(false);
+        setVideoError(false);
+        return;
+      }
+
       // ==========================
       // MP4
       // ==========================
       setLoadingPlayer(true);
 
       if (movie.videoType === "mp4") {
-
         videoRef.current.src = movie.video;
-
         videoRef.current.onloadedmetadata = () => {
-
           setLoadingPlayer(false);
-
           if (forceRestart) {
-
             videoRef.current.currentTime = 0;
-
             setForceRestart(false);
-
           }
-
           else if (allowResume && resumeTime > 0) {
-
             videoRef.current.currentTime = resumeTime;
-
           }
-
           videoRef.current.play().catch(() => { });
-
         };
-
         videoRef.current.onerror = () => {
-
           setLoadingPlayer(false);
-
           setVideoError(true);
-
         };
-
         return;
-
       }
 
       // ==========================
@@ -259,10 +253,12 @@ function MovieDetail() {
   const saveProgress = () => {
     if (!videoRef.current || !movie) return;
 
+    // Iframe ไม่สามารถอ่าน currentTime จากเว็บภายในได้
+    if (movie.videoType === "iframe") return;
+
     const current = videoRef.current.currentTime;
     const duration = videoRef.current.duration || 0;
 
-    // ดูเกิน 95% ให้ลบออกจาก Continue Watching
     if (duration > 0 && current / duration >= 0.95) {
       removeContinueWatching(movie.slug);
       return;
@@ -639,7 +635,17 @@ function MovieDetail() {
                     </div>
                   )}
 
-                  {startMovie && (
+                  {startMovie && movie.videoType === "iframe" && (
+                    <iframe
+                      src={movie.video}
+                      className="movie-video"
+                      title={movie.title}
+                      allow="autoplay; fullscreen; picture-in-picture"
+                      allowFullScreen
+                    />
+                  )}
+
+                  {startMovie && movie.videoType !== "iframe" && (
                     <video
                       ref={videoRef}
                       controls

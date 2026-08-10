@@ -7,7 +7,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     unique: true,
     trim: true,
-    maxlength: 150
+    maxlength: 500
   },
   image: {
     type: String,
@@ -21,7 +21,7 @@ const movieSchema = new mongoose.Schema({
 
   videoType: {
     type: String,
-    enum: ["hls", "mp4"],
+    enum: ["hls", "mp4","iframe"],
     default: "hls"
   },
 

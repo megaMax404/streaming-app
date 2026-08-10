@@ -441,8 +441,8 @@ function MovieManager({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
 
+    try {
       if (
         !isUrl(formData.image) ||
         !isUrl(formData.video) ||
@@ -686,6 +686,7 @@ function MovieManager({
             >
               <option value="hls">HLS (.m3u8)</option>
               <option value="mp4">MP4</option>
+              <option value="iframe">Iframe</option>
             </select>
 
             <input

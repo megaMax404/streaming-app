@@ -103,7 +103,7 @@ router.post(
       }
 
       try {
-        console.log(movie.video);
+       
         const url = new URL(movie.video);
         console.log(new URL(movie.video).hostname);
 
