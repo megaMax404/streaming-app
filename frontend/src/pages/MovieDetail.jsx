@@ -638,7 +638,7 @@ function MovieDetail() {
                   {startMovie && movie.videoType === "iframe" && (
                     <iframe
                       src={movie.video}
-                      className="movie-video movie-iframe"
+                      className="movie-video"
                       title={movie.title}
                       allow="autoplay; fullscreen; picture-in-picture"
                       allowFullScreen
