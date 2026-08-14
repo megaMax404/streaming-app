@@ -679,15 +679,51 @@ function MovieManager({
 
             <input name="video" placeholder="Video URL" value={formData.video} onChange={handleChange} />
 
-            <select
-              name="videoType"
-              value={formData.videoType}
-              onChange={handleChange}
-            >
-              <option value="hls">HLS (.m3u8)</option>
-              <option value="mp4">MP4</option>
-              <option value="iframe">Iframe</option>
-            </select>
+            <div className="video-type-selector">
+              <label className="video-type-label">
+                🎬 รูปแบบการเล่นหนัง
+              </label>
+
+              <div className="video-type-options">
+                <button
+                  type="button"
+                  className={`video-type-option ${formData.videoType === "hls" ? "active" : ""
+                    }`}
+                  onClick={() =>
+                    setFormData({
+                      ...formData,
+                      videoType: "hls",
+                    })
+                  }
+                >
+                  <span className="video-type-icon">📡</span>
+
+                  <span>
+                    <strong>HLS</strong>
+                    <small>.m3u8</small>
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  className={`video-type-option ${formData.videoType === "iframe" ? "active" : ""
+                    }`}
+                  onClick={() =>
+                    setFormData({
+                      ...formData,
+                      videoType: "iframe",
+                    })
+                  }
+                >
+                  <span className="video-type-icon">🌐</span>
+
+                  <span>
+                    <strong>Iframe</strong>
+                    <small>Embedded Player</small>
+                  </span>
+                </button>
+              </div>
+            </div>
 
             <input
               name="trailer"

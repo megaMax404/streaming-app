@@ -65,12 +65,12 @@
 ========================================================== */
 
 .movie-poster {
-    width:300px;
-    flex-shrink:0;
-    border-radius:16px;
-    object-fit:cover;
-    transition:.3s;
-    box-shadow:0 15px 40px rgba(0,0,0,.55);
+    width: 300px;
+    flex-shrink: 0;
+    border-radius: 16px;
+    object-fit: cover;
+    transition: .3s;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, .55);
 }
 
 
@@ -80,7 +80,7 @@
 
 .movie-info {
     flex: 1;
-    min-width:0;
+    min-width: 0;
 }
 
 .movie-trailer {
@@ -88,7 +88,7 @@
     aspect-ratio: 16/9;
     border: none;
     border-radius: 16px;
-    display:block;
+    display: block;
 }
 
 
@@ -97,13 +97,13 @@
 ========================================================== */
 
 .movie-meta-card {
-    display:flex;
-    justify-content:space-between;
-    gap:18px;
-    padding:18px 24px;
-    background:#1a1a1a;
-    border-radius:14px;
-    margin-top:24px;
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 18px 24px;
+    background: #1a1a1a;
+    border-radius: 14px;
+    margin-top: 24px;
 }
 
 .movie-meta-item {
@@ -185,14 +185,14 @@
 ========================================================== */
 
 .resume-popup {
-    position:absolute;
-    inset:0;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:rgba(0,0,0,.75);
-    z-index:99;
-    padding:20px;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, .75);
+    z-index: 99;
+    padding: 20px;
 }
 
 .resume-box {
@@ -209,22 +209,22 @@
 }
 
 .resume-button-group {
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-    width:100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
 }
 
 .resume-play-button,
 .resume-restart-button,
 .resume-close-button {
-    width:100%;
-    border:none;
-    border-radius:12px;
-    padding:14px;
-    font-size:17px;
-    font-weight:bold;
-    cursor:pointer;
+    width: 100%;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .resume-play-button,
@@ -320,22 +320,29 @@
     object-fit: contain;
 }
 
+.movie-iframe {
+    width: 100%;
+    height: 520px;
+    border: 0;
+    display: block;
+}
+
 
 /* ==========================================================
    Ads
 ========================================================== */
 
 .movie-side-ads {
-    width:110px;
-    display:flex;
-    flex-direction:column;
-    gap:8px;
+    width: 110px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .movie-ad-img {
-    width:100%;
-    border-radius:10px;
-    display:block;
+    width: 100%;
+    border-radius: 10px;
+    display: block;
 }
 
 
@@ -353,73 +360,73 @@
 /* ==========================================================
    Responsive
 ========================================================== */
-@media (max-width:768px){
-.movie-page{
-    padding:10px;
-}
+@media (max-width:768px) {
+    .movie-page {
+        padding: 10px;
+    }
 
-.movie-top-section{
-    display:flex;
-    flex-direction:column;
-    gap:20px;
-    align-items:center;
-}
+    .movie-top-section {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+    }
 
-.movie-poster{
-    width:100%;
-    max-width:260px;
-}
+    .movie-poster {
+        width: 100%;
+        max-width: 260px;
+    }
 
-.movie-info{
-    width:100%;
-    order:2;
-}
+    .movie-info {
+        width: 100%;
+        order: 2;
+    }
 
-.movie-trailer{
-    width:100%;
-}
+    .movie-trailer {
+        width: 100%;
+    }
 
-.movie-meta-card{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:12px;
-    padding:15px;
-}
+    .movie-meta-card {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        padding: 15px;
+    }
 
-.movie-meta-item{
-    flex-direction:column;
-    text-align:center;
-    gap:6px;
-}
+    .movie-meta-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 6px;
+    }
 
-.movie-meta-icon{
-    font-size:22px;
-}
+    .movie-meta-icon {
+        font-size: 22px;
+    }
 
-.movie-meta-item small{
-    font-size:12px;
-}
+    .movie-meta-item small {
+        font-size: 12px;
+    }
 
-.movie-meta-item strong{
-    font-size:17px;
-}
+    .movie-meta-item strong {
+        font-size: 17px;
+    }
 
-.resume-box{
-    max-width:260px;
-    padding:16px;
-}
+    .resume-box {
+        max-width: 260px;
+        padding: 16px;
+    }
 
-.resume-box h2{
-    font-size:22px;
-}
+    .resume-box h2 {
+        font-size: 22px;
+    }
 
-.resume-play-button,
-.resume-restart-button,
-.resume-close-button{
-    padding:12px;
-    font-size:15px;
+    .resume-play-button,
+    .resume-restart-button,
+    .resume-close-button {
+        padding: 12px;
+        font-size: 15px;
 
-}
+    }
 
 }
 
@@ -449,30 +456,30 @@
 }
 
 .movie-player-wrapper {
-    position:relative;
-    width:100%;
-    aspect-ratio:16/9;
-    background:#000;
-    border-radius:16px;
-    overflow:hidden;
-    border:2px solid #303030;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #000;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 2px solid #303030;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.movie-trailer-placeholder{
-    position:relative;
+.movie-trailer-placeholder {
+    position: relative;
 }
 
-.movie-trailer-loading{
-    position:absolute;
-    inset:0;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    color:#fff;
-    font-size:20px;
-    font-weight:bold;
-    background:rgba(0,0,0,.45);
+.movie-trailer-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    background: rgba(0, 0, 0, .45);
 }
