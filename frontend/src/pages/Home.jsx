@@ -4,63 +4,152 @@ import axios from "axios";
 
 import { API_URL } from "../config";
 import { categories } from "../data/categories";
-import {
-  slugToCategory,
-  categoryToSlug,
-} from "../data/categoryMap";
+import { slugToCategory, categoryToSlug, } from "../data/categoryMap";
 
 import MovieCard from "../components/MovieCard";
 import Carousel from "../components/Carousel";
 import Pagination from "../components/Pagination";
-import ContinueWatching from "../components/ContinueWatching";
-import { getContinueWatching } from "../utils/continueWatching";
 
 const MOVIES_PER_PAGE = 36;
+const LATEST_CATEGORY = "หนังใหม่ล่าสุด";
+const LATEST_YEAR = 2026;
 
 function Home({ search }) {
   const { slug } = useParams();
   const navigate = useNavigate();
 
+  // ========================= 
+  // STATE 
+  // =========================
   const [movies, setMovies] = useState([]);
+  const [latestMovies, setLatestMovies] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [articles, setArticles] = useState([]);
-
-  const category = slug
-    ? slugToCategory(slug)
-    : "หนังทั้งหมด";
   const [currentPage, setCurrentPage] = useState(1);
+  const [loadingMovies, setLoadingMovies] = useState(false);
+  const [loadingLatest, setLoadingLatest] = useState(false);
 
-  /* ======================
-     FETCH DATA
-  ====================== */
+  // ========================= 
+  // CURRENT CATEGORY
+  // =========================
+  const category = slug ? slugToCategory(slug) : "หนังทั้งหมด";
+
+  // =========================
+  // LOAD MOVIES 
+  // =========================
+
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const [movieRes, articleRes] = await Promise.all([
-          axios.get(
-            `${API_URL}/api/movies?page=${currentPage}&limit=${MOVIES_PER_PAGE}`
-          ),
-          axios.get(`${API_URL}/api/articles`),
-        ]);
-        setMovies(movieRes.data.movies);
-        setTotalPages(movieRes.data.totalPages);
-        setArticles(articleRes.data);
+    let cancelled = false;
+    const loadMovies = async () => {
+      setLoadingMovies(true);
 
+      try {
+        const params = new URLSearchParams({
+          page: String(currentPage),
+          limit: String(MOVIES_PER_PAGE),
+        });
+
+        const res = await axios.get(`${API_URL}/api/movies?${params.toString()}`
+        );
+
+        if (cancelled) return;
+
+        setMovies(res.data.movies || []);
+        setTotalPages(res.data.totalPages || 1);
       } catch (err) {
-        console.error("Failed loading home data:", err);
+        if (cancelled) return;
+        console.error("Failed loading movies:", err);
+        setMovies([]);
+        setTotalPages(1);
+
+      } finally {
+        if (!cancelled) {
+          setLoadingMovies(false);
+        }
       }
     };
 
-    loadData();
+    loadMovies();
+    return () => {
+      cancelled = true;
+    };
   }, [currentPage]);
 
 
-  /* ======================
-     CATEGORY FROM URL
-  ====================== */
+  // ========================= 
+  // LOAD LATEST MOVIES
+  // =========================
   useEffect(() => {
-    setCurrentPage(1);
-  }, [slug]);
+    let cancelled = false;
+    const loadLatestMovies = async () => {
+      setLoadingLatest(true); try {
+        const params = new URLSearchParams({
+          page: String(currentPage),
+          limit: String(MOVIES_PER_PAGE),
+          category: LATEST_CATEGORY,
+        });
+        const res = await axios.get(`${API_URL}/api/movies?${params.toString()}`);
+
+        if (cancelled) return;
+
+        const latest = (res.data.movies || []).filter(
+          (movie) => Number(movie.year) === LATEST_YEAR);
+        setLatestMovies(latest);
+
+      } catch (err) {
+        if (cancelled) return;
+
+        console.error("Failed loading latest movies:", err);
+        setLatestMovies([]);
+      }
+
+      finally {
+        if (!cancelled) {
+          setLoadingLatest(false);
+        }
+      }
+    };
+
+    loadLatestMovies();
+    return () => {
+      cancelled = true;
+    };
+  }, [currentPage]);
+
+  // ========================= 
+  // LOAD ARTICLES 
+  // =========================
+
+  useEffect(() => {
+    let cancelled = false;
+    const loadArticles = async () => {
+
+      try {
+        const res = await axios.get(`${API_URL}/api/articles`);
+
+        if (cancelled) return;
+        setArticles(res.data || []);
+      } catch (err) {
+        if (cancelled) return;
+        console.error("Failed loading articles:", err);
+        setArticles([]);
+      }
+    };
+    loadArticles();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // ========================= 
+  // RESET PAGE WHEN CATEGORY CHANGES
+  // =========================
+
+  useEffect(() => { setCurrentPage(1); }, [slug]);
+
+  // ========================= 
+  // CHANGE CATEGORY 
+  // =========================
 
   const changeCategory = (cat) => {
     if (cat === "หนังทั้งหมด") {
@@ -68,59 +157,23 @@ function Home({ search }) {
       return;
     }
 
-    navigate(`/category/${categoryToSlug(cat)}`);
+    navigate(`/category/${categoryToSlug(cat)}`
+    );
   };
 
-  /* ======================
-     FILTER MOVIES
-  ====================== */
-
-
-  /* ======================
-     PAGINATION
-  ====================== */
-  const currentMovies = useMemo(() => {
-
-    return movies.filter(movie => {
-
-      const title =
-        movie.title?.toLowerCase() || "";
-
-      const keyword =
-        (search || "").toLowerCase();
-
-      const matchSearch =
-        title.includes(keyword);
-
-      const matchCategory =
-
-        category === "หนังทั้งหมด" ||
-
-        movie.category?.includes(category);
-
-      return matchSearch && matchCategory;
-
-    });
-
-  }, [movies, category, search]);
-
-  const latestMovies = currentMovies.filter((movie) =>
-    movie.category?.includes("หนังใหม่ล่าสุด")
-  );
-
-  useEffect(() => {
-  }, [movies, latestMovies]);
 
   return (
     <div>
       {/* CAROUSEL */}
-      <ContinueWatching />
-      <div style={styles.carouselSection}>
-        <div style={styles.sectionTitle}>
-          หนังใหม่ล่าสุด (2026)
-        </div>
-        <Carousel movies={latestMovies} />
-      </div>
+      {latestMovies.length > 0 && (
+        <section style={styles.carouselSection}>
+          <h2 style={styles.sectionTitle}>
+            หนังใหม่ล่าสุด (2026)
+          </h2>
+
+          <Carousel movies={latestMovies} />
+        </section>
+      )}
 
       {/* MAIN */}
       <div style={styles.wrapper}>
