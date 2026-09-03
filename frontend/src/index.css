@@ -276,3 +276,32 @@ body,
     width:100%;
 }
 
+.movie-card-image {
+  position: relative;
+  width: 100%;
+}
+
+.movie-card-image img {
+  width: 100%;
+  display: block;
+}
+
+.movie-card-rating {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+
+  padding: 5px 9px;
+
+  background: rgba(0, 0, 0, 0.85);
+  color: #ffd000;
+
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-weight: bold;
+
+  z-index: 2;
+
+  backdrop-filter: blur(4px);
+}

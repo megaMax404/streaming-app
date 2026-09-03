@@ -10,13 +10,26 @@ function MovieCard({ movie }) {
       className="movie-card"
       onClick={() => navigate(`/movie/${movie.slug}`)}
     >
-      <img
-        src={movie.image || "/no-image.jpg"}
-        alt={movie.title || "movie"}
-        loading="lazy"
-        decoding="async"
-      />
+      {/* POSTER */}
+      <div className="movie-card-image">
+        <img
+          src={movie.image || "/no-image.jpg"}
+          alt={movie.title || "movie"}
+          loading="lazy"
+          decoding="async"
+        />
 
+        {/* RATING */}
+        {movie.rating !== undefined &&
+          movie.rating !== null &&
+          movie.rating !== "" && (
+            <div className="movie-card-rating">
+              ⭐ {movie.rating}
+            </div>
+          )}
+      </div>
+
+      {/* INFO */}
       <h3>{movie.title || "Untitled"}</h3>
 
       <p>{movie.description || "-"}</p>
