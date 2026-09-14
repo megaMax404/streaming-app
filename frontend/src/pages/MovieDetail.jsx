@@ -587,9 +587,9 @@ function MovieDetail() {
 
 
               {/* TITLE */}
-              <h2 className="movie-page-title">
+              <h1 className="movie-page-title">
                 {movie.title}
-              </h2>
+              </h1>
 
               {/* TOP */}
               <div className="movie-top-section">
