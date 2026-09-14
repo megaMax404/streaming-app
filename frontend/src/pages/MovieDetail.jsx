@@ -33,8 +33,8 @@ function MovieDetail() {
   const [showResumePopup, setShowResumePopup] = useState(false);
   const [forceRestart, setForceRestart] = useState(false);
   const [allowResume, setAllowResume] = useState(false);
-  // โหลดข้อมูลหนัง
 
+  // โหลดข้อมูลหนัง
   useEffect(() => {
     setLoading(true);
     setNotFound(false);
@@ -71,6 +71,151 @@ function MovieDetail() {
       )
       .catch(console.error);
   }, []);
+
+  useEffect(() => {
+    if (!movie) return;
+
+    const movieTitle = String(
+      movie.title || "ดูหนังออนไลน์"
+    ).trim();
+
+    const descriptionSource =
+      movie.summary ||
+      movie.content ||
+      `ดูหนัง ${movieTitle} ออนไลน์`;
+
+    const metaDescription = String(descriptionSource)
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, 160);
+
+    const canonicalUrl = movie.slug
+      ? new URL(
+        `/movie/${movie.slug}`,
+        window.location.origin
+      ).href
+      : window.location.href;
+
+    const imageUrl = movie.image
+      ? new URL(
+        movie.image,
+        window.location.origin
+      ).href
+      : new URL(
+        "/no-image.jpg",
+        window.location.origin
+      ).href;
+
+    const pageTitle = `${movieTitle} ดูหนังออนไลน์ | DooHD`;
+
+    document.title = pageTitle;
+    document.documentElement.lang = "th";
+
+    const setMeta = (selector, attributes, content) => {
+      let element = document.head.querySelector(selector);
+
+      if (!element) {
+        element = document.createElement("meta");
+
+        Object.entries(attributes).forEach(
+          ([key, value]) => {
+            element.setAttribute(key, value);
+          }
+        );
+
+        document.head.appendChild(element);
+      }
+
+      element.setAttribute(
+        "content",
+        content
+      );
+    };
+
+    setMeta(
+      'meta[name="description"]',
+      { name: "description" },
+      metaDescription
+    );
+
+    setMeta(
+      'meta[property="og:title"]',
+      { property: "og:title" },
+      pageTitle
+    );
+
+    setMeta(
+      'meta[property="og:description"]',
+      { property: "og:description" },
+      metaDescription
+    );
+
+    setMeta(
+      'meta[property="og:image"]',
+      { property: "og:image" },
+      imageUrl
+    );
+
+    setMeta(
+      'meta[property="og:url"]',
+      { property: "og:url" },
+      canonicalUrl
+    );
+
+    setMeta(
+      'meta[property="og:type"]',
+      { property: "og:type" },
+      "website"
+    );
+
+    setMeta(
+      'meta[name="twitter:card"]',
+      { name: "twitter:card" },
+      "summary_large_image"
+    );
+
+    setMeta(
+      'meta[name="twitter:title"]',
+      { name: "twitter:title" },
+      pageTitle
+    );
+
+    setMeta(
+      'meta[name="twitter:description"]',
+      { name: "twitter:description" },
+      metaDescription
+    );
+
+    setMeta(
+      'meta[name="twitter:image"]',
+      { name: "twitter:image" },
+      imageUrl
+    );
+
+    let canonical = document.head.querySelector(
+      'link[rel="canonical"]'
+    );
+
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.setAttribute(
+        "rel",
+        "canonical"
+      );
+      document.head.appendChild(canonical);
+    }
+
+    canonical.setAttribute(
+      "href",
+      canonicalUrl
+    );
+
+    return () => {
+      document.title = "ดูหนังออนไลน์ฟรี";
+
+      document.documentElement.lang = "th";
+    };
+  }, [movie]);
 
   useEffect(() => {
     setStartMovie(false);
@@ -443,8 +588,7 @@ function MovieDetail() {
 
               {/* TITLE */}
               <h2 className="movie-page-title">
-                {movie.title}{" "}
-                {movie.description}
+                {movie.title}
               </h2>
 
               {/* TOP */}
@@ -528,7 +672,7 @@ function MovieDetail() {
               {/* ARTICLE */}
               <div className="movie-article-box">
                 <h2 className="movie-article-title">
-                  เรื่องย่อของ {movie.title}{" "}{movie.description}
+                  เรื่องย่อของ {movie.title}
                 </h2>
 
                 <div className="movie-article-text">

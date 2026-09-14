@@ -284,7 +284,7 @@ function BannerManager() {
                     {banner.active
                       ? "🟢 เปิดใช้งาน"
                       : "🔴 ปิดใช้งาน"}
-                  </p>
+                  </p>             
 
                   <p
                     style={{
