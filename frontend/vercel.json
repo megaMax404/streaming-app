@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/sitemap.xml",
-      "destination": "https://streaming-backend-yzfm.onrender.com/sitemap.xml"
+      "destination": "/api/sitemap"
     },
     {
       "source": "/(.*)",
