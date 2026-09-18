@@ -210,7 +210,78 @@ function MovieDetail() {
       canonicalUrl
     );
 
+    // =========================
+    // JSON-LD: VideoObject
+    // =========================
+    const existingJsonLd = document.head.querySelector(
+      'script[data-seo="movie-video"]'
+    );
+
+    if (existingJsonLd) {
+      existingJsonLd.remove();
+    }
+
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@type": "VideoObject",
+
+      "name": movieTitle,
+
+      "description": metaDescription,
+
+      "thumbnailUrl": imageUrl,
+
+      "uploadDate": movie.createdAt
+        ? new Date(movie.createdAt).toISOString()
+        : undefined,
+
+      "url": canonicalUrl,
+
+      "publisher": {
+        "@type": "Organization",
+        "name": "DooHD",
+        "url": "https://doohd.vip"
+      }
+    };
+
+    // ถ้าเป็น iframe ให้ใช้ URL ของตัว player
+    if (
+      movie.videoType === "iframe" &&
+      movie.video
+    ) {
+      jsonLd.embedUrl = movie.video;
+    }
+
+    // ถ้าเป็นไฟล์วิดีโอโดยตรง เช่น MP4 / HLS
+    if (
+      movie.video &&
+      movie.videoType !== "iframe"
+    ) {
+      jsonLd.contentUrl = movie.video;
+    }
+
+    const script = document.createElement("script");
+
+    script.type = "application/ld+json";
+    script.dataset.seo = "movie-video";
+
+    script.textContent = JSON.stringify(
+      jsonLd,
+      null,
+      2
+    );
+
+    document.head.appendChild(script);
+
     return () => {
+      const script = document.head.querySelector(
+        'script[data-seo="movie-video"]'
+      );
+
+      if (script) {
+        script.remove();
+      }
+
       document.title = "ดูหนังออนไลน์ฟรี";
 
       document.documentElement.lang = "th";
