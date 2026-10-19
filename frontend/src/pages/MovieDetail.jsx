@@ -1,7 +1,7 @@
 import { API_URL } from "../config";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { categoryToSlug } from "../utils/categoryMap";
+import { categoryToSlug } from "../data/categoryMap";
 import {
   useEffect,
   useRef,
@@ -24,7 +24,7 @@ function MovieDetail() {
   const [banners, setBanners] = useState([]);
   const [startMovie, setStartMovie] = useState(false);
   const [countedView, setCountedView] = useState(false);
-  const [loadingPlayer, setLoadingPlayer] = useState(false);
+ 
   const trailerRef = useRef(null);
   const videoRef = useRef(null);
   const [loading, setLoading] = useState(true);
