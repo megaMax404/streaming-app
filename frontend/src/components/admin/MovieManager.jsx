@@ -6,6 +6,25 @@ import {
   useNavigate,
 } from "react-router-dom";
 
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  KeyboardSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+
+import { CSS } from "@dnd-kit/utilities";
+
 function MovieManager({
   editMovieId,
   setEditMovieId
@@ -331,6 +350,121 @@ function MovieManager({
   };
 
   const [movies, setMovies] = useState([]);
+  const [reordering, setReordering] = useState(false);
+  const [savingOrder, setSavingOrder] = useState(false);
+  const [allMoviesForOrder, setAllMoviesForOrder] = useState([]);
+  const [orderDirty, setOrderDirty] = useState(false);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 6,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = allMoviesForOrder.findIndex(
+      (movie) => movie._id === active.id
+    );
+
+    const newIndex = allMoviesForOrder.findIndex(
+      (movie) => movie._id === over.id
+    );
+
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    setAllMoviesForOrder((currentMovies) =>
+      arrayMove(currentMovies, oldIndex, newIndex)
+    );
+
+    setOrderDirty(true);
+  };
+
+
+
+  const startReordering = async () => {
+    if (search.trim() || searchInput.trim() ||
+      selectedCategory !== "All") {
+      alert("กรุณาล้างคำค้นหาและเลือกหมวดหมู่ All ก่อนจัดลำดับ");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const res = await axios.get(MOVIE_API, {
+        params: {
+          page: 1,
+          limit: Math.max(totalMovies, 1),
+          search: "",
+          category: "",
+        },
+      });
+
+      const allMovies = res.data.movies || [];
+
+      if (allMovies.length !== totalMovies) {
+        alert(
+          "โหลดหนังได้ไม่ครบ กรุณาตรวจสอบ API ก่อนจัดลำดับ"
+        );
+        return;
+      }
+
+      setAllMoviesForOrder(allMovies);
+      setOrderDirty(false);
+      setReordering(true);
+    } catch (err) {
+      console.error(err);
+      alert("โหลดรายการหนังสำหรับจัดลำดับไม่สำเร็จ");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const saveMovieOrder = async () => {
+    if (!orderDirty || savingOrder) return;
+
+    try {
+      setSavingOrder(true);
+
+      const movieIds = allMoviesForOrder.map(
+        (movie) => movie._id
+      );
+
+      await axios.put(
+        `${MOVIE_API}/reorder`,
+        { movieIds },
+        authHeader
+      );
+
+      setOrderDirty(false);
+      setReordering(false);
+      setAllMoviesForOrder([]);
+
+      await fetchMovies();
+
+      alert("บันทึกลำดับหนังเรียบร้อยแล้ว");
+    } catch (err) {
+      console.error(err);
+      alert(
+        err.response?.data?.message ||
+        "บันทึกลำดับหนังไม่สำเร็จ"
+      );
+    } finally {
+      setSavingOrder(false);
+    }
+  };
+
+
   const [trashMovies, setTrashMovies] = useState([]);
   const [showTrash, setShowTrash] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -348,7 +482,7 @@ function MovieManager({
       const res = await axios.get(MOVIE_API, {
         params: {
           page: currentPage,
-          limit: 20,
+          limit: 36,
           search,
           category:
             selectedCategory === "All"
@@ -664,6 +798,13 @@ function MovieManager({
     }
   };
 
+  const displayedMovies = reordering
+    ? allMoviesForOrder.slice(
+      (currentPage - 1) * 36,
+      currentPage * 36
+    )
+    : movies;
+
   return (
     <>
       <div className="movie-dashboard-grid">
@@ -822,9 +963,51 @@ function MovieManager({
           </p>
 
 
+          <div className="movie-order-controls">
+            {!reordering ? (
+              <button
+                type="button"
+                onClick={startReordering}
+                disabled={loading || showTrash}
+              >
+                ⠿ จัดลำดับหนัง
+              </button>
+            ) : (
+              <>
+                <span>
+                  {orderDirty
+                    ? "มีการเปลี่ยนลำดับที่ยังไม่บันทึก"
+                    : "กำลังจัดลำดับหนัง"}
+                </span>
+
+                <button
+                  type="button"
+                  onClick={saveMovieOrder}
+                  disabled={!orderDirty || savingOrder}
+                >
+                  {savingOrder ? "กำลังบันทึก..." : "บันทึกลำดับ"}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setReordering(false);
+                    setAllMoviesForOrder([]);
+                    setOrderDirty(false);
+                  }}
+                  disabled={savingOrder}
+                >
+                  ยกเลิก
+                </button>
+              </>
+            )}
+          </div>
+
+
+
           <div className="search-row">
-            <input placeholder="ค้นหาหนัง..." value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
-            <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} > {categories.map((cat) => (
+            <input placeholder="ค้นหาหนัง..." value={searchInput} disabled={reordering} onChange={(e) => setSearchInput(e.target.value)} />
+            <select value={selectedCategory} disabled={reordering} onChange={(e) => setSelectedCategory(e.target.value)} > {categories.map((cat) => (
               <option key={cat} > {cat} </option>))}
             </select>
           </div>
@@ -872,62 +1055,70 @@ function MovieManager({
 
             ) : (
 
-              movies.map((movie) => (
-
-                <div
-                  className="movie-row"
-                  key={movie._id}
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={reordering ? handleDragEnd : undefined}
+              >
+                <SortableContext
+                  items={displayedMovies.map((movie) => movie._id)}
+                  strategy={verticalListSortingStrategy}
                 >
-                  <img
-                    src={movie.image ||
-                      "/no-image.jpg"}
-                    alt={movie.title}
-                  />
-
-                  <div className="movie-info">
-                    <h3>{movie.title}</h3>
-
-                    <p>
-                      ⭐ {movie.rating}
-                      {" | "}
-                      📅 {movie.year}
-                    </p>
-                  </div>
-
-                  <div className="action-buttons">
-
-                    <button
-                      onClick={() =>
-                        editMovie(movie)
-                      }
+                  {displayedMovies.map((movie) => (
+                    <SortableMovieRow
+                      key={movie._id}
+                      movie={movie}
+                      disabled={!reordering}
+                      showHandle={reordering}
                     >
-                      แก้ไข
-                    </button>
+                      <img
+                        src={movie.image || "/no-image.jpg"}
+                        alt={movie.title}
+                      />
 
-                    <button
-                      className="delete-btn"
-                      onClick={() => {
-                        setDeleteMovieId(movie._id);
-                        setDeleteMovieTitle(movie.title);
-                      }}
-                    >
-                      🗑 ลบ
-                    </button>
+                      <div className="movie-info">
+                        <h3>{movie.title}</h3>
 
-                  </div>
-                </div>
+                        <p>
+                          ⭐ {movie.rating}
+                          {" | "}
+                          📅 {movie.year}
+                        </p>
+                      </div>
 
-              ))
+                      <div className="action-buttons">
+                        <button
+                          type="button"
+                          disabled={reordering}
+                          onClick={() => editMovie(movie)}
+                        >
+                          แก้ไข
+                        </button>
 
+                        <button
+                          type="button"
+                          className="delete-btn"
+                          disabled={reordering}
+                          onClick={() => {
+                            setDeleteMovieId(movie._id);
+                            setDeleteMovieTitle(movie.title);
+                          }}
+                        >
+                          🗑 ลบ
+                        </button>
+                      </div>
+                    </SortableMovieRow>
+                  ))}
+                </SortableContext>
+              </DndContext>
             )}
-
           </div>
 
           {!showTrash && (
             <div className="pagination">
 
               <button
-                disabled={currentPage === 1}
+                disabled={reordering || currentPage === 1}
                 onClick={() =>
                   setCurrentPage((p) => p - 1)
                 }
@@ -942,7 +1133,7 @@ function MovieManager({
               </span>
 
               <button
-                disabled={currentPage === totalPages}
+                disabled={reordering || currentPage === totalPages}
                 onClick={() =>
                   setCurrentPage((p) => p + 1)
                 }
@@ -1000,6 +1191,57 @@ function MovieManager({
       )}
 
     </>
+  );
+}
+
+function SortableMovieRow({
+  movie,
+  children,
+  disabled,
+  showHandle,
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: movie._id,
+    disabled,
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    position: "relative",
+    zIndex: isDragging ? 10 : "auto",
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`movie-row ${isDragging ? "movie-row-dragging" : ""}`}
+    >
+      {showHandle && (
+        <button
+          type="button"
+          className="movie-drag-handle"
+          {...attributes}
+          {...listeners}
+          disabled={disabled}
+          title="ลากเพื่อจัดลำดับหนัง"
+          aria-label={`ลากเพื่อจัดลำดับ ${movie.title}`}
+        >
+          ⠿
+        </button>
+      )}
+
+      {children}
+    </div>
   );
 }
 export default MovieManager;

@@ -21,7 +21,7 @@ const movieSchema = new mongoose.Schema({
 
   videoType: {
     type: String,
-    enum: ["hls", "mp4","iframe"],
+    enum: ["hls", "mp4", "iframe"],
     default: "hls"
   },
 
@@ -57,9 +57,17 @@ const movieSchema = new mongoose.Schema({
     type: Number,
     min: 1900
   },
+
   views: {
     type: Number,
     default: 0
+  },
+
+  // ลำดับการแสดงหนังบนหน้าเว็บหลัก
+  sortOrder: {
+    type: Number,
+    default: 0,
+    index: true
   },
 
   language: {
@@ -88,6 +96,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     default: "unknown"
   },
+
   slug: {
     type: String,
     unique: true,

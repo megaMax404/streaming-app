@@ -1,6 +1,7 @@
 import { API_URL } from "../config";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { categoryToSlug } from "../utils/categoryMap";
 import {
   useEffect,
   useRef,
@@ -721,6 +722,42 @@ function MovieDetail() {
                 </div>
 
               </div>
+
+              {/* BREADCRUMB */}
+              <nav
+                className="movie-breadcrumb"
+                aria-label="Breadcrumb"
+              >
+                <button
+                  type="button"
+                  onClick={() => navigate("/")}
+                >
+                  หน้าแรก
+                </button>
+
+                <span>›</span>
+
+                {movie.category?.[0] && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        navigate(
+                          `/c/${categoryToSlug(movie.category[0])}`
+                        )
+                      }
+                    >
+                      {movie.category[0]}
+                    </button>
+
+                    <span>›</span>
+                  </>
+                )}
+
+                <span className="movie-breadcrumb-current">
+                  {movie.title}
+                </span>
+              </nav>
 
               <div className="movie-category-text">
                 <svg

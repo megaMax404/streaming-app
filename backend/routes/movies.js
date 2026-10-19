@@ -70,7 +70,7 @@ router.get("/", async (req, res) => {
         createdAt: 1,
       }
     )
-      .sort({ createdAt: -1 })
+      .sort({ sortOrder: 1, createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit)
       .lean();
@@ -230,6 +230,59 @@ router.post("/", auth, async (req, res) => {
     res.status(500).json({
       message: err.message
     });
+  }
+});
+router.put("/reorder", auth, async (req, res) => {
+  try {
+    const { movieIds } = req.body;
+
+    if (!Array.isArray(movieIds)) {
+      return res.status(400).json({
+        message: "movieIds must be an array",
+      });
+    }
+
+    const uniqueIds = new Set(movieIds);
+
+    if (uniqueIds.size !== movieIds.length) {
+      return res.status(400).json({
+        message: "Duplicate movie IDs are not allowed",
+      });
+    }
+
+    const operations = movieIds.map((id, index) => ({
+      updateOne: {
+        filter: {
+          _id: id,
+          deleted: false,
+        },
+        update: {
+          $set: {
+            sortOrder: index + 1,
+          },
+        },
+      },
+    }));
+
+    if (operations.length > 0) {
+      await Movie.bulkWrite(operations);
+    }
+
+    cache.flushAll();
+    await createBackup();
+
+    res.json({
+      success: true,
+      message: "Movie order saved",
+    });
+
+  } catch (err) {
+    console.error("REORDER MOVIES ERROR:", err);
+
+    res.status(500).json({
+      message: err.message || "Failed to save movie order",
+    });
+
   }
 });
 

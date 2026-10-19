@@ -476,3 +476,37 @@
     font-weight: bold;
     background: rgba(0, 0, 0, .45);
 }
+
+.movie-breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 18px 0 14px;
+    font-size: 14px;
+    color: #999;
+}
+
+.movie-breadcrumb button {
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    color: #aaa;
+    font-size: 14px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.movie-breadcrumb button:hover {
+    color: #ffd000;
+}
+
+.movie-breadcrumb>span {
+    color: #666;
+}
+
+.movie-breadcrumb .movie-breadcrumb-current {
+    color: #ddd;
+    cursor: default;
+}
