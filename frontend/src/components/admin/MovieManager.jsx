@@ -389,8 +389,6 @@ function MovieManager({
     setOrderDirty(true);
   };
 
-
-
   const startReordering = async () => {
     if (search.trim() || searchInput.trim() ||
       selectedCategory !== "All") {
@@ -967,6 +965,7 @@ function MovieManager({
             {!reordering ? (
               <button
                 type="button"
+                className="reorder-start-btn"
                 onClick={startReordering}
                 disabled={loading || showTrash}
               >
@@ -982,6 +981,7 @@ function MovieManager({
 
                 <button
                   type="button"
+                  className="reorder-save-btn"
                   onClick={saveMovieOrder}
                   disabled={!orderDirty || savingOrder}
                 >
@@ -990,6 +990,7 @@ function MovieManager({
 
                 <button
                   type="button"
+                  className="reorder-cancel-btn"
                   onClick={() => {
                     setReordering(false);
                     setAllMoviesForOrder([]);

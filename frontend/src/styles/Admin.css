@@ -1284,3 +1284,182 @@
 .video-type-option.active small {
   color: #aaa;
 }
+
+
+
+/* ========================================
+   MOVIE REORDER - DARK ADMIN DASHBOARD
+======================================== */
+
+/* แถบควบคุมการจัดลำดับ */
+.movie-order-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px;
+  margin: 0 0 18px;
+  background: linear-gradient(135deg, #191919, #111);
+  border: 1px solid #303030;
+  border-radius: 16px;
+}
+
+.movie-order-controls>span {
+  flex: 1;
+  min-width: 180px;
+  color: #a3a3a3;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ปุ่มในแถบจัดลำดับ */
+.movie-order-controls button {
+  min-height: 42px;
+  padding: 10px 16px;
+  border: 1px solid #414141;
+  border-radius: 10px;
+  background: #262626;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.movie-order-controls button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: #333;
+  border-color: #666;
+}
+
+.movie-order-controls button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+/* ปุ่มเริ่มจัดลำดับ */
+.movie-order-controls .reorder-start-btn {
+  background: #262626;
+  border-color: #414141;
+}
+
+/* ปุ่มบันทึกลำดับ */
+.movie-order-controls .reorder-save-btn {
+  color: #fff;
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  border-color: #15803d;
+  box-shadow: 0 4px 14px rgba(22, 163, 74, 0.16);
+}
+
+
+.movie-order-controls .reorder-save-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  box-shadow: 0 6px 20px rgba(22, 163, 74, 0.22);
+}
+
+/* ปุ่มยกเลิก */
+.movie-order-controls .reorder-cancel-btn {
+  background: #222;
+  color: #d4d4d4;
+  border-color: #3a3a3a;
+}
+
+/* ปุ่มที่กดไม่ได้ */
+.movie-order-controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* การ์ดหนัง */
+.movie-row {
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+/* ปุ่มจับลาก: ตรงกับ JSX จริง */
+.movie-row .movie-drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 44px;
+  padding: 0;
+  color: #b3b3b3;
+  background: #252525;
+  border: 1px solid #3a3a3a;
+  border-radius: 10px;
+  font-size: 23px;
+  line-height: 1;
+  cursor: grab;
+  touch-action: none;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.movie-row .movie-drag-handle:hover:not(:disabled) {
+  color: #fff;
+  background: #333;
+  border-color: #666;
+}
+
+.movie-row .movie-drag-handle:active {
+  cursor: grabbing;
+}
+
+.movie-row .movie-drag-handle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* การ์ดขณะลาก: ตรงกับ JSX จริง */
+.movie-row.movie-row-dragging {
+  position: relative;
+  z-index: 10;
+  border-color: #e50914;
+  background: #222;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* มือถือ */
+@media (max-width: 768px) {
+  .movie-order-controls {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 14px;
+  }
+
+  .movie-order-controls>span {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .movie-order-controls button {
+    width: 100%;
+  }
+
+  .movie-row .movie-drag-handle {
+    align-self: flex-start;
+  }
+}
+
+/* ลดเอฟเฟกต์สำหรับผู้ใช้ที่ตั้งค่าลดการเคลื่อนไหว */
+@media (prefers-reduced-motion: reduce) {
+
+  .movie-order-controls button,
+  .movie-row,
+  .movie-row .movie-drag-handle {
+    transition: none;
+  }
+}
