@@ -20,7 +20,7 @@ import {
 function MovieDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const [movie, setMovie] = useState(null);
+  const [movie, setMovie] = useState(null); 
   const [banners, setBanners] = useState([]);
   const [startMovie, setStartMovie] = useState(false);
   const [countedView, setCountedView] = useState(false);
@@ -28,6 +28,7 @@ function MovieDetail() {
   const trailerRef = useRef(null);
   const videoRef = useRef(null);
   const [loading, setLoading] = useState(true);
+  const [loadingPlayer, setLoadingPlayer] = useState(false);
   const [notFound, setNotFound] = useState(false);
   const [videoError, setVideoError] = useState(false);
   const [resumeTime, setResumeTime] = useState(0);
