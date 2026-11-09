@@ -20,11 +20,12 @@ import {
 function MovieDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const [movie, setMovie] = useState(null); 
+  const [movie, setMovie] = useState(null);
   const [banners, setBanners] = useState([]);
+  const [showMobileBottomBanner, setShowMobileBottomBanner] = useState(true);
   const [startMovie, setStartMovie] = useState(false);
   const [countedView, setCountedView] = useState(false);
- 
+
   const trailerRef = useRef(null);
   const videoRef = useRef(null);
   const [loading, setLoading] = useState(true);
@@ -36,7 +37,7 @@ function MovieDetail() {
   const [forceRestart, setForceRestart] = useState(false);
   const [allowResume, setAllowResume] = useState(false);
 
-  // โหลดข้อมูลหนัง
+  // โหลดข้อมูลหนัง.
   useEffect(() => {
     setLoading(true);
     setNotFound(false);
@@ -587,6 +588,10 @@ function MovieDetail() {
         b.placement === "right"
     );
 
+  const mobileBottomBanner = banners.find(
+    (b) => b.placement === "mobile-bottom"
+  );
+
   return (
     <div>
       <PlayerNavbar />
@@ -971,6 +976,38 @@ function MovieDetail() {
           ))}
         </div>
       </div>
+
+      {/* MOBILE STICKY BOTTOM BANNER */}
+      {mobileBottomBanner?.image && showMobileBottomBanner && (
+        <div className="mobile-bottom-banner">
+          <a
+            href={mobileBottomBanner.link || "#"}
+            target={mobileBottomBanner.link ? "_blank" : undefined}
+            rel="noopener noreferrer"
+            onClick={(e) => {
+              if (!mobileBottomBanner.link) {
+                e.preventDefault();
+              }
+            }}
+          >
+            <img
+              src={mobileBottomBanner.image}
+              alt="Advertisement"
+            />
+          </a>
+
+          <button
+            type="button"
+            className="mobile-bottom-banner-close"
+            onClick={() => setShowMobileBottomBanner(false)}
+            aria-label="ปิดโฆษณา"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
+    </div>
     </div >
   );
 }
