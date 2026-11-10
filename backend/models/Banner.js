@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const bannerSchema = new mongoose.Schema({
   image: {
     type: String,
-    maxlength: 100,
+    maxlength: 2000,
     default: ""
   },
 
@@ -15,7 +15,7 @@ const bannerSchema = new mongoose.Schema({
 
   placement: {
     type: String,
-    enum: ["top", "left", "right"],
+    enum: ["top", "left", "right", "mobile-bottom"],
     default: "top"
   },
 

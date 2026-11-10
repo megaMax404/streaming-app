@@ -135,20 +135,20 @@ function BannerManager() {
             <select
               className="banner-select"
               value={placement}
-              onChange={(e) =>
-                setPlacement(e.target.value)
-              }
+              onChange={(e) => {
+                const value = e.target.value;
+                setPlacement(value);
+
+                if (value === "mobile-bottom") {
+                  setPosition("movie");
+                }
+              }}
             >
-              <option value="top">
-                Top Banner
-              </option>
-
-              <option value="left">
-                Left Ads
-              </option>
-
-              <option value="right">
-                Right Ads
+              <option value="top">Top Banner</option>
+              <option value="left">Left Ads</option>
+              <option value="right">Right Ads</option>
+              <option value="mobile-bottom">
+                Mobile Bottom (มือถือด้านล่าง)
               </option>
             </select>
 
@@ -157,17 +157,13 @@ function BannerManager() {
             <select
               className="banner-select"
               value={position}
+              disabled={placement === "mobile-bottom"}
               onChange={(e) =>
                 setPosition(e.target.value)
               }
             >
-              <option value="movie">
-                Movie Detail
-              </option>
-
-              <option value="home">
-                Home
-              </option>
+              <option value="movie">Movie Detail</option>
+              <option value="home">Home</option>
             </select>
 
             <label
@@ -197,6 +193,8 @@ function BannerManager() {
                 "ขนาดแนะนำ 200 × 270 px"}
               {placement === "right" &&
                 "ขนาดแนะนำ 200 × 270 px"}
+              {placement === "mobile-bottom" &&
+                "ขนาดแนะนำ 540 × 120 px (มือถือ)"}
             </p>
           </div>
           <input
@@ -272,7 +270,11 @@ function BannerManager() {
                         ? "Top Banner"
                         : banner.placement === "left"
                           ? "Left Ads"
-                          : "Right Ads"
+                          : banner.placement === "right"
+                            ? "Right Ads"
+                            : banner.placement === "mobile-bottom"
+                              ? "Mobile Bottom"
+                              : banner.placement
                     }
                   </h3>
 
@@ -284,7 +286,7 @@ function BannerManager() {
                     {banner.active
                       ? "🟢 เปิดใช้งาน"
                       : "🔴 ปิดใช้งาน"}
-                  </p>             
+                  </p>
 
                   <p
                     style={{

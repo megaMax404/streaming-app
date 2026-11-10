@@ -570,26 +570,28 @@ function MovieDetail() {
     );
   }
 
-  const topBanners =
-    banners.filter(
-      (b) =>
-        b.placement === "top"
-    );
+  const topBanners = banners.filter(
+    (b) =>
+      b.placement === "top" &&
+      b.position === "movie"
+  );
 
-  const leftAds =
-    banners.filter(
-      (b) =>
-        b.placement === "left"
-    );
+  const leftAds = banners.filter(
+    (b) =>
+      b.placement === "left" &&
+      b.position === "movie"
+  );
 
-  const rightAds =
-    banners.filter(
-      (b) =>
-        b.placement === "right"
-    );
+  const rightAds = banners.filter(
+    (b) =>
+      b.placement === "right" &&
+      b.position === "movie"
+  );
 
   const mobileBottomBanner = banners.find(
-    (b) => b.placement === "mobile-bottom"
+    (b) =>
+      b.placement === "mobile-bottom" &&
+      b.position === "movie"
   );
 
   return (
@@ -1006,9 +1008,7 @@ function MovieDetail() {
           </button>
         </div>
       )}
-
     </div>
-    </div >
   );
 }
 

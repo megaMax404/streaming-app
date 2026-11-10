@@ -44,7 +44,7 @@ router.post("/", auth, async (req, res) => {
       }
     }
     if (
-      sanitized.image?.length > 500 ||
+      sanitized.image?.length > 2000 ||
       sanitized.link?.length > 500
     ) {
       return res.status(400).json({
@@ -88,17 +88,27 @@ router.put("/:id", auth, async (req, res) => {
       }
     }
     if (
-      sanitized.image?.length > 500 ||
+      sanitized.image?.length > 2000 ||
       sanitized.link?.length > 500
     ) {
       return res.status(400).json({
         message: "Input too long"
       });
     }
-    await Banner.findByIdAndUpdate(
+    const updatedBanner = await Banner.findByIdAndUpdate(
       req.params.id,
-      sanitized
+      sanitized,
+      {
+        new: true,
+        runValidators: true
+      }
     );
+
+    if (!updatedBanner) {
+      return res.status(404).json({
+        message: "Banner not found"
+      });
+    }
     await createBackup();
     res.json({ success: true });
   } catch (err) {
